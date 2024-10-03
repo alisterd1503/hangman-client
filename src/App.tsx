@@ -4,15 +4,17 @@ import { HangmanWord } from "./HangmanWord"
 import { Keyboard } from "./Keyboard"
 import words from "./wordList.json"
 import Confetti from 'react-confetti'
-import useWindowSize from 'react-use/lib/useWindowSize'
+
+const HEIGHT = 800;
+const WIDTH = 1200;
 
 function getWord() {
   return words[Math.floor(Math.random() * words.length)]
 }
 
 function App() {
-  const { width, height } = useWindowSize()
   const [chosenWord, setChosenWord] = useState(() => getWord())
+  console.log(chosenWord)
   const [guessedLetters, setGuessedLetters] = useState<string[]>([])
 
   const incorrectLetters = guessedLetters.filter( 
@@ -73,36 +75,57 @@ function App() {
     }
   },[])
 
+  let playAgain = ''
+
+  isWinner != isLoser ? playAgain = "PRESS ENTER TO PLAY AGAIN" : ""
+
   return (
     <div style={{
       backgroundColor: isWinner != isLoser ? (isWinner ? "#9ADE7B" : "#FF8F8F") : "white",
-      maxWidth: "600px",
       display: "flex",
       flexDirection: "column",
       margin: "0 auto",
-      alignItems: "center"
+      alignItems: "center",
+      border: "solid black 0.5rem",
+      gap: "0rem",
+      transform: "scale(0.9)",
+      maxHeight: `${HEIGHT.toString()}px`,
+      maxWidth: `${WIDTH.toString()}px`
     }}>
-
+      {isWinner && <Confetti width={WIDTH} height={HEIGHT}/>}
       {/* Displays winner loser message */}
       <div 
         style={{
-          marginTop: "50px", 
-          fontSize: isWinner != isLoser ? "6rem" : "3rem", 
+          marginTop: "40px", 
+          fontSize: "4rem",
           textAlign: "center", 
           color: isWinner != isLoser ? (isWinner ? "green" : "red") : "black",
           fontWeight: "bold",
-          fontFamily: "arial"
+          fontFamily: "arial",
+          letterSpacing: "0.6rem",
+          height: "60px"
         }}
       >
         {isWinner == isLoser && "GUESS THE WORD!"}
         {isWinner && "WINNER!"}
         {isLoser && "LOSER!"}
-
-        {isWinner && <Confetti width={width} height={height} />}
+        <div 
+          style={{
+            fontSize: "1rem",
+            color: "black",
+            fontFamily: "arial",
+            fontWeight: "100",
+            letterSpacing: "0.15rem",
+            height: "20px"
+          }}>
+          {playAgain}
+        </div>
       </div>
 
       {/* Displays the stand and body */}
-      <HangmanDrawing numOfGuesses={incorrectLetters.length} />
+      <div style={{ transform: "scale(0.6)" }}>
+        <HangmanDrawing numOfGuesses={incorrectLetters.length} />
+      </div>
 
       {/* Displays the dashes and letters */}
       <HangmanWord
@@ -112,7 +135,7 @@ function App() {
       />
 
       {/* Displays the keyboard */}
-      <div style={{ alignSelf: "stretch", transform: "scale(0.8)", }}>
+      <div style={{ alignSelf: "stretch", transform: "scale(0.6)" }}>
         <Keyboard 
           disabled = {isWinner || isLoser}
           activeLetters={guessedLetters.filter(letter =>
@@ -127,15 +150,16 @@ function App() {
       <div 
         style={{ 
           fontFamily: "arial",
-          fontSize: "2.5rem", 
+          fontSize: "1.5rem", 
           textAlign: "center", 
           color: "red",
           fontWeight: "bold",
           textTransform: "uppercase",
-          marginBottom: "50px", 
+          marginBottom: "40px",
+          height: "30px" 
         }}
       >
-        {incorrectLetters.length > 0 && 
+        {
           incorrectLetters.map((letter, index) => (
             <span key={index} style={{ textDecoration: 'line-through', marginRight: '0.5rem' }}>
               {letter}

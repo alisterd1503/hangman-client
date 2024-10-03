@@ -141,7 +141,6 @@ HangmanDrawingProps) {
     return (
         <div style={{ 
             position: "relative", 
-            transform: "scale(0.6)",
           }}>      
             {DROPDOWN}
             {HANGOVER}

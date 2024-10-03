@@ -4,7 +4,6 @@ type HangmanWordProps = {
     reveal?: boolean
 }
 
-
 export function HangmanWord({guessedLetters, chosenWord, reveal=false}:
 HangmanWordProps) {
     return (
@@ -12,7 +11,7 @@ HangmanWordProps) {
             style={{ 
                 display: "flex", 
                 gap: ".25rem", 
-                fontSize: "5rem", 
+                fontSize: "3rem", 
                 fontWeight: "bold",
                 textTransform: "uppercase",
                 fontFamily: "monospace",
