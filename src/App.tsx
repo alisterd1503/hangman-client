@@ -155,8 +155,6 @@ function App() {
           addGuessedLetter={addGuessedLetter}
         />
       </div>
-    
-      {chosenWord}
   
       {/* Displays the guess word input field */}
       <div className="guess-words">
