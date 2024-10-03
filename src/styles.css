@@ -1,0 +1,66 @@
+/* Main container styling */
+.main {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    align-items: center;
+    border: solid black 0.5rem;
+    gap: 0rem;
+    transform: scale(0.9);
+    border-radius: 20px;
+    max-width: 100%;
+  }
+  
+  /* Winner and loser message styling */
+  .message {
+    margin-top: 40px; 
+    font-size: 4rem;
+    text-align: center; 
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    letter-spacing: 0.6rem;
+    height: 30px;
+  }
+  
+  /* Styling for play again message */
+  .play-again {
+    font-size: 1rem;
+    color: black;
+    font-family: Arial, sans-serif;
+    font-weight: 100;
+    letter-spacing: 0.15rem;
+    height: 20px;
+  }
+  
+  /* Hangman drawing */
+  .drawing {
+    transform: scale(0.6);
+  }
+  
+  /* Dashes and letters */
+  .dashed-words {
+    margin-top: -50px;
+  }
+  
+  /* Styling for guessed letters */
+  .guessed-letters {
+    font-family: Arial, sans-serif;
+    font-size: 1.5rem; 
+    text-align: center; 
+    color: red;
+    font-weight: bold;
+    text-transform: uppercase;
+    height: 30px;
+    margin-top: 10px; 
+  }
+  
+  /* Keyboard styling */
+  .keyboard {
+    align-self: stretch;
+    transform: scale(0.6);
+  }
+  
+  /* Guess input and button container */
+  .guess-words {
+    margin-bottom: 40px;
+  }

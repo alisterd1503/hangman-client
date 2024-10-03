@@ -5,6 +5,7 @@ import { Keyboard } from "./Keyboard"
 import words from "./wordList.json"
 import Confetti from 'react-confetti'
 import { Button, Stack, TextField } from "@mui/material"
+import './styles.css';
 
 const HEIGHT = 800;
 const WIDTH = 1200;
@@ -17,7 +18,6 @@ function getWord() {
 function App() {
   let playAgain = ''
   const [chosenWord, setChosenWord] = useState(() => getWord())
-  console.log(chosenWord)
   const [guessedLetters, setGuessedLetters] = useState<string[]>([])
 
   const incorrectLetters = guessedLetters.filter(guess => {
@@ -36,7 +36,6 @@ function App() {
   .every((letter: string) => guessedLetters.includes(letter));
 
   const addGuessedLetter = useCallback((letter: string) => {
-    console.log(guessedLetters)
     if (guessedLetters.includes(letter) || isLoser || isWinner) {
       return
     }
@@ -110,122 +109,70 @@ function App() {
   };
 
   return (
-    <div className="main" style={{
+    <div className={`main ${isWinner ? 'winner' : isLoser ? 'loser' : ''}`} style={{
       backgroundColor: isWinner != isLoser ? (isWinner ? "#9ADE7B" : "#FF8F8F") : "white",
-      display: "flex",
-      flexDirection: "column",
-      margin: "0 auto",
-      alignItems: "center",
-      border: "solid black 0.5rem",
-      gap: "0rem",
-      transform: "scale(0.9)",
-      borderRadius: "20px",
       maxWidth: `${WIDTH}px`
     }}>
       {isWinner && <Confetti width={WIDTH} height={HEIGHT}/>}
-
+  
       {/* Displays winner loser message */}
-      <div className="message"
-        style={{
-          marginTop: "40px", 
-          fontSize: "4rem",
-          textAlign: "center", 
-          color: isWinner != isLoser ? (isWinner ? "green" : "red") : "black",
-          fontWeight: "bold",
-          fontFamily: "arial",
-          letterSpacing: "0.6rem",
-          height: "30px"
-        }}
-      >
+      <div className="message" style={{
+        color: isWinner != isLoser ? (isWinner ? "green" : "red") : "black",
+      }}>
         {isWinner == isLoser && "GUESS THE WORD!"}
         {isWinner && "WINNER!"}
         {isLoser && "LOSER!"}
-        <div className="play-again"
-          style={{
-            fontSize: "1rem",
-            color: "black",
-            fontFamily: "arial",
-            fontWeight: "100",
-            letterSpacing: "0.15rem",
-            height: "20px"
-          }}>
+        <div className="play-again">
           {playAgain}
         </div>
       </div>
-
+  
       {/* Displays the stand and body */}
-      <div className="drawing" style={{ transform: "scale(0.6)" }}>
+      <div className="drawing">
         <HangmanDrawing numOfGuesses={incorrectLetters.length} />
       </div>
-
+  
       {/* Displays the dashes and letters */}
-      <div className="dashed-words" style={{marginTop: "-50px"}}>
-      <HangmanWord
-        reveal={isLoser}
-        guessedLetters={guessedLetters} 
-        chosenWord={chosenWord}
-      />
+      <div className="dashed-words">
+        <HangmanWord reveal={isLoser} guessedLetters={guessedLetters} chosenWord={chosenWord} />
       </div>
-
+  
       {/* Displays the guessed letters */}
-      <div className="guessed-letters"
-        style={{ 
-          fontFamily: "arial",
-          fontSize: "1.5rem", 
-          textAlign: "center", 
-          color: "red",
-          fontWeight: "bold",
-          textTransform: "uppercase",
-          height: "30px",
-          marginTop: "10px" 
-        }}
-      >
-        {
-          incorrectLetters.map((letter, index) => (
-            <span key={index} style={{ textDecoration: 'line-through', marginRight: '0.5rem' }}>
-              {letter}
-            </span>
-          ))
-        }
+      <div className="guessed-letters">
+        {incorrectLetters.map((letter, index) => (
+          <span key={index} style={{ textDecoration: 'line-through', marginRight: '0.5rem' }}>
+            {letter}
+          </span>
+        ))}
       </div>
-
+  
       {/* Displays the keyboard */}
-      <div className="keyboard" style={{ alignSelf: "stretch", transform: "scale(0.6)" }}>
+      <div className="keyboard">
         <Keyboard 
-          disabled = {isWinner || isLoser}
-          activeLetters={guessedLetters.filter(letter =>
-            chosenWord.includes(letter)
-          )}
-          inactiveLetters = {incorrectLetters}
-          addGuessedLetter = {addGuessedLetter}
+          disabled={isWinner || isLoser}
+          activeLetters={guessedLetters.filter(letter => chosenWord.includes(letter))}
+          inactiveLetters={incorrectLetters}
+          addGuessedLetter={addGuessedLetter}
         />
       </div>
-        
-      {/* Displays the textline and guess button */}
-      <div className="guess-words" style={{marginBottom: "40px"}}>
-        <Stack 
-          direction="row" 
-          spacing={2} 
-          justifyContent="center"
-          alignItems="center"
-        >
+  
+      {/* Displays the text line and guess button */}
+      <div className="guess-words">
+        <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
           <TextField
-            id="outlined-basic" 
-            variant="outlined" 
-            value={inputValue} 
+            id="outlined-basic"
+            variant="outlined"
+            value={inputValue}
             onChange={handleInputChange}
             onKeyDown={handleKeyPress}
             placeholder="Guess a Word!"
             sx={{
-              width: "250px",
-              height: "55px",
-              border: "solid black 2px",
-              borderRadius: "10px"
-    
+              width: '250px',
+              height: '55px',
+              border: 'solid black 2px',
+              borderRadius: '10px',
             }}
           />
-          
-          {/* Button with improved styling */}
           <Button 
             variant="contained" 
             onClick={handleButtonClick}
@@ -246,9 +193,8 @@ function App() {
           </Button>
         </Stack>
       </div>
-
     </div>
-  )
+  );  
 }
 
 export default App
