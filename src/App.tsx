@@ -9,7 +9,8 @@ import './styles.css';
 
 const HEIGHT = 800;
 const WIDTH = 1200;
-const primaryColour = "#b3510b";
+const primaryColour = "#FF8343";
+const secondaryColour = "#db6e37"
 
 function getWord() {
   return words[Math.floor(Math.random() * words.length)]
@@ -159,20 +160,32 @@ function App() {
       {/* Displays the guess word input field */}
       <div className="guess-words">
         <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
-          <TextField
-            id="outlined-basic"
-            variant="outlined"
-            value={inputValue}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyPress}
-            placeholder="Guess a Word!"
-            sx={{
-              width: '250px',
-              height: '55px',
-              border: 'solid black 2px',
-              borderRadius: '10px',
-            }}
-          />
+        <input
+          type="text"
+          id="standard-basic"
+          value={inputValue}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyPress}
+          placeholder="Guess a Word!"
+          style={{
+            width: '250px',
+            height: '50px',
+            padding: '5px',
+            border: 'solid black 2px',
+            borderRadius: '10px',
+            paddingLeft: '15px',
+            fontFamily: "Arial",
+            fontSize: "1.8rem",
+            fontWeight: "bold",
+            textTransform: "uppercase",
+          }}
+          onFocus={(event) => {
+            event.target.style.outline = `2px solid ${primaryColour}`; 
+          }}
+          onBlur={(event) => {
+            event.target.style.outline = 'none';
+          }}
+        />
           <Button 
             variant="contained" 
             onClick={handleButtonClick}
@@ -181,10 +194,10 @@ function App() {
               padding: "10px 20px",
               fontSize: "1rem",
               borderRadius: "10px",
-              height: "55px",
+              height: "65px",
               border: "solid black 2px",
               ':hover': {
-                bgcolor: '#b3510b',
+                bgcolor: secondaryColour,
                 color: 'white',
               },
             }}
