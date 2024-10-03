@@ -2,9 +2,10 @@ type HangmanWordProps = {
     guessedLetters: string[]
     chosenWord: string
     reveal?: boolean
+    isWinner?: boolean
 }
 
-export function HangmanWord({guessedLetters, chosenWord, reveal=false}:
+export function HangmanWord({guessedLetters, chosenWord, reveal=false, isWinner=false}:
 HangmanWordProps) {
     return (
         <div 
@@ -24,7 +25,7 @@ HangmanWordProps) {
                             visibility: guessedLetters.includes(letter) || reveal
                             ? "visible" 
                             : "hidden",
-                            color: !guessedLetters.includes(letter) && reveal ? "red" : "black"
+                            color: isWinner ? "black" : (!guessedLetters.includes(letter) && reveal ? "red" : "black")
                         }}
                 >
                     {letter}</span>

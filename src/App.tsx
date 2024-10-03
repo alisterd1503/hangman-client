@@ -134,7 +134,7 @@ function App() {
   
       {/* Displays the dashes and letters */}
       <div className="dashed-words">
-        <HangmanWord reveal={isLoser} guessedLetters={guessedLetters} chosenWord={chosenWord} />
+        <HangmanWord reveal={isLoser || isWinner} guessedLetters={guessedLetters} chosenWord={chosenWord} isWinner={isWinner}/>
       </div>
   
       {/* Displays the guessed letters */}
@@ -155,8 +155,10 @@ function App() {
           addGuessedLetter={addGuessedLetter}
         />
       </div>
+    
+      {chosenWord}
   
-      {/* Displays the text line and guess button */}
+      {/* Displays the guess word input field */}
       <div className="guess-words">
         <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
           <TextField
