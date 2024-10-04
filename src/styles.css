@@ -1,24 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+
 /* Main container styling */
 .main {
     display: flex;
     flex-direction: column;
     margin: 0 auto;
     align-items: center;
-    border: solid black 0.5rem;
     gap: 0rem;
     transform: scale(0.9);
     border-radius: 20px;
     max-width: 100%;
-    background-color: white;
   }
   
   /* Winner and loser message styling */
   .message {
-    margin-top: 40px; 
-    font-size: 4rem;
+    margin-top: 10px; 
+    margin-bottom: 40px;
+    font-size: 6rem;
     text-align: center; 
     font-weight: bold;
-    font-family: Arial, sans-serif;
+    font-family: 'Indie Flower', cursive;
     letter-spacing: 0.6rem;
     height: 30px;
   }
@@ -27,7 +28,7 @@
   .play-again {
     font-size: 1rem;
     color: black;
-    font-family: Arial, sans-serif;
+    font-family: 'Indie Flower', cursive;
     font-weight: 100;
     letter-spacing: 0.15rem;
     height: 20px;
@@ -40,7 +41,7 @@
   
   /* Styling for guessed letters */
   .guessed-letters {
-    font-family: Arial, sans-serif;
+    font-family: 'Indie Flower', cursive;
     font-size: 1.5rem; 
     text-align: center; 
     color: red;
