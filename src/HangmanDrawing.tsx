@@ -1,152 +1,46 @@
-const BASE = (
-    <div 
-        style={{
-            height: "10px",
-            width:"250px", 
-            background: "black"
-        }}
-    />
-)
-
-const POLE = (
-    <div 
-        style={{
-            height: "400px",
-             width:"10px",
-              background: "black",
-               marginLeft: "120px"
-            }}
-    />
-)
-
-const HANGOVER = (
-    <div 
-        style={{
-            height: "10px",
-            width:"200px",
-            background: "black",
-            marginLeft: "120px"
-        }}
-    />
-)
-
-const DROPDOWN = (
-    <div 
-        style={{
-            height: "50px",
-            width:"10px",
-            background: "black",
-            position: "absolute",
-            top: 0,
-            right: 0
-        }}
-    />
-)
-
-const HEAD = (
-    <div
-        style={{
-            width: "50px",
-            height: "50px",
-            borderRadius: "100%",
-            border: "10px solid black",
-            position: "absolute",
-            top: "50px",
-            right: "-30px",
-        }}
-    />
-)
-  
-const BODY = (
-    <div
-        style={{
-            width: "10px",
-            height: "100px",
-            background: "black",
-            position: "absolute",
-            top: "120px",
-            right: 0,
-        }}
-    />
-)
-
-const RIGHT_ARM = (
-    <div
-        style={{
-            width: "100px",
-            height: "10px",
-            background: "black",
-            position: "absolute",
-            top: "150px",
-            right: "-100px",
-            rotate: "-30deg",
-            transformOrigin: "left bottom",
-        }}
-    />
-)
-
-const LEFT_ARM = (
-    <div
-        style={{
-            width: "100px",
-            height: "10px",
-            background: "black",
-            position: "absolute",
-            top: "150px",
-            right: "10px",
-            rotate: "30deg",
-            transformOrigin: "right bottom",
-        }}
-    />
-)
-
-const RIGHT_LEG = (
-    <div
-        style={{
-            width: "100px",
-            height: "10px",
-            background: "black",
-            position: "absolute",
-            top: "210px",
-            right: "-90px",
-            rotate: "60deg",
-            transformOrigin: "left bottom",
-        }}
-    />
-)
-
-const LEFT_LEG = (
-    <div
-        style={{
-            width: "100px",
-            height: "10px",
-            background: "black",
-            position: "absolute",
-            top: "210px",
-            right: 0,
-            rotate: "-60deg",
-            transformOrigin: "right bottom",
-        }}
-    />
-)
-
-const BODY_PARTS = [HEAD, BODY, RIGHT_ARM, LEFT_ARM, RIGHT_LEG, LEFT_LEG]
+import img1 from './images/img1.png';
+import img2 from './images/img2.png';
+import img3 from './images/img3.png';
+import img4 from './images/img4.png';
+import img5 from './images/img5.png';
+import img6 from './images/img6.png';
+import img7 from './images/img7.png';
+import img8 from './images/img8.png';
+import img9 from './images/img9.png';
+import img10 from './images/img10.png';
 
 type HangmanDrawingProps = {
     numOfGuesses: number
 }
 
-export function HangmanDrawing({ numOfGuesses }: 
-HangmanDrawingProps) {
+const IMAGES = [
+    img1,img2,img3,img4,img5,img6,img7,img8,img9,img10
+]
+
+export function HangmanDrawing({ numOfGuesses }: HangmanDrawingProps) {
     return (
-        <div style={{ 
-            position: "relative", 
-          }}>      
-            {DROPDOWN}
-            {HANGOVER}
-            {POLE}
-            {BASE}
-            {BODY_PARTS.slice(0, numOfGuesses)}
+        <div 
+            style={{ 
+                position: "relative", 
+                height: "400px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+            }}
+        >
+            {IMAGES.slice(0, numOfGuesses).map((imgSrc, index) => (
+                <img 
+                    key={index} 
+                    src={imgSrc} 
+                    alt={`hangman-stage-${index}`} 
+                    style={{ 
+                        position: 'absolute',
+                        maxWidth: "200px",
+                        left: "50%",
+                        transform: "translateX(-50%)" 
+                    }}
+                />
+            ))}
         </div>
     )
 }

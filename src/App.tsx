@@ -10,7 +10,7 @@ import { Button } from "@mui/material"
 
 const HEIGHT = 800;
 const WIDTH = 1200;
-
+const regex = /^[a-zA-Z]+$/;
 
 function getWord() {
   return words[Math.floor(Math.random() * words.length)]
@@ -29,7 +29,7 @@ function App() {
     return guess !== chosenWord;
   });
 
-  const isLoser = incorrectLetters.length >= 6
+  const isLoser = incorrectLetters.length >= 10
 
   const isWinner = guessedLetters.includes(chosenWord) || chosenWord
   .split("")
@@ -75,7 +75,8 @@ function App() {
   };
   
   const handleButtonClick = () => {
-    if (inputValue.trim() === "") {
+    if (inputValue.trim() === "" || !(regex.test(inputValue))) {
+      setInputValue("")
       return;
     }
     addGuessedLetter(inputValue);
@@ -90,7 +91,7 @@ function App() {
 
   return (
     <div className={`main ${isWinner ? 'winner' : isLoser ? 'loser' : ''}`} style={{
-      backgroundColor: isWinner != isLoser ? (isWinner ? "#9ADE7B" : "#FF8F8F") : "white",
+      backgroundColor: "white",
       maxWidth: `${WIDTH}px`
     }}>
       {isWinner && <Confetti width={WIDTH} height={HEIGHT}/>}
@@ -133,9 +134,9 @@ function App() {
         />
       </div>
   
-      {/* Displays the guess word input field */}
-      {isLoser || isWinner ?  
-        <div>
+      {/* Displays the guess word input field or reset button */}
+      <div className="guess-words">
+        {isLoser || isWinner ?  
           <Button 
             variant="contained" 
             onClick={resetGame}
@@ -144,21 +145,18 @@ function App() {
               padding: "10px 20px",
               fontSize: "1rem",
               borderRadius: "10px",
-              height: "40px",
+              height: "65px",
               border: "solid black 2px",
               ':hover': {
                 bgcolor: "darkgreen",
                 color: 'white',
               },
               boxShadow: "0px 0px 0px",
-              marginBottom: "30px",
             }}
           >
             PlAY AGAIN!
           </Button>
-        </div>
-        :
-        <div className="guess-words">
+          :
           <HangmanGuess 
             inputValue={inputValue} 
             handleInputChange={handleInputChange} 
@@ -166,9 +164,8 @@ function App() {
             handleButtonClick={handleButtonClick} 
             isWinner={isWinner} 
           />
-        </div>
-      }
-      
+        }
+      </div>
     </div>
   );  
 }
