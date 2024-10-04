@@ -33,180 +33,205 @@ function getWord(difficulty: string) {
 }
 
 function App() {
-  const [difficulty, setDifficulty] = useState<string | null>(null); // Initial state set to null
+  const [difficulty, setDifficulty] = useState<string | null>(null);
   const [chosenWord, setChosenWord] = useState<string | null>(null);
-  const [userGuesses, setUserGuesses] = useState<string[]>([])
+  const [userGuesses, setUserGuesses] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
-  const [isGameStarted, setIsGameStarted] = useState(false); // New state for tracking if the game has started
+  const [isGameStarted, setIsGameStarted] = useState(false);
 
-  const handleStartGame = () => {
-    setIsGameStarted(true); // Start the game
-    setChosenWord(getWord(difficulty!)); // Use difficulty to get the word
+  // Function to get incorrect guesses
+  const getIncorrectGuesses = () => {
+      return userGuesses.filter(guess => {
+          if (guess.length === 1) {
+              return !chosenWord!.includes(guess);
+          }
+          return guess !== chosenWord;
+      });
   };
 
-  // Adding incorrect guesses to an array
-  const incorrectGuesses = userGuesses.filter(guess => {
-    if (guess.length === 1) {
-      return !chosenWord!.includes(guess);
-    }
-    return guess !== chosenWord;
-  });
+  // Function to start the game
+  const handleStartGame = () => {
+      setIsGameStarted(true);
+      setChosenWord(getWord(difficulty!));
+  };
+
+  // Variable to track incorrect guesses
+  const incorrectGuesses = getIncorrectGuesses();
 
   // Variable to track if player lost
   const isLoser = incorrectGuesses.length >= 10;
 
   // Variable to track if player won
   const isWinner = chosenWord && (userGuesses.includes(chosenWord) || chosenWord
-  .split("")
-  .every((letter: string) => userGuesses.includes(letter)));
+      .split("")
+      .every((letter: string) => userGuesses.includes(letter)));
 
   const addUserGuess = useCallback((letter: string) => {
-    if (userGuesses.includes(letter) || isLoser || isWinner) {
-      return
-    }
-    setUserGuesses(currentLetters => [...currentLetters, letter])
+      if (userGuesses.includes(letter) || isLoser || isWinner) {
+          return;
+      }
+      setUserGuesses(currentLetters => [...currentLetters, letter]);
   }, [userGuesses, isLoser, isWinner]);
 
+  // Function to reset all variables and game
   const resetGame = () => {
-    setUserGuesses([]);
-    setChosenWord(getWord(difficulty!));
+      setUserGuesses([]);
+      setChosenWord(getWord(difficulty!));
+      setInputValue('');
   };
 
   const handleInputChange = (event: { target: { value: SetStateAction<string> } }) => {
-    setInputValue(event.target.value);
+      setInputValue(event.target.value);
   };
 
   const handleButtonClick = () => {
-    if (inputValue.trim() === "" || !(regex.test(inputValue))) {
-      setInputValue("")
-      return;
-    }
-    addUserGuess(inputValue);
-    setInputValue("")
+      if (inputValue.trim() === "" || !(regex.test(inputValue))) {
+          setInputValue("");
+          return;
+      }
+      addUserGuess(inputValue);
+      setInputValue("");
   };
 
   const handleKeyPress = (event: { key: string }) => {
-    if (event.key === 'Enter') {
-      handleButtonClick();
-    }
+      if (event.key === 'Enter') {
+          handleButtonClick();
+      }
+  };
+
+  // Reset all relevant states when returning to the home screen
+  const homeScreen = () => {
+      setUserGuesses([]);
+      setChosenWord(null);
+      setInputValue('');
+      setDifficulty(null);
+      setIsGameStarted(false);
   };
 
   return (
-    <div className="main">
-      {!isGameStarted ? (
-        <StartScreen 
-          onStart={handleStartGame} 
-          onDifficultySelect={setDifficulty} // Pass difficulty handler
-        />
-      ) : (
-        <>
-          <div>
-            <img 
-              src={homeIcon} 
-              alt="Home" 
-              onClick={() => setIsGameStarted(false)} 
-              style={{
-                  position: 'absolute',
-                  bottom: '40px',
-                  left: '20px',
-                  width: '80px',
-                  height: '80px',
-                  cursor: 'pointer',
-                  transition: 'transform 0.3s, opacity 0.3s',
-              }}
-              onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.1)';
-                  e.currentTarget.style.opacity = '0.8';
-              }}
-              onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.opacity = '1';
-              }}
-            />
-          </div>
-
-          {isWinner && (
-            <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-              <Confetti width={window.outerWidth} height={window.outerHeight} />
-            </div>
-          )}
-
-          <div className="message" style={{
-            color: isWinner !== isLoser ? (isWinner ? "green" : "red") : "black",
-          }}>
-            {isWinner === isLoser && "GUESS THE WORD!"}
-            {isWinner && "WINNER!"}
-            {isLoser && "LOSER!"}
-          </div>
-  
-          <div className="drawing">
-            <HangmanDrawing numOfGuesses={incorrectGuesses.length} />
-          </div>
-  
-          <div className="dashed-words">
-            <HangmanWord 
-              reveal={isLoser || isWinner ? true : false}
-              userGuesses={userGuesses} 
-              chosenWord={chosenWord ?? ''}
-              isWinner={!!isWinner}
-            />
-          </div>
-  
-          <div className="guessed-letters">
-            {incorrectGuesses.map((letter, index) => (
-              <span key={index} style={{ marginRight: '1rem' }}>
-                {letter}
-              </span>
-            ))}
-          </div>
-  
-          <div className="keyboard">
-            <Keyboard 
-              disabled={isWinner || isLoser}
-              activeLetters={userGuesses.filter(letter => chosenWord!.includes(letter))}
-              inactiveLetters={incorrectGuesses}
-              addUserGuess={addUserGuess}
-            />
-          </div>
-  
-          <div className="guess-words">
-            {isLoser || isWinner ?  
-              <span 
-                onClick={resetGame}
-                style={{
-                  display: "inline-block",
-                  color: "green",
-                  fontSize: "4rem",
-                  height: "65px",
-                  fontFamily: "'Indie Flower', cursive",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  transition: "transform 0.3s, background-color 0.3s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = 'darkgreen',
-                  e.currentTarget.style.transform = 'scale(1.1)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = 'green',
-                  e.currentTarget.style.transform = 'scale(1)'
-                }}
-                >
-              PLAY AGAIN
-            </span>
-              :
-              <HangmanGuess 
-                inputValue={inputValue} 
-                handleInputChange={handleInputChange} 
-                handleKeyPress={handleKeyPress} 
-                handleButtonClick={handleButtonClick} 
+      <div className="main">
+          {!isGameStarted ? (
+              <StartScreen
+                  onStart={handleStartGame}
+                  onDifficultySelect={setDifficulty}
               />
-            }
-          </div>
-        </>
-      )}
-    </div>
-  );  
+          ) : (
+              <>
+                  {/* Home screen button */}
+                  <div>
+                      <img
+                          src={homeIcon}
+                          alt="Home"
+                          onClick={homeScreen}
+                          style={{
+                              position: 'absolute',
+                              bottom: '40px',
+                              left: '20px',
+                              width: '80px',
+                              height: '80px',
+                              cursor: 'pointer',
+                              transition: 'transform 0.3s, opacity 0.3s',
+                          }}
+                          onMouseEnter={(e) => {
+                              e.currentTarget.style.transform = 'scale(1.1)';
+                              e.currentTarget.style.opacity = '0.8';
+                          }}
+                          onMouseLeave={(e) => {
+                              e.currentTarget.style.transform = 'scale(1)';
+                              e.currentTarget.style.opacity = '1';
+                          }}
+                      />
+                  </div>
+
+                  {/* Displays confetti */}
+                  {isWinner && (
+                      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+                          <Confetti width={window.outerWidth} height={window.outerHeight} />
+                      </div>
+                  )}
+                  
+                  {/* Displays header tite */}
+                  <div className="message" style={{
+                      color: isWinner !== isLoser ? (isWinner ? "green" : "red") : "black",
+                  }}>
+                      {isWinner === isLoser && "GUESS THE WORD!"}
+                      {isWinner && "WINNER!"}
+                      {isLoser && "LOSER!"}
+                  </div>
+
+                  {/* Displays the hangman image */}
+                  <div className="drawing">
+                      <HangmanDrawing numOfGuesses={incorrectGuesses.length} />
+                  </div>
+
+                  {/* Displays the correct guessed letters and dashes */}
+                  <div className="dashed-words">
+                      <HangmanWord
+                          reveal={isLoser || isWinner ? true : false}
+                          userGuesses={userGuesses}
+                          chosenWord={chosenWord ?? ''}
+                          isWinner={!!isWinner}
+                      />
+                  </div>
+
+                  {/* Displays the incorrect guessed letters */}
+                  <div className="guessed-letters">
+                      {incorrectGuesses.map((letter, index) => (
+                          <span key={index} style={{ marginRight: '1rem' }}>
+                              {letter}
+                          </span>
+                      ))}
+                  </div>
+                  
+                  {/* Displays the keyboard */}
+                  <div className="keyboard">
+                      <Keyboard
+                          disabled={isWinner || isLoser}
+                          activeLetters={userGuesses.filter(letter => chosenWord!.includes(letter))}
+                          inactiveLetters={incorrectGuesses}
+                          addUserGuess={addUserGuess}
+                      />
+                  </div>
+
+                  {/* Displays the guess input field    */}
+                  <div className="guess-words">
+                      {isLoser || isWinner ?
+                          <span
+                              onClick={resetGame}
+                              style={{
+                                  display: "inline-block",
+                                  color: "green",
+                                  fontSize: "4rem",
+                                  height: "65px",
+                                  fontFamily: "'Indie Flower', cursive",
+                                  fontWeight: "bold",
+                                  cursor: "pointer",
+                                  transition: "transform 0.3s, background-color 0.3s",
+                              }}
+                              onMouseEnter={(e) => {
+                                  e.currentTarget.style.color = 'darkgreen';
+                                  e.currentTarget.style.transform = 'scale(1.1)';
+                              }}
+                              onMouseLeave={(e) => {
+                                  e.currentTarget.style.color = 'green';
+                                  e.currentTarget.style.transform = 'scale(1)';
+                              }}
+                          >
+                              PLAY AGAIN
+                          </span>
+                          :
+                          <HangmanGuess
+                              inputValue={inputValue}
+                              handleInputChange={handleInputChange}
+                              handleKeyPress={handleKeyPress}
+                              handleButtonClick={handleButtonClick}
+                          />
+                      }
+                  </div>
+              </>
+          )}
+      </div>
+  );
 }
 
 export default App;
