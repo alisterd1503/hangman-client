@@ -1,23 +1,22 @@
-import { SetStateAction, useCallback, useEffect, useState } from "react"
+import { SetStateAction, useCallback, useState } from "react"
 import { HangmanDrawing } from "./HangmanDrawing"
 import { HangmanWord } from "./HangmanWord"
 import { Keyboard } from "./Keyboard"
+import { HangmanGuess } from "./HangmanGuess"
 import words from "./wordList.json"
 import Confetti from 'react-confetti'
-import { Button, Stack, TextField } from "@mui/material"
 import './styles.css';
+import { Button } from "@mui/material"
 
 const HEIGHT = 800;
 const WIDTH = 1200;
-const primaryColour = "#FF8343";
-const secondaryColour = "#db6e37"
+
 
 function getWord() {
   return words[Math.floor(Math.random() * words.length)]
 }
 
 function App() {
-  let playAgain = ''
   const [chosenWord, setChosenWord] = useState(() => getWord())
   const [guessedLetters, setGuessedLetters] = useState<string[]>([])
 
@@ -64,30 +63,10 @@ function App() {
   //   }
   // },[guessedLetters])
 
-
-  // RESET GAME WHEN ENTER IS PRESSED
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      const key = e.key
-
-      if (key !== " ") {
-        return
-      }
-
-      e.preventDefault()
-      if (isWinner || isLoser) {
-        setGuessedLetters([]);
-        setChosenWord(getWord());
-      }
-    }
-    document.addEventListener("keypress", handler)
-
-    return () => {
-      document.removeEventListener("keypress", handler)
-    }
-  },[])
-
-  isWinner != isLoser ? playAgain = "PRESS SPACE TO PLAY AGAIN" : ""
+  const resetGame = () => {
+    setGuessedLetters([]);
+    setChosenWord(getWord());
+  };
 
   const [inputValue, setInputValue] = useState('');
 
@@ -123,9 +102,6 @@ function App() {
         {isWinner == isLoser && "GUESS THE WORD!"}
         {isWinner && "WINNER!"}
         {isLoser && "LOSER!"}
-        <div className="play-again">
-          {playAgain}
-        </div>
       </div>
   
       {/* Displays the stand and body */}
@@ -158,54 +134,41 @@ function App() {
       </div>
   
       {/* Displays the guess word input field */}
-      <div className="guess-words">
-        <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
-        <input
-          type="text"
-          id="standard-basic"
-          value={inputValue}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyPress}
-          placeholder="Guess a Word!"
-          style={{
-            width: '250px',
-            height: '50px',
-            padding: '5px',
-            border: 'solid black 2px',
-            borderRadius: '10px',
-            paddingLeft: '15px',
-            fontFamily: "Arial",
-            fontSize: "1.8rem",
-            fontWeight: "bold",
-            textTransform: "uppercase",
-          }}
-          onFocus={(event) => {
-            event.target.style.outline = `2px solid ${primaryColour}`; 
-          }}
-          onBlur={(event) => {
-            event.target.style.outline = 'none';
-          }}
-        />
+      {isLoser || isWinner ?  
+        <div>
           <Button 
             variant="contained" 
-            onClick={handleButtonClick}
+            onClick={resetGame}
             sx={{
-              backgroundColor: isWinner ? "green" : primaryColour,
+              backgroundColor: "green",
               padding: "10px 20px",
               fontSize: "1rem",
               borderRadius: "10px",
-              height: "65px",
+              height: "40px",
               border: "solid black 2px",
               ':hover': {
-                bgcolor: secondaryColour,
+                bgcolor: "darkgreen",
                 color: 'white',
               },
+              boxShadow: "0px 0px 0px",
+              marginBottom: "30px",
             }}
           >
-            GUESS
+            PlAY AGAIN!
           </Button>
-        </Stack>
-      </div>
+        </div>
+        :
+        <div className="guess-words">
+          <HangmanGuess 
+            inputValue={inputValue} 
+            handleInputChange={handleInputChange} 
+            handleKeyPress={handleKeyPress} 
+            handleButtonClick={handleButtonClick} 
+            isWinner={isWinner} 
+          />
+        </div>
+      }
+      
     </div>
   );  
 }
