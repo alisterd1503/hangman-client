@@ -12,77 +12,62 @@ const HEIGHT = 800;
 const WIDTH = 1200;
 const regex = /^[a-zA-Z]+$/;
 
+// Function that returns a random word from the words list
 function getWord() {
   return words[Math.floor(Math.random() * words.length)]
 }
 
 function App() {
   const [chosenWord, setChosenWord] = useState(() => getWord())
-  const [guessedLetters, setGuessedLetters] = useState<string[]>([])
+  const [userGuesses, setUserGuesses] = useState<string[]>([])
+  const [inputValue, setInputValue] = useState('');
 
-  const incorrectLetters = guessedLetters.filter(guess => {
-    // single character guess
+  // Adding incorrect guesses to an array
+  const incorrectGuesses = userGuesses.filter(guess => {
     if (guess.length === 1) {
       return !chosenWord.includes(guess);
     }
-    // whole word guess
     return guess !== chosenWord;
   });
 
-  const isLoser = incorrectLetters.length >= 10
+  // Variable to track if player lost
+  const isLoser = incorrectGuesses.length >= 10
 
-  const isWinner = guessedLetters.includes(chosenWord) || chosenWord
+   // Variable to track if player won
+  const isWinner = userGuesses.includes(chosenWord) || chosenWord
   .split("")
-  .every((letter: string) => guessedLetters.includes(letter));
+  .every((letter: string) => userGuesses.includes(letter));
 
-  const addGuessedLetter = useCallback((letter: string) => {
-    if (guessedLetters.includes(letter) || isLoser || isWinner) {
+  // Funcition that adds users guesses to userGuesses array
+  const addUserGuess = useCallback((letter: string) => {
+    if (userGuesses.includes(letter) || isLoser || isWinner) {
       return
     }
-    setGuessedLetters(currentLetters => [...currentLetters, letter])
-  }, [guessedLetters, isLoser, isWinner])
+    setUserGuesses(currentLetters => [...currentLetters, letter])
+  }, [userGuesses, isLoser, isWinner])
 
-
-  // USE KEYBOARD TO ENTER LETTERS
-  // useEffect(() => {
-  //   const handler = (e: KeyboardEvent) => {
-  //     const key = e.key
-
-  //     if (!key.match(/^[a-z]$/)) {
-  //       return
-  //     }
-
-  //     e.preventDefault()
-  //     addGuessedLetter(key)
-  //   }
-
-  //   document.addEventListener("keypress", handler)
-
-  //   return () => {
-  //     document.removeEventListener("keypress", handler)
-  //   }
-  // },[guessedLetters])
-
+  // Funciton to reset the game
   const resetGame = () => {
-    setGuessedLetters([]);
+    setUserGuesses([]);
     setChosenWord(getWord());
   };
 
-  const [inputValue, setInputValue] = useState('');
-
+  // Function that updates the inputValue variable
   const handleInputChange = (event: { target: { value: SetStateAction<string> } }) => {
     setInputValue(event.target.value);
   };
   
+  // Function that adds the inputValue to useGuesses array
   const handleButtonClick = () => {
     if (inputValue.trim() === "" || !(regex.test(inputValue))) {
       setInputValue("")
       return;
     }
-    addGuessedLetter(inputValue);
+    addUserGuess(inputValue);
     setInputValue("")
   };
 
+  // Allows users to press enter instead of clicking button
   const handleKeyPress = (event: { key: string }) => {
     if (event.key === 'Enter') {
       handleButtonClick();
@@ -90,10 +75,9 @@ function App() {
   };
 
   return (
-    <div className={`main ${isWinner ? 'winner' : isLoser ? 'loser' : ''}`} style={{
-      backgroundColor: "white",
-      maxWidth: `${WIDTH}px`
-    }}>
+    <div className="main" style={{maxWidth: `${WIDTH}px`}}>
+
+      {/* Displays confetti if the user wins */}
       {isWinner && <Confetti width={WIDTH} height={HEIGHT}/>}
   
       {/* Displays winner loser message */}
@@ -107,17 +91,17 @@ function App() {
   
       {/* Displays the stand and body */}
       <div className="drawing">
-        <HangmanDrawing numOfGuesses={incorrectLetters.length} />
+        <HangmanDrawing numOfGuesses={incorrectGuesses.length} />
       </div>
   
       {/* Displays the dashes and letters */}
       <div className="dashed-words">
-        <HangmanWord reveal={isLoser || isWinner} guessedLetters={guessedLetters} chosenWord={chosenWord} isWinner={isWinner}/>
+        <HangmanWord reveal={isLoser || isWinner} userGuesses={userGuesses} chosenWord={chosenWord} isWinner={isWinner}/>
       </div>
   
       {/* Displays the guessed letters */}
       <div className="guessed-letters">
-        {incorrectLetters.map((letter, index) => (
+        {incorrectGuesses.map((letter, index) => (
           <span key={index} style={{ textDecoration: 'line-through', marginRight: '0.5rem' }}>
             {letter}
           </span>
@@ -128,9 +112,9 @@ function App() {
       <div className="keyboard">
         <Keyboard 
           disabled={isWinner || isLoser}
-          activeLetters={guessedLetters.filter(letter => chosenWord.includes(letter))}
-          inactiveLetters={incorrectLetters}
-          addGuessedLetter={addGuessedLetter}
+          activeLetters={userGuesses.filter(letter => chosenWord.includes(letter))}
+          inactiveLetters={incorrectGuesses}
+          addUserGuess={addUserGuess}
         />
       </div>
   
@@ -146,6 +130,8 @@ function App() {
               fontSize: "1rem",
               borderRadius: "10px",
               height: "65px",
+              fontFamily: "Arial",
+              fontWeight: "bold",
               border: "solid black 2px",
               ':hover': {
                 bgcolor: "darkgreen",
@@ -154,7 +140,7 @@ function App() {
               boxShadow: "0px 0px 0px",
             }}
           >
-            PlAY AGAIN!
+            PlAY AGAIN
           </Button>
           :
           <HangmanGuess 

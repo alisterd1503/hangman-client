@@ -55,6 +55,8 @@ export function HangmanGuess({
               fontSize: "1rem",
               borderRadius: "10px",
               height: "65px",
+              fontFamily: "Arial",
+              fontWeight: "bold",
               border: "solid black 2px",
               boxShadow: "0px 0px 0px",
               ':hover': {
