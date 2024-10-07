@@ -1,12 +1,14 @@
+import './styles.css';
+
 import { SetStateAction, useCallback, useState } from "react"
 import { HangmanDrawing } from "./HangmanDrawing"
 import { HangmanWord } from "./HangmanWord"
 import { Keyboard } from "./Keyboard"
 import { HangmanGuess } from "./HangmanGuess"
 import { StartScreen } from "./StartScreen"
+
 import words from "./wordList.json"
 import Confetti from 'react-confetti'
-import './styles.css';
 import homeIcon from './images/home.png';
 
 const regex = /^[a-zA-Z]+$/;
@@ -66,6 +68,7 @@ function App() {
       .split("")
       .every((letter: string) => userGuesses.includes(letter)));
 
+  // Adding users guesses to an array
   const addUserGuess = useCallback((letter: string) => {
       if (userGuesses.includes(letter) || isLoser || isWinner) {
           return;
@@ -84,6 +87,7 @@ function App() {
       setInputValue(event.target.value);
   };
 
+  // Sets the input value when the submit button is clicked
   const handleButtonClick = () => {
       if (inputValue.trim() === "" || !(regex.test(inputValue))) {
           setInputValue("");
@@ -93,6 +97,7 @@ function App() {
       setInputValue("");
   };
 
+  // User can press enter to submit the input
   const handleKeyPress = (event: { key: string }) => {
       if (event.key === 'Enter') {
           handleButtonClick();
@@ -112,8 +117,8 @@ function App() {
       <div className="main">
           {!isGameStarted ? (
               <StartScreen
-                  onStart={handleStartGame}
-                  onDifficultySelect={setDifficulty}
+                    onStart={handleStartGame}
+                    onDifficultySelect={setDifficulty}
               />
           ) : (
               <>

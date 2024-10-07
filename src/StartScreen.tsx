@@ -1,21 +1,48 @@
 import { Button, Stack, Typography } from '@mui/material';
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import './styles.css';
 
+const secondaryColour = "#db6e37"
+const primaryColour = "#FF8343";
+
 type StartScreenProps = {
-  onStart: () => void;
-  onDifficultySelect: (difficulty: string) => void;
+    onStart: () => void,
+    onDifficultySelect: (difficulty: string) => void,
 };
 
-const secondaryColour = "#db6e37"
+export function StartScreen({ 
+    onStart, 
+    onDifficultySelect,
+}: StartScreenProps) {
 
-export function StartScreen({ onStart, onDifficultySelect }: StartScreenProps) {
   const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null);
+  const [inputValue, setInputValue] = useState('');
 
   const handleDifficultyChange = (difficulty: string) => {
     setSelectedDifficulty(difficulty);
     onDifficultySelect(difficulty); // Call parent function to update difficulty in App
   };
+
+    // Setting input value
+    const handleInputChange = (event: { target: { value: SetStateAction<string> } }) => {
+        setInputValue(event.target.value);
+    };
+
+    // Sets the input value when the submit button is clicked
+    const handleButtonClick = () => {
+        if (inputValue.trim() === "") {
+            setInputValue("");
+            return;
+        }
+        setInputValue(inputValue);
+    };
+
+    // User can press enter to submit the input
+    const handleKeyPress = (event: { key: string }) => {
+        if (event.key === 'Enter') {
+            handleButtonClick();
+        }
+    };
 
   return (
     <div style={{
@@ -23,7 +50,7 @@ export function StartScreen({ onStart, onDifficultySelect }: StartScreenProps) {
       flexDirection: "column", 
       alignItems: "center", 
       justifyContent: "center", 
-      height: "100vh"
+      height: "80vh"
     }}>
         <Typography variant="h1" style={{ marginBottom: "40px", fontFamily: "'Indie Flower', cursive", fontWeight: "bold", fontSize: "8rem" }}>
             Hangman Game
@@ -117,6 +144,37 @@ export function StartScreen({ onStart, onDifficultySelect }: StartScreenProps) {
 
         </Stack>
 
+        <input
+          type="text"
+          id="standard-basic"
+          value={inputValue}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyPress}
+          placeholder="Enter Your Name"
+          style={{
+            width: '250px',
+            height: '50px',
+            border: 'none',
+            borderBottom: '2px solid black',
+            fontFamily: "'Indie Flower', cursive",
+            fontSize: "2rem",
+            fontWeight: "bold",
+            textTransform: "uppercase",
+            background: 'none',
+            textAlign: 'center',
+            marginBottom: '60px'
+          }}
+          onFocus={(event) => {
+            event.target.style.outline = `none`;
+            event.target.style.borderBottom = `2px solid ${primaryColour}`;
+            event.target.placeholder = '';
+          }}
+          onBlur={(event) => {
+            event.target.style.borderBottom = '2px solid black';
+            event.target.placeholder = 'Enter Your Name';
+          }}
+        />
+
         <span 
             onClick={selectedDifficulty ? onStart : undefined}
             style={{
@@ -140,6 +198,7 @@ export function StartScreen({ onStart, onDifficultySelect }: StartScreenProps) {
             >
             START
         </span>
+        
     </div>
   );
 }
