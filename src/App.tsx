@@ -10,9 +10,31 @@ import { StartScreen } from "./StartScreen"
 import words from "./wordList.json"
 import Confetti from 'react-confetti'
 import homeIcon from './images/home.png';
+import appleIcon from './images/apple.png';
+import { Stack, Typography } from '@mui/material';
+
+/** 
+
+Easy: 10 points for each correct letter.
+Medium: 15 points for each correct letter.
+Hard: 20 points for each correct letter.
+
+Easy: -2 points for each incorrect guess.
+Medium: -5 points for each incorrect guess.
+Hard: -8 points for each incorrect guess.
+
+Easy: No multiplier (1x).
+Medium: 1.5x multiplier.
+Hard: 2x multiplier.
+
+Easy: 30 points.
+Medium: 50 points.
+Hard: 100 points.
+
+
+**/
 
 const regex = /^[a-zA-Z]+$/;
-
 const options = ['easy','medium','hard']
 
 // Function that returns a random word from the words list
@@ -40,6 +62,7 @@ function App() {
   const [userGuesses, setUserGuesses] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isGameStarted, setIsGameStarted] = useState(false);
+  const [usersPoints, setUsersPoints] = useState(0);
 
   // Function to get incorrect guesses
   const getIncorrectGuesses = () => {
@@ -55,6 +78,7 @@ function App() {
   const handleStartGame = () => {
       setIsGameStarted(true);
       setChosenWord(getWord(difficulty!));
+      setUsersPoints(0);
   };
 
   // Variable to track incorrect guesses
@@ -66,21 +90,37 @@ function App() {
   // Variable to track if player won
   const isWinner = chosenWord && (userGuesses.includes(chosenWord) || chosenWord
       .split("")
-      .every((letter: string) => userGuesses.includes(letter)));
+      .every((letter: string) => userGuesses.includes(letter)))
 
   // Adding users guesses to an array
   const addUserGuess = useCallback((letter: string) => {
-      if (userGuesses.includes(letter) || isLoser || isWinner) {
-          return;
-      }
-      setUserGuesses(currentLetters => [...currentLetters, letter]);
-  }, [userGuesses, isLoser, isWinner]);
+    if (userGuesses.includes(letter) || isLoser || isWinner) {
+      return;
+    }
+    setUserGuesses(currentLetters => {
+      const newGuesses = [...currentLetters, letter];
+
+      // Increment correct points if the guess is correct
+      if ((chosenWord!.includes(letter) && letter.length === 1) 
+        || chosenWord && userGuesses.includes(chosenWord)) {
+        if (difficulty === 'easy') {
+            setUsersPoints(prev => prev + 5);
+        } else if (difficulty === 'hard') {
+            setUsersPoints(prev => prev + 10);
+        } else {
+            setUsersPoints(prev => prev + 7.5);
+        }
+      } 
+      return newGuesses;
+    });
+  }, [userGuesses, isLoser, isWinner, chosenWord]);
 
   // Function to reset all variables and game
   const resetGame = () => {
       setUserGuesses([]);
       setChosenWord(getWord(difficulty!));
       setInputValue('');
+      setUsersPoints(0);
   };
 
   const handleInputChange = (event: { target: { value: SetStateAction<string> } }) => {
@@ -146,6 +186,28 @@ function App() {
                               e.currentTarget.style.opacity = '1';
                           }}
                       />
+                  </div>
+                
+                  <div style={{bottom: '20px',right: '20px', position: 'absolute',}}>
+                    <Stack direction="row" justifyContent="center" alignItems="flex-center">
+                        <Typography 
+                            style={{
+                                fontSize: "5rem",
+                                fontFamily: "'Indie Flower', cursive",
+                                fontWeight: "bold",
+                                }}
+                            >{usersPoints}
+                        </Typography>
+                        <img
+                            src={appleIcon}
+                            alt="Points"
+                            style={{
+                                width: '80px',
+                                height: '80px',
+                                marginTop: '15px'
+                            }}
+                        />
+                    </Stack>
                   </div>
                   
                   {/* Displays confetti */}

@@ -18,10 +18,12 @@ export function StartScreen({
 
   const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState('');
+  const [message, setMessage] = useState('');
 
   const handleDifficultyChange = (difficulty: string) => {
     setSelectedDifficulty(difficulty);
-    onDifficultySelect(difficulty); // Call parent function to update difficulty in App
+    onDifficultySelect(difficulty);
+    setMessage('')
   };
 
     // Setting input value
@@ -81,7 +83,7 @@ export function StartScreen({
       flexDirection: "column", 
       alignItems: "center", 
       justifyContent: "center", 
-      height: "90vh"
+      height: "100vh"
     }}>
 
         <Typography variant="h1" style={{ marginBottom: "40px", fontFamily: "'Indie Flower', cursive", fontWeight: "bold", fontSize: "8rem" }}>
@@ -183,6 +185,7 @@ export function StartScreen({
           onChange={handleInputChange}
           onKeyDown={handleKeyPress}
           placeholder="Enter Your Name"
+          autoComplete="off"
           style={{
             width: '250px',
             height: '50px',
@@ -193,7 +196,7 @@ export function StartScreen({
             fontWeight: "bold",
             background: 'none',
             textAlign: 'center',
-            marginBottom: '60px'
+            marginBottom: '60px',
           }}
           onFocus={(event) => {
             event.target.style.outline = `none`;
@@ -207,7 +210,13 @@ export function StartScreen({
         />
 
         <span 
-            onClick={selectedDifficulty ? onStart : undefined}
+            onClick={() => {
+                if (selectedDifficulty) {
+                    onStart();
+                } else {
+                    setMessage('Please select a difficulty before starting.');
+                }
+            }}
             style={{
                 color: "green",
                 display: "inline-block",
@@ -217,6 +226,7 @@ export function StartScreen({
                 fontWeight: "bold",
                 cursor: "pointer",
                 transition: "transform 0.3s, background-color 0.3s",
+                marginBottom: "80px"
             }}
             onMouseEnter={(e) => {
                 e.currentTarget.style.color = 'darkgreen',
@@ -229,7 +239,19 @@ export function StartScreen({
             >
             START
         </span>
-        
+
+        {message &&
+        <div style={{ transition: "height 0.3s"}}>
+            <Typography
+                style={{ 
+                    fontFamily: "'Indie Flower',cursive",
+                    fontWeight: "bold",
+                    fontSize: "2rem",
+                }}>{message}
+            </Typography>
+        </div> 
+        }
+
     </div>
     </>
   );

@@ -26,6 +26,7 @@ export function HangmanGuess({
           onChange={handleInputChange}
           onKeyDown={handleKeyPress}
           placeholder="Guess a Word"
+          autoComplete="off"
           style={{
             width: '250px',
             height: '50px',

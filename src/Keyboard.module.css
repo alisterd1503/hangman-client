@@ -16,10 +16,12 @@
 
 .btn.active {
     color: hsl(200, 100%, 50%);
+    cursor: default;
 }
 
 .btn.inactive {
     opacity: .3;
+    cursor: default;
 }
 
 .btn:hover:not(:disabled),
