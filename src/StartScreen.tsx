@@ -159,7 +159,6 @@ export function StartScreen({
             fontFamily: "'Indie Flower', cursive",
             fontSize: "2rem",
             fontWeight: "bold",
-            textTransform: "uppercase",
             background: 'none',
             textAlign: 'center',
             marginBottom: '60px'
