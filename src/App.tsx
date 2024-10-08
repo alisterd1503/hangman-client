@@ -6,12 +6,15 @@ import { HangmanWord } from "./HangmanWord"
 import { Keyboard } from "./Keyboard"
 import { HangmanGuess } from "./HangmanGuess"
 import { StartScreen } from "./StartScreen"
+import { Settings } from './Settings';
+import { HomeIcon } from './HomeIcon';
+import { SettingsIcon } from './SettingsIcon';
+import { Points } from './Points';
+import { PlayAgain } from './PlayAgain';
+import { BgMusic } from './BgMusic';
 
 import words from "./wordList.json"
 import Confetti from 'react-confetti'
-import homeIcon from './images/home.png';
-import appleIcon from './images/apple.png';
-import { Stack, Typography } from '@mui/material';
 
 /** 
 
@@ -56,6 +59,9 @@ function App() {
   const [inputValue, setInputValue] = useState('');
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [usersPoints, setUsersPoints] = useState(0);
+  const [settingsClicked, setSettingsClicked] = useState(false);
+  const [volume, setVolume] = useState(0.5)
+  const [mute, setMute] = useState(false)
 
   // Function to get incorrect guesses
   const getIncorrectGuesses = () => {
@@ -139,12 +145,17 @@ function App() {
 
   // Reset all relevant states when returning to the home screen
   const homeScreen = () => {
+      setSettingsClicked(false)
       setUserGuesses([]);
       setChosenWord(null);
       setInputValue('');
       setDifficulty(null);
       setIsGameStarted(false);
   };
+  
+  const settingsScreen = () => {
+    setSettingsClicked(true);
+  }
 
   useEffect(() => {
     if (isWinner) {
@@ -166,152 +177,98 @@ function App() {
     }
     }, [isWinner, isLoser, difficulty]);
 
-  return (
-      <div className="main">
-          {!isGameStarted ? (
-              <StartScreen
-                    onStart={handleStartGame}
-                    onDifficultySelect={setDifficulty}
-              />
+    return (
+        <div className="main">
+            <BgMusic volume={volume} mute={mute}/>
+          {settingsClicked ? (
+            <><Settings volume={volume} mute={mute} setVolume={setVolume} setMute={setMute}/><HomeIcon homeScreen={homeScreen}/></>
           ) : (
+            !isGameStarted ? (
+            <>
+              <StartScreen
+                onStart={handleStartGame}
+                onDifficultySelect={setDifficulty}
+              />
+              <SettingsIcon settingsScreen={settingsScreen}/>
+            </>
+            ) : (
               <>
-                  {/* Home screen button */}
-                  <div>
-                      <img
-                          src={homeIcon}
-                          alt="Home"
-                          onClick={homeScreen}
-                          style={{
-                              position: 'absolute',
-                              bottom: '40px',
-                              left: '20px',
-                              width: '80px',
-                              height: '80px',
-                              cursor: 'pointer',
-                              transition: 'transform 0.3s, opacity 0.3s',
-                          }}
-                          onMouseEnter={(e) => {
-                              e.currentTarget.style.transform = 'scale(1.1)';
-                              e.currentTarget.style.opacity = '0.8';
-                          }}
-                          onMouseLeave={(e) => {
-                              e.currentTarget.style.transform = 'scale(1)';
-                              e.currentTarget.style.opacity = '1';
-                          }}
-                      />
-                  </div>
+                {/* Home screen button */}
+                <SettingsIcon settingsScreen={settingsScreen}/>
                 
-                  <div style={{bottom: '20px',right: '20px', position: 'absolute',}}>
-                    <Stack direction="row" justifyContent="center" alignItems="flex-center">
-                        <Typography 
-                            style={{
-                                fontSize: "5rem",
-                                fontFamily: "'Indie Flower', cursive",
-                                fontWeight: "bold",
-                                }}
-                            >{usersPoints}
-                        </Typography>
-                        <img
-                            src={appleIcon}
-                            alt="Points"
-                            style={{
-                                width: '80px',
-                                height: '80px',
-                                marginTop: '15px'
-                            }}
-                        />
-                    </Stack>
+                <HomeIcon homeScreen={homeScreen}/>
+                
+                <Points usersPoints={usersPoints}/>
+      
+                {/* Displays confetti */}
+                {isWinner && (
+                  <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+                    <Confetti width={window.outerWidth} height={window.outerHeight} />
                   </div>
-                  
-                  {/* Displays confetti */}
-                  {isWinner && (
-                      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-                          <Confetti width={window.outerWidth} height={window.outerHeight} />
-                      </div>
+                )}
+      
+                {/* Displays header title */}
+                <div className="message" style={{
+                  color: isWinner !== isLoser ? (isWinner ? "green" : "red") : "black",
+                }}>
+                  {isWinner === isLoser && "GUESS THE WORD!"}
+                  {isWinner && "WINNER!"}
+                  {isLoser && "LOSER!"}
+                </div>
+      
+                {/* Displays the hangman image */}
+                <div className="drawing">
+                  <HangmanDrawing numOfGuesses={incorrectGuesses.length} />
+                </div>
+                {chosenWord}
+                {/* Displays the correct guessed letters and dashes */}
+                <div className="dashed-words">
+                  <HangmanWord
+                    reveal={isLoser || isWinner ? true : false}
+                    userGuesses={userGuesses}
+                    chosenWord={chosenWord ?? ''}
+                    isWinner={!!isWinner}
+                  />
+                </div>
+      
+                {/* Displays the incorrect guessed letters */}
+                <div className="guessed-letters">
+                  {incorrectGuesses.map((letter, index) => (
+                    <span key={index} style={{ marginRight: '1rem' }}>
+                      {letter}
+                    </span>
+                  ))}
+                </div>
+      
+                {/* Displays the keyboard */}
+                <div className="keyboard">
+                  <Keyboard
+                    disabled={isWinner || isLoser}
+                    activeLetters={userGuesses.filter(letter => chosenWord!.includes(letter))}
+                    inactiveLetters={incorrectGuesses}
+                    addUserGuess={addUserGuess}
+                  />
+                </div>
+      
+                {/* Displays the guess input field */}
+                <div className="guess-words">
+                  {isLoser || isWinner ? (
+                    <PlayAgain resetGame={resetGame}/>
+                  ) : (
+                    <HangmanGuess
+                      inputValue={inputValue}
+                      handleInputChange={handleInputChange}
+                      handleKeyPress={handleKeyPress}
+                      handleButtonClick={handleButtonClick}
+                    />
                   )}
-                  
-                  {/* Displays header tite */}
-                  <div className="message" style={{
-                      color: isWinner !== isLoser ? (isWinner ? "green" : "red") : "black",
-                  }}>
-                      {isWinner === isLoser && "GUESS THE WORD!"}
-                      {isWinner && "WINNER!"}
-                      {isLoser && "LOSER!"}
-                  </div>
-
-                  {/* Displays the hangman image */}
-                  <div className="drawing">
-                      <HangmanDrawing numOfGuesses={incorrectGuesses.length} />
-                  </div>
-                  {chosenWord}
-                  {/* Displays the correct guessed letters and dashes */}
-                  <div className="dashed-words">
-                      <HangmanWord
-                          reveal={isLoser || isWinner ? true : false}
-                          userGuesses={userGuesses}
-                          chosenWord={chosenWord ?? ''}
-                          isWinner={!!isWinner}
-                      />
-                  </div>
-
-                  {/* Displays the incorrect guessed letters */}
-                  <div className="guessed-letters">
-                      {incorrectGuesses.map((letter, index) => (
-                          <span key={index} style={{ marginRight: '1rem' }}>
-                              {letter}
-                          </span>
-                      ))}
-                  </div>
-                  
-                  {/* Displays the keyboard */}
-                  <div className="keyboard">
-                      <Keyboard
-                          disabled={isWinner || isLoser}
-                          activeLetters={userGuesses.filter(letter => chosenWord!.includes(letter))}
-                          inactiveLetters={incorrectGuesses}
-                          addUserGuess={addUserGuess}
-                      />
-                  </div>
-
-                  {/* Displays the guess input field    */}
-                  <div className="guess-words">
-                      {isLoser || isWinner ?
-                          <span
-                              onClick={resetGame}
-                              style={{
-                                  display: "inline-block",
-                                  color: "green",
-                                  fontSize: "4rem",
-                                  height: "65px",
-                                  fontFamily: "'Indie Flower', cursive",
-                                  fontWeight: "bold",
-                                  cursor: "pointer",
-                                  transition: "transform 0.3s, background-color 0.3s",
-                              }}
-                              onMouseEnter={(e) => {
-                                  e.currentTarget.style.color = 'darkgreen';
-                                  e.currentTarget.style.transform = 'scale(1.1)';
-                              }}
-                              onMouseLeave={(e) => {
-                                  e.currentTarget.style.color = 'green';
-                                  e.currentTarget.style.transform = 'scale(1)';
-                              }}
-                          >
-                              PLAY AGAIN
-                          </span>
-                          :
-                          <HangmanGuess
-                              inputValue={inputValue}
-                              handleInputChange={handleInputChange}
-                              handleKeyPress={handleKeyPress}
-                              handleButtonClick={handleButtonClick}
-                          />
-                      }
-                  </div>
+                </div>
               </>
+            )
           )}
-      </div>
-  );
+        </div>
+      );
+      
 }
 
 export default App;

@@ -60,7 +60,6 @@ export function StartScreen({
             onClick={leaderboard}
             style={{
                 position: 'absolute',
-                top: '40px',
                 right: '20px',
                 width: '80px',
                 height: '80px',
@@ -226,7 +225,7 @@ export function StartScreen({
                 fontWeight: "bold",
                 cursor: "pointer",
                 transition: "transform 0.3s, background-color 0.3s",
-                marginBottom: "830px"
+                marginBottom: "80px"
             }}
             onMouseEnter={(e) => {
                 e.currentTarget.style.color = 'darkgreen',
@@ -240,8 +239,8 @@ export function StartScreen({
             START
         </span>
 
+        <div style={{transition: '0.3s', height: '50px'}}>
         {message &&
-        <div style={{ transition: "height 0.3s"}}>
             <Typography
                 style={{ 
                     fontFamily: "'Indie Flower',cursive",
@@ -249,8 +248,8 @@ export function StartScreen({
                     fontSize: "2rem",
                 }}>{message}
             </Typography>
+            }
         </div> 
-        }
 
     </div>
     </>
