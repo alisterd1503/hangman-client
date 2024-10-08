@@ -226,7 +226,7 @@ export function StartScreen({
                 fontWeight: "bold",
                 cursor: "pointer",
                 transition: "transform 0.3s, background-color 0.3s",
-                marginBottom: "80px"
+                marginBottom: "830px"
             }}
             onMouseEnter={(e) => {
                 e.currentTarget.style.color = 'darkgreen',

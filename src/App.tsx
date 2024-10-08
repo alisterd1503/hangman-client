@@ -1,6 +1,6 @@
 import './styles.css';
 
-import { SetStateAction, useCallback, useState } from "react"
+import { SetStateAction, useCallback, useEffect, useState } from "react"
 import { HangmanDrawing } from "./HangmanDrawing"
 import { HangmanWord } from "./HangmanWord"
 import { Keyboard } from "./Keyboard"
@@ -39,22 +39,15 @@ const options = ['easy','medium','hard']
 
 // Function that returns a random word from the words list
 function getWord(difficulty: string) {
-  let word;
-  do {
-    word = words[Math.floor(Math.random() * words.length)];
-
-    if (difficulty === 'easy' && word.length === 4) {
-      return word;
-    } else if (difficulty === 'medium' && (word.length === 5 || word.length === 6)) {
-      return word;
-    } else if (difficulty === 'hard' && word.length > 6) {
-      return word;
-    } else if (!options.includes(difficulty)) {
-      return word;
-    }
-
-  } while (true);
-}
+    let word;
+    do {
+      word = words[Math.floor(Math.random() * words.length)];
+      if (difficulty === 'easy' && word.length === 4) return word;
+      else if (difficulty === 'medium' && (word.length === 5 || word.length === 6)) return word;
+      else if (difficulty === 'hard' && word.length > 6) return word;
+      else if (!options.includes(difficulty)) return word;
+    } while (true);
+  }
 
 function App() {
   const [difficulty, setDifficulty] = useState<string | null>(null);
@@ -153,6 +146,26 @@ function App() {
       setIsGameStarted(false);
   };
 
+  useEffect(() => {
+    if (isWinner) {
+        if (difficulty === 'easy') {
+            setUsersPoints(prev => prev + 20);
+        } else if (difficulty === 'hard') {
+            setUsersPoints(prev => prev + 40);
+        } else {
+            setUsersPoints(prev => prev + 50);
+        }
+    } else if (isLoser) {
+        if (difficulty === 'easy') {
+            setUsersPoints(prev => prev - 10);
+        } else if (difficulty === 'hard') {
+            setUsersPoints(prev => prev - 20);
+        } else {
+            setUsersPoints(prev => prev - 15);
+        }
+    }
+    }, [isWinner, isLoser, difficulty]);
+
   return (
       <div className="main">
           {!isGameStarted ? (
@@ -230,7 +243,7 @@ function App() {
                   <div className="drawing">
                       <HangmanDrawing numOfGuesses={incorrectGuesses.length} />
                   </div>
-
+                  {chosenWord}
                   {/* Displays the correct guessed letters and dashes */}
                   <div className="dashed-words">
                       <HangmanWord
