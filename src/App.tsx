@@ -12,6 +12,9 @@ import { SettingsIcon } from './SettingsIcon';
 import { Points } from './Points';
 import { PlayAgain } from './PlayAgain';
 import { BgMusic } from './BgMusic';
+import { WrongGuesses } from './WrongGuesses';
+import { LeaderboardIcon } from './LeaderboardIcon';
+import { LeaderboardTable } from './LeaderboardTable';
 
 import words from "./wordList.json"
 import Confetti from 'react-confetti'
@@ -40,6 +43,38 @@ Hard: 100 points.
 const regex = /^[a-zA-Z]+$/;
 const options = ['easy','medium','hard']
 
+// Import the moment-timezone library
+import moment from 'moment-timezone';
+
+/**
+ * Get the user's country based on their time zone.
+ * @param {string} userTimeZone - The user's time zone.
+ * @returns {string} The user's country or the original time zone if not found.
+ */
+function getCountryByTimeZone(userTimeZone: string): string {
+  // Get a list of countries from moment-timezone
+  const countries: string[] = moment.tz.countries();
+
+  // Iterate through the countries and check if the time zone is associated with any country
+  for (const country of countries) {
+    const timeZones: string[] = moment.tz.zonesForCountry(country);
+
+    if (timeZones.includes(userTimeZone)) {
+      // Use Intl.DisplayNames to get the full country name
+      const countryName = new Intl.DisplayNames(['en'], { type: 'region' }).of(country);
+      return countryName as string; // Type assertion since DisplayNames.of can return undefined
+    }
+  }
+
+  // Return the original time zone if no matching country is found
+  return userTimeZone;
+}
+
+const userTimeZone: string = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const userCountry: string = getCountryByTimeZone(userTimeZone);
+
+console.log(userCountry)
+
 // Function that returns a random word from the words list
 function getWord(difficulty: string) {
     let word;
@@ -60,8 +95,9 @@ function App() {
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [usersPoints, setUsersPoints] = useState(0);
   const [settingsClicked, setSettingsClicked] = useState(false);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [volume, setVolume] = useState(0.5)
-  const [mute, setMute] = useState(false)
+  const [mute, setMute] = useState(true)
 
   // Function to get incorrect guesses
   const getIncorrectGuesses = () => {
@@ -146,6 +182,7 @@ function App() {
   // Reset all relevant states when returning to the home screen
   const homeScreen = () => {
       setSettingsClicked(false)
+      setShowLeaderboard(false)
       setUserGuesses([]);
       setChosenWord(null);
       setInputValue('');
@@ -155,6 +192,10 @@ function App() {
   
   const settingsScreen = () => {
     setSettingsClicked(true);
+  }
+
+  const LeaderboardScreen = () => {
+    setShowLeaderboard(true);
   }
 
   useEffect(() => {
@@ -177,97 +218,99 @@ function App() {
     }
     }, [isWinner, isLoser, difficulty]);
 
+
     return (
-        <div className="main">
-            <BgMusic volume={volume} mute={mute}/>
-          {settingsClicked ? (
-            <><Settings volume={volume} mute={mute} setVolume={setVolume} setMute={setMute}/><HomeIcon homeScreen={homeScreen}/></>
-          ) : (
-            !isGameStarted ? (
-            <>
-              <StartScreen
-                onStart={handleStartGame}
-                onDifficultySelect={setDifficulty}
+      <div className="main">
+        <BgMusic volume={volume} mute={mute}/>
+        {/* Conditional rendering for LeaderboardTable */}
+        {showLeaderboard ? (
+          <>
+            <LeaderboardTable />
+            <HomeIcon homeScreen={homeScreen} />
+          </>          
+        ) : settingsClicked ? (
+          <>
+            <Settings volume={volume} mute={mute} setVolume={setVolume} setMute={setMute} />
+            <HomeIcon homeScreen={homeScreen} />
+          </>
+        ) : !isGameStarted ? (
+          <>
+            <StartScreen onStart={handleStartGame} onDifficultySelect={setDifficulty} />
+            <SettingsIcon settingsScreen={settingsScreen} />
+            <LeaderboardIcon LeaderboardScreen={LeaderboardScreen} />
+          </>
+        ) : (
+          <>
+            {/* Home screen button */}
+            <SettingsIcon settingsScreen={settingsScreen} />
+            <HomeIcon homeScreen={homeScreen} />
+            <Points usersPoints={usersPoints} />
+    
+            {/* Displays confetti */}
+            {isWinner && (
+              <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+                <Confetti width={window.outerWidth} height={window.outerHeight} />
+              </div>
+            )}
+    
+            {/* Displays header title */}
+            <div className="message"
+              style={{
+                color: isWinner !== isLoser ? (isWinner ? 'green' : 'red') : 'black',
+              }}
+            >
+              {isWinner === isLoser && 'GUESS THE WORD!'}
+              {isWinner && 'WINNER!'}
+              {isLoser && 'LOSER!'}
+            </div>
+    
+            {/* Displays the hangman image */}
+            <div className="drawing">
+              <HangmanDrawing numOfGuesses={incorrectGuesses.length} />
+            </div>
+            {chosenWord}
+    
+            {/* Displays the correct guessed letters and dashes */}
+            <div className="dashed-words">
+              <HangmanWord
+                reveal={isLoser || isWinner ? true : false}
+                userGuesses={userGuesses}
+                chosenWord={chosenWord ?? ''}
+                isWinner={!!isWinner}
               />
-              <SettingsIcon settingsScreen={settingsScreen}/>
-            </>
-            ) : (
-              <>
-                {/* Home screen button */}
-                <SettingsIcon settingsScreen={settingsScreen}/>
-                
-                <HomeIcon homeScreen={homeScreen}/>
-                
-                <Points usersPoints={usersPoints}/>
-      
-                {/* Displays confetti */}
-                {isWinner && (
-                  <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-                    <Confetti width={window.outerWidth} height={window.outerHeight} />
-                  </div>
-                )}
-      
-                {/* Displays header title */}
-                <div className="message" style={{
-                  color: isWinner !== isLoser ? (isWinner ? "green" : "red") : "black",
-                }}>
-                  {isWinner === isLoser && "GUESS THE WORD!"}
-                  {isWinner && "WINNER!"}
-                  {isLoser && "LOSER!"}
-                </div>
-      
-                {/* Displays the hangman image */}
-                <div className="drawing">
-                  <HangmanDrawing numOfGuesses={incorrectGuesses.length} />
-                </div>
-                {chosenWord}
-                {/* Displays the correct guessed letters and dashes */}
-                <div className="dashed-words">
-                  <HangmanWord
-                    reveal={isLoser || isWinner ? true : false}
-                    userGuesses={userGuesses}
-                    chosenWord={chosenWord ?? ''}
-                    isWinner={!!isWinner}
-                  />
-                </div>
-      
-                {/* Displays the incorrect guessed letters */}
-                <div className="guessed-letters">
-                  {incorrectGuesses.map((letter, index) => (
-                    <span key={index} style={{ marginRight: '1rem' }}>
-                      {letter}
-                    </span>
-                  ))}
-                </div>
-      
-                {/* Displays the keyboard */}
-                <div className="keyboard">
-                  <Keyboard
-                    disabled={isWinner || isLoser}
-                    activeLetters={userGuesses.filter(letter => chosenWord!.includes(letter))}
-                    inactiveLetters={incorrectGuesses}
-                    addUserGuess={addUserGuess}
-                  />
-                </div>
-      
-                {/* Displays the guess input field */}
-                <div className="guess-words">
-                  {isLoser || isWinner ? (
-                    <PlayAgain resetGame={resetGame}/>
-                  ) : (
-                    <HangmanGuess
-                      inputValue={inputValue}
-                      handleInputChange={handleInputChange}
-                      handleKeyPress={handleKeyPress}
-                      handleButtonClick={handleButtonClick}
-                    />
-                  )}
-                </div>
-              </>
-            )
-          )}
-        </div>
-      );
+            </div>
+    
+            {/* Displays the incorrect guessed letters */}
+            <WrongGuesses incorrectGuesses={incorrectGuesses} />
+    
+            {/* Displays the keyboard */}
+            <div className="keyboard">
+              <Keyboard
+                disabled={isWinner || isLoser}
+                activeLetters={userGuesses.filter((letter) => chosenWord!.includes(letter))}
+                inactiveLetters={incorrectGuesses}
+                addUserGuess={addUserGuess}
+              />
+            </div>
+    
+            {/* Displays the guess input field */}
+            <div className="guess-words">
+              {isLoser || isWinner ? (
+                <PlayAgain resetGame={resetGame} />
+              ) : (
+                <HangmanGuess
+                  inputValue={inputValue}
+                  handleInputChange={handleInputChange}
+                  handleKeyPress={handleKeyPress}
+                  handleButtonClick={handleButtonClick}
+                />
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    );
+    
       
 }
 

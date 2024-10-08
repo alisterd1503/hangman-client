@@ -1,7 +1,6 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { SetStateAction, useState } from 'react';
 import './styles.css';
-import leaderboardIcon from './images/leaderboard.png';
 
 const secondaryColour = "#db6e37"
 const primaryColour = "#FF8343";
@@ -47,35 +46,8 @@ export function StartScreen({
         }
     };
 
-    const leaderboard = () => {
-        console.log("Open Leaderboard")
-    }
-
   return (
     <>
-    <div>
-        <img
-            src={leaderboardIcon}
-            alt="Home"
-            onClick={leaderboard}
-            style={{
-                position: 'absolute',
-                right: '20px',
-                width: '80px',
-                height: '80px',
-                cursor: 'pointer',
-                transition: 'transform 0.3s, opacity 0.3s',
-            }}
-            onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.1)';
-                e.currentTarget.style.opacity = '0.8';
-            }}
-            onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.opacity = '1';
-            }}
-        />
-    </div>
 
     <div style={{
       display: "flex", 

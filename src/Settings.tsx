@@ -29,7 +29,7 @@ export function Settings({
     const toggleMute = () => {
         setMute(!mute);
     }
-    console.log(mute,volume)
+
     return (
         <div style={{
             display: "flex",
