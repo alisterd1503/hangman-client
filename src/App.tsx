@@ -16,11 +16,13 @@ import { PlayAgain } from './components/hangman/PlayAgain';
 import { Settings } from './components/pages/Settings';
 import { LeaderboardTable } from './components/pages/LeaderboardTable';
 import { StartScreen } from "./components/pages/StartScreen"
+import { Login } from "./components/pages/login.tsx";
 
 //Icons//
 import { HomeIcon } from './components/icons/HomeIcon';
 import { SettingsIcon } from './components/icons/SettingsIcon';
 import { LeaderboardIcon } from './components/icons/LeaderboardIcon';
+import { LoginIcon } from "./components/icons/LoginIcon.tsx";
 
 //Background//
 import { BgMusic } from './components/background/BgMusic.tsx';
@@ -63,18 +65,18 @@ type Packet = {
   location: string
 }
 
+type Page = 'home' | 'settings' | 'leaderboard' | 'login' | 'game';
+
 function App() {
   const [difficulty, setDifficulty] = useState<string | null>(null);
   const [chosenWord, setChosenWord] = useState<string | null>(null);
   const [userGuesses, setUserGuesses] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
-  const [isGameStarted, setIsGameStarted] = useState(false);
   const [usersPoints, setUsersPoints] = useState(0);
-  const [settingsClicked, setSettingsClicked] = useState(false);
-  const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [volume, setVolume] = useState(0.5)
   const [mute, setMute] = useState(true)
   const [usersName, setUsersName] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<Page>('home');
 
   const sendPacket = () => {
     const body: Packet = {
@@ -84,6 +86,10 @@ function App() {
     }
     addScore(body)
   }
+
+  const navigateTo = (page: Page) => {
+    setCurrentPage(page);
+  };
 
   const handleNameSubmit = (name: string) => {
     setUsersName(name);
@@ -101,7 +107,6 @@ function App() {
 
   // Function to start the game
   const handleStartGame = () => {
-      setIsGameStarted(true);
       setChosenWord(getWord(difficulty!));
       setUsersPoints(0);
   };
@@ -169,25 +174,17 @@ function App() {
   };
 
   // Reset all relevant states when returning to the home screen
-  const homeScreen = () => {
+  const stopGame = () => {
       sendPacket()
-      setSettingsClicked(false)
-      setShowLeaderboard(false)
       setUserGuesses([]);
       setChosenWord(null);
       setInputValue('');
       setDifficulty(null);
-      setIsGameStarted(false);
       setUsersName('')
+      navigateTo('home')
   };
-  
-  const settingsScreen = () => {
-    setSettingsClicked(true);
-  }
 
-  const LeaderboardScreen = () => {
-    setShowLeaderboard(true);
-  }
+
 
   useEffect(() => {
     if (isWinner) {
@@ -210,30 +207,52 @@ function App() {
     }
     }, [isWinner, isLoser, difficulty]);
 
-    return (
-      <div className="main">
-        <BgMusic volume={volume} mute={mute}/>
-        {/* Conditional rendering for LeaderboardTable */}
-        {showLeaderboard ? (
-          <>
-            <LeaderboardTable />
-            <HomeIcon homeScreen={homeScreen} />
-          </>          
-        ) : settingsClicked ? (
-          <>
-            <Settings volume={volume} mute={mute} setVolume={setVolume} setMute={setMute} />
-            <HomeIcon homeScreen={homeScreen} />
-          </>
-        ) : !isGameStarted ? (
-          <>
-            <StartScreen onStart={handleStartGame} onDifficultySelect={setDifficulty} handleNameSubmit={handleNameSubmit} />
-            <SettingsIcon settingsScreen={settingsScreen} />
-            <LeaderboardIcon LeaderboardScreen={LeaderboardScreen} />
-          </>
-        ) : (
-          <>
+    const renderPage = () => {
+      switch (currentPage) {
+        case 'home':
+          return (
+            <>
+              <StartScreen 
+                onStart={() => { handleStartGame(); navigateTo('game'); }} 
+                onDifficultySelect={setDifficulty} 
+                handleNameSubmit={handleNameSubmit} 
+              />
+              <SettingsIcon settingsScreen={() => navigateTo('settings')} />
+              <LeaderboardIcon LeaderboardScreen={() => navigateTo('leaderboard')} />
+              <LoginIcon LoginScreen={() => navigateTo('login')} />
+            </>
+          );
+        case 'settings':
+          return (
+            <>
+              <Settings 
+                volume={volume} 
+                mute={mute} 
+                setVolume={setVolume} 
+                setMute={setMute} 
+              />
+              <HomeIcon homeScreen={() => navigateTo('home')} />
+            </>
+          );
+        case 'leaderboard':
+          return (
+            <>
+              <LeaderboardTable />
+              <HomeIcon homeScreen={() => navigateTo('home')} />
+            </>
+          );
+        case 'login':
+          return (
+            <>
+              <Login />
+              <HomeIcon homeScreen={() => navigateTo('home')} />
+            </>
+          );
+        case 'game':
+          return (
+            <>
             {/* Home screen button */}
-            <HomeIcon homeScreen={homeScreen} />
+            <HomeIcon homeScreen={stopGame} />
             <Points usersPoints={usersPoints} />
     
             {/* Displays confetti */}
@@ -296,7 +315,16 @@ function App() {
               )}
             </div>
           </>
-        )}
+          );
+        default:
+          return null;
+      }
+    };
+
+    return (
+      <div className="main">
+        <BgMusic volume={volume} mute={mute}/>
+        {renderPage()}
       </div>
     );
     

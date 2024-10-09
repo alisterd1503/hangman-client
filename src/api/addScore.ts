@@ -4,7 +4,7 @@ type Packet = {
     name: string | null,
     score: number,
     location: string
-  }
+}
 
 export const addScore = async (packet: Packet): Promise<void> => {
     try {
