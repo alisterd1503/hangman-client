@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+
+/* Main container styling */
+.main {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    align-items: center;
+    gap: 0rem;
+    transform: scale(0.9);
+    border-radius: 20px;
+    max-width: 100%;
+  }
+  
+  /* Winner and loser message styling */
+  .message {
+    margin-top: 10px; 
+    margin-bottom: 40px;
+    font-size: 6rem;
+    text-align: center; 
+    font-weight: bold;
+    font-family: 'Indie Flower', cursive;
+    letter-spacing: 0.6rem;
+    height: 30px;
+  }
+  
+  /* Styling for play again message */
+  .play-again {
+    font-size: 1rem;
+    color: black;
+    font-family: 'Indie Flower', cursive;
+    font-weight: 100;
+    letter-spacing: 0.15rem;
+    height: 20px;
+  }
+  
+  /* Dashes and letters */
+  .dashed-words {
+    margin-top: -50px;
+  }
+  
+  /* Styling for guessed letters */
+  .guessed-letters {
+    font-family: 'Indie Flower', cursive;
+    font-size: 1.5rem; 
+    text-align: center; 
+    color: red;
+    font-weight: bold;
+    text-transform: uppercase;
+    height: 30px;
+    margin-top: 10px; 
+  }
+  
+  /* Keyboard styling */
+  .keyboard {
+    align-self: stretch;
+    transform: scale(0.6);
+  }
+  
+  /* Guess input and button container */
+  .guess-words {
+    margin-bottom: 40px;
+    height: 65px;
+  }
