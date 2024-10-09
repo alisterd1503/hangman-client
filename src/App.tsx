@@ -76,7 +76,6 @@ function App() {
       score: usersPoints,
       location: userCountry
     } 
-    console.log(body) 
   }
 
   const handleNameSubmit = (name: string) => {
@@ -123,11 +122,11 @@ function App() {
       if ((chosenWord!.includes(letter) && letter.length === 1) 
         || chosenWord && userGuesses.includes(chosenWord)) {
         if (difficulty === 'easy') {
-            setUsersPoints(prev => prev + 5);
-        } else if (difficulty === 'hard') {
             setUsersPoints(prev => prev + 10);
+        } else if (difficulty === 'hard') {
+            setUsersPoints(prev => prev + 20);
         } else {
-            setUsersPoints(prev => prev + 7.5);
+            setUsersPoints(prev => prev + 15);
         }
       } 
       return newGuesses;
@@ -136,7 +135,6 @@ function App() {
 
   // Function to reset all variables and game
   const resetGame = () => {
-    console.log(usersName)
       setUserGuesses([]);
       setChosenWord(getWord(difficulty!));
       setInputValue('');
@@ -254,7 +252,6 @@ function App() {
             <div className="drawing">
               <HangmanDrawing numOfGuesses={incorrectGuesses.length} isWinner={!!isWinner}/>
             </div>
-            {chosenWord}
     
             {/* Displays the correct guessed letters and dashes */}
             <div className="dashed-words">

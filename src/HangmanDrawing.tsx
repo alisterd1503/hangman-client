@@ -23,7 +23,6 @@ export function HangmanDrawing({
      numOfGuesses,
      isWinner 
 }: HangmanDrawingProps) {
-    console.log(isWinner)
     const currentImage = isWinner ? winner : (numOfGuesses > 0 ? IMAGES[numOfGuesses - 1] : null)
   
     return (
