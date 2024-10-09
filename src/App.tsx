@@ -4,33 +4,36 @@ import Confetti from 'react-confetti'
 import './styles.css';
 
 //Hangman//
-import { HangmanDrawing } from "./HangmanDrawing"
-import { HangmanWord } from "./HangmanWord"
-import { HangmanGuess } from "./HangmanGuess"
-import { WrongGuesses } from './WrongGuesses';
-import { Keyboard } from "./Keyboard"
-import { Points } from './Points';
-import { PlayAgain } from './PlayAgain';
+import { HangmanDrawing } from "./components/hangman/HangmanDrawing.tsx"
+import { HangmanWord } from "./components/hangman/HangmanWord"
+import { HangmanGuess } from "./components/hangman/HangmanGuess"
+import { WrongGuesses } from './components/hangman/WrongGuesses';
+import { Keyboard } from "./components/hangman/Keyboard"
+import { Points } from './components/hangman/Points';
+import { PlayAgain } from './components/hangman/PlayAgain';
 
 //Pages//
-import { Settings } from './Settings';
-import { LeaderboardTable } from './LeaderboardTable';
-import { StartScreen } from "./StartScreen"
+import { Settings } from './components/pages/Settings';
+import { LeaderboardTable } from './components/pages/LeaderboardTable';
+import { StartScreen } from "./components/pages/StartScreen"
 
 //Icons//
-import { HomeIcon } from './HomeIcon';
-import { SettingsIcon } from './SettingsIcon';
-import { LeaderboardIcon } from './LeaderboardIcon';
+import { HomeIcon } from './components/icons/HomeIcon';
+import { SettingsIcon } from './components/icons/SettingsIcon';
+import { LeaderboardIcon } from './components/icons/LeaderboardIcon';
 
 //Background//
-import { BgMusic } from './BgMusic';
+import { BgMusic } from './components/background/BgMusic.tsx';
 
 //Functions//
-import { getCountryByTimeZone } from './getLocation.tsx';
-import { getWord } from './getWord.tsx';
+import { getCountryByTimeZone } from './components/functions/getLocation.tsx';
+import { getWord } from './components/functions/getWord.tsx';
 
-//Models//
-import { Packet } from './Packet.tsx'
+type Packet = {
+  name: string | null,
+  score: number,
+  location: string
+}
 
 /** 
 
@@ -227,7 +230,6 @@ function App() {
         ) : (
           <>
             {/* Home screen button */}
-            <SettingsIcon settingsScreen={settingsScreen} />
             <HomeIcon homeScreen={homeScreen} />
             <Points usersPoints={usersPoints} />
     

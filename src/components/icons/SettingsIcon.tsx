@@ -1,24 +1,24 @@
-import homeIcon from './images/home.png'
+import settingsIcon from '../../images/settings.png'
 
-type HomeIconProps = {
-    homeScreen: () => void,
+type SettingsIconProps = {
+    settingsScreen: () => void,
 }
 
-export function HomeIcon({
-    homeScreen
-}: HomeIconProps) {
+export function SettingsIcon({
+    settingsScreen
+}: SettingsIconProps) {
     return (
         <div>
             <img
-            src={homeIcon}
-            alt="Home"
-            onClick={homeScreen}
+            src={settingsIcon}
+            alt="Settings"
+            onClick={settingsScreen}
             style={{
                 position: 'absolute',
-                bottom: '40px',
+                top: '20px',
                 left: '20px',
-                width: '80px',
-                height: '80px',
+                width: '60px',
+                height: '60px',
                 cursor: 'pointer',
                 transition: 'transform 0.3s, opacity 0.3s',
             }}

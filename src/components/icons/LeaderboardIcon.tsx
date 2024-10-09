@@ -1,4 +1,4 @@
-import leaderboardIcon from './images/leaderboard.png'
+import leaderboardIcon from '../../images/leaderboard.png'
 
 type LeaderboardIconProps = {
     LeaderboardScreen: () => void,

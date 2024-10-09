@@ -1,4 +1,3 @@
-
 type PlayAgainProps = {
     resetGame: () => void,
 }

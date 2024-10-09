@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material"
-import './styles.css';
+import '../../styles.css';
 
 const primaryColour = "#FF8343";
 const secondaryColour = "#db6e37"

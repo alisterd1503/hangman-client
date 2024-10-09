@@ -1,8 +1,8 @@
 import { Box, Slider, Stack, Typography } from "@mui/material";
 import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
-import muteIcon from './images/mute.png';
-import unmuteIcon from './images/unmute.png';
+import muteIcon from '../../images/mute.png';
+import unmuteIcon from '../../images/unmute.png';
 
 type SettingsProps = {
     volume: number;

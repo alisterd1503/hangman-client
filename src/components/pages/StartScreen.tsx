@@ -1,6 +1,6 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { SetStateAction, useState } from 'react';
-import './styles.css';
+import '../../styles.css';
 
 const secondaryColour = "#db6e37"
 const primaryColour = "#FF8343";

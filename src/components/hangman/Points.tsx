@@ -1,5 +1,5 @@
 import { Stack, Typography } from '@mui/material'
-import appleIcon from './images/apple.png'
+import appleIcon from '../../images/apple.png'
 
 type PointsProps = {
     usersPoints: number
