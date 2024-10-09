@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+
+.btn {
+    width: 100%;
+    background: none;
+    aspect-ratio: 1 / 1;
+    font-size: 4rem;
+    text-transform: uppercase;
+    padding: .5rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: black;
+    font-family: 'Indie Flower', cursive;
+    border: none;
+}
+
+.btn.active {
+    color: hsl(200, 100%, 50%);
+    cursor: default;
+}
+
+.btn.inactive {
+    opacity: .3;
+    cursor: default;
+}
+
+.btn:hover:not(:disabled),
+.btn:focus:not(:disabled) {
+    color: hsl(200, 100%, 75%);
+
+}
