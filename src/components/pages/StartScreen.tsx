@@ -1,6 +1,7 @@
 import { Button, Stack, Typography } from '@mui/material';
-import { SetStateAction, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import '../../styles.css';
+import { getNames } from '../../api/getNames';
 
 const secondaryColour = "#db6e37"
 const primaryColour = "#FF8343";
@@ -20,6 +21,16 @@ export function StartScreen({
   const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null);
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
+  const [usedNames, setUsedNames] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchScores = async () => {
+        const data = await getNames();
+        setUsedNames(data);
+    };
+
+    fetchScores();
+}, []);
 
   const handleDifficultyChange = (difficulty: string) => {
     setSelectedDifficulty(difficulty);
@@ -181,13 +192,15 @@ export function StartScreen({
 
         <span 
             onClick={() => {
-                if (selectedDifficulty && name) {
+                if (selectedDifficulty && name && (!usedNames.includes(name))) {
                     handleButtonClick()
                 } else {
                     if (!name) {
                         setMessage('Please enter your name before starting.');
-                    } else {
+                    } else if (!selectedDifficulty) {
                         setMessage('Please select a difficulty before starting.');
+                    } else if (usedNames.includes(name)) {
+                        setMessage('This name is already taken.');
                     }
                 }
             }}
