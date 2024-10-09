@@ -75,7 +75,8 @@ function App() {
       name: usersName,
       score: usersPoints,
       location: userCountry
-    } 
+    }
+    return body
   }
 
   const handleNameSubmit = (name: string) => {
