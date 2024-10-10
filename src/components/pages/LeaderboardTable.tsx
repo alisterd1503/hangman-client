@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 type DB_Packet = {
     id: number
-    name: string | null,
+    username: string | null,
     score: number,
     location: string
 }
@@ -49,7 +49,7 @@ export function LeaderboardTable() {
                             <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': { backgroundColor: '#FFCCBC' } }}>
                                 {/* Display Position */}
                                 <TableCell align="center" sx={{ fontSize: '3rem', color: '#D84315', fontFamily: "'Indie Flower', cursive" }}>#{index + 1}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive"}}>{row.name}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive"}}>{row.username}</TableCell>
                                 <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive" }}>{row.score}</TableCell>
                                 <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive" }}>{row.location}</TableCell>
                             </TableRow>

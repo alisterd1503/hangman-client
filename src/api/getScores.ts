@@ -1,8 +1,8 @@
-const API_URL = 'http://localhost:5001/api/scores';
+const API_URL = 'http://localhost:5001/api/getScores';
 
 type DB_Packet = {
     id: number
-    name: string | null,
+    username: string | null,
     score: number,
     location: string
 }

@@ -16,13 +16,15 @@ import { PlayAgain } from './components/hangman/PlayAgain';
 import { Settings } from './components/pages/Settings';
 import { LeaderboardTable } from './components/pages/LeaderboardTable';
 import { StartScreen } from "./components/pages/StartScreen"
-import { Login } from "./components/pages/login.tsx";
+import { Login } from "./components/pages/Login.tsx";
+import { Register } from "./components/pages/Register.tsx";
 
 //Icons//
 import { HomeIcon } from './components/icons/HomeIcon';
 import { SettingsIcon } from './components/icons/SettingsIcon';
 import { LeaderboardIcon } from './components/icons/LeaderboardIcon';
 import { LoginIcon } from "./components/icons/LoginIcon.tsx";
+import { RegisterIcon } from "./components/icons/RegisterIcon.tsx";
 
 //Background//
 import { BgMusic } from './components/background/BgMusic.tsx';
@@ -65,7 +67,7 @@ type Packet = {
   location: string
 }
 
-type Page = 'home' | 'settings' | 'leaderboard' | 'login' | 'game';
+type Page = 'home' | 'settings' | 'leaderboard' | 'login' | 'game' | 'register';
 
 function App() {
   const [difficulty, setDifficulty] = useState<string | null>(null);
@@ -184,8 +186,6 @@ function App() {
       navigateTo('home')
   };
 
-
-
   useEffect(() => {
     if (isWinner) {
         if (difficulty === 'easy') {
@@ -245,6 +245,15 @@ function App() {
           return (
             <>
               <Login />
+              <RegisterIcon RegisterScreen={() => navigateTo('register')}/>
+              <HomeIcon homeScreen={() => navigateTo('home')} />
+            </>
+          );
+        case 'register':
+          return (
+            <>
+              <Register />
+              <LoginIcon LoginScreen={() => navigateTo('login')} />
               <HomeIcon homeScreen={() => navigateTo('home')} />
             </>
           );

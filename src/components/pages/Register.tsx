@@ -1,15 +1,105 @@
-import { Stack, Typography } from "@mui/material";
-import { SetStateAction, useState } from "react";
+import { Alert, Stack, Typography } from "@mui/material";
+import { SetStateAction, useEffect, useState } from "react";
+
+import { getNames } from '../../api/getNames';
+import { addUser } from '../../api/addUser'
+
 const primaryColour = "#FF8343";
 
-export function Login() {
+import { getCountryByTimeZone } from '../functions/getLocation';
 
-    const message = 'hello'
+function validPassword(password:string) {
+    const minLength = 6;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasDigit = /\d/.test(password); 
+
+    if (password.length < minLength) {
+        return { valid: false, message: 'Password must be at least 6 characters long.' };
+    }
+    if (!hasUpperCase) {
+        return { valid: false, message: 'Password must contain at least one uppercase letter.' };
+    }
+    if (!hasLowerCase) {
+        return { valid: false, message: 'Password must contain at least one lowercase letter.' };
+    }
+    if (!hasDigit) {
+        return { valid: false, message: 'Password must contain at least one digit.' };
+    }
+    return { valid: true, message: 'Password is valid.' }; 
+}
+
+const location: string = getCountryByTimeZone();
+
+type Packet = {
+    username: string,
+    score: number,
+    location: string,
+    password: string
+}
+
+export function Register() {
+
+    const [usedNames, setUsedNames] = useState<string[]>([]);
+    const [message, setMessage] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
 
-    console.log(username,password)
 
+    console.log(usedNames)
+    console.log("lets see: ",usedNames.includes(username))
+
+    const alert = () => {
+        return(
+            <Alert 
+                variant="outlined" 
+                severity="success" 
+                sx={{
+                    fontFamily: "'Indie Flower', cursive", 
+                    fontWeight: "bold", 
+                    fontSize: "2rem",
+                    display: 'flex',
+                    alignItems: 'center',
+                    '& .MuiAlert-icon': {
+                        fontSize: '2.6rem',
+                        marginRight: '8px',
+                    }
+                }}
+            >
+                Account Created!
+            </Alert>
+        )
+    }
+
+    useEffect(() => {
+        const fetchScores = async () => {
+            const data = await getNames();
+            setUsedNames(data);
+        };
+    
+        fetchScores();
+    }, [])
+
+    const handleButtonClick = () => {
+        setMessage('')
+        const body: Packet = {
+            username: username,
+            password: password,
+            score: 0,
+            location: location
+        }
+        addUser(body)
+        setShowAlert(true); 
+        setUsername('');
+        setPassword('');
+        
+        const timer = setTimeout(() => {
+            setShowAlert(false);
+        }, 2000);
+
+        return () => clearTimeout(timer);
+    };
 
     const handleUsernameChange = (event: { target: { value: SetStateAction<string> } }) => {
         setUsername(event.target.value);
@@ -28,7 +118,7 @@ export function Login() {
             height: "100vh"
         }}>
             <Typography variant="h1" style={{ marginBottom: "80px", fontFamily: "'Indie Flower', cursive", fontWeight: "bold", fontSize: "8rem" }}>
-                Login
+                Register
             </Typography>
 
             <Stack direction="row" spacing={2} sx={{ justifyContent: "center", alignItems: "center" }}>
@@ -37,6 +127,7 @@ export function Login() {
                 </Typography>
                 <input
                     onChange={handleUsernameChange}
+                    value={username}
                     type="text"
                     id="standard-basic"
                     placeholder="Enter Username"
@@ -71,6 +162,7 @@ export function Login() {
                 </Typography>
                 <input
                     onChange={handlePasswordChange}
+                    value={password}
                     type="text"
                     id="standard-basic"
                     placeholder="Enter Password"
@@ -99,7 +191,24 @@ export function Login() {
                 />
             </Stack>
 
-            <span 
+            <span
+                 onClick={() => {
+                    const result = validPassword(password)
+                    if (password && username && (!usedNames.includes(username)) && result.valid) {
+                        handleButtonClick()
+                        alert()
+                    } else {
+                        if (!username) {
+                            setMessage('Please enter a username.');
+                        } else if (!password) {
+                            setMessage('Please enter a password.');
+                        } else if (result.valid == false) {
+                            setMessage(result.message)
+                        } else if (usedNames.includes(username)) {
+                            setMessage('Username already taken.');
+                        }
+                    }
+                }} 
                 style={{
                     color: "green",
                     display: "inline-block",
@@ -134,7 +243,28 @@ export function Login() {
                 </Typography>
                 }
             </div> 
-
+            
+            <div style={{transition: '0.3s', height: '75px'}}>
+            {showAlert && (
+                <Alert 
+                    variant="outlined" 
+                    severity="success" 
+                    sx={{
+                        fontFamily: "'Indie Flower', cursive", 
+                        fontWeight: "bold", 
+                        fontSize: "2rem",
+                        display: 'flex',
+                        alignItems: 'center',
+                        '& .MuiAlert-icon': {
+                            fontSize: '2.6rem',
+                            marginRight: '8px',
+                        }
+                    }}
+                >
+                    Account Created!
+                </Alert>
+            )}
+            </div>
         </div>
     )
 }

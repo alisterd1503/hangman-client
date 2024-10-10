@@ -200,7 +200,7 @@ export function StartScreen({
                     } else if (!selectedDifficulty) {
                         setMessage('Please select a difficulty before starting.');
                     } else if (usedNames.includes(name)) {
-                        setMessage('This name is already taken.');
+                        setMessage('This name is already take.');
                     }
                 }
             }}
