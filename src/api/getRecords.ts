@@ -1,10 +1,13 @@
 const API_URL = 'http://localhost:5001/api/getRecords';
 
 type Record = {
-    id: number;
-    score: number;
-    difficulty: string;
-    date: string; 
+    id: number,
+    score: number,
+    difficulty: string,
+    date: string,
+    word: string,
+    result: boolean,
+    guesses: number,
 };
 
 export const getRecords = async (username: string): Promise<Record[]> => {

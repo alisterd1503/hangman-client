@@ -66,6 +66,9 @@ type Score = {
   username: string,
   score: number,
   difficulty: string
+  word: string,
+  result: boolean,
+  guesses: number,
 }
 
 type Page = 'home' | 'settings' | 'leaderboard' | 'login' | 'game' | 'register' | 'records';
@@ -79,15 +82,19 @@ function App() {
   const [volume, setVolume] = useState(0.5)
   const [mute, setMute] = useState(true)
   const [currentPage, setCurrentPage] = useState<Page>('home');
+  const [result , setResult] = useState(false)
 
   const [currentUser, setCurrentUser] = useState<string | null>(null);
 
   const sendPacket = () => {
-    if (currentUser && difficulty) {
+    if (currentUser && difficulty && chosenWord) {
       const body: Score = {
         username: currentUser,
         score: usersPoints,
         difficulty: difficulty,
+        word: chosenWord,
+        result: result,
+        guesses: userGuesses.length
       }
       addScore(body)
     }
@@ -199,6 +206,7 @@ function App() {
 
   useEffect(() => {
     if (isWinner) {
+        setResult(true)
         if (difficulty === 'easy') {
             setUsersPoints(prev => prev + 20);
         } else if (difficulty === 'hard') {
