@@ -1,19 +1,18 @@
-const API_URL = 'http://localhost:5001/api/scores';
+const API_URL = 'http://localhost:5001/api/addScore';
 
-type Packet = {
-    name: string | null,
+type Score = {
+    username: string,
     score: number,
-    location: string
 }
 
-export const addScore = async (packet: Packet): Promise<void> => {
+export const addScore = async (score: Score): Promise<void> => {
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(packet),
+            body: JSON.stringify(score),
         });
 
         if (!response.ok) {

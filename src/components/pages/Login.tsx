@@ -1,15 +1,72 @@
-import { Stack, Typography } from "@mui/material";
-import { SetStateAction, useState } from "react";
+import { Alert, Stack, Typography } from "@mui/material";
+import { SetStateAction, useEffect, useState } from "react";
+
+import { getPasswords } from '../../api/getPasswords';
+
+type Logins = {
+    username: string,
+    password: string
+}
+
 const primaryColour = "#FF8343";
 
-export function Login() {
+type LoginProps = {
+    navigateToHome: () => void
+}
 
-    const message = 'hello'
+export function Login({
+    navigateToHome
+}: LoginProps) {
+
+    const [logins, setLogins] = useState<Logins[]>([]);
+    const [message, setMessage] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
 
-    console.log(username,password)
+    const alert = () => {
+        return(
+            <Alert 
+                variant="outlined" 
+                severity="success" 
+                sx={{
+                    fontFamily: "'Indie Flower', cursive", 
+                    fontWeight: "bold", 
+                    fontSize: "2rem",
+                    display: 'flex',
+                    alignItems: 'center',
+                    '& .MuiAlert-icon': {
+                        fontSize: '2.6rem',
+                        marginRight: '8px',
+                    }
+                }}
+            >
+                Account Created!
+            </Alert>
+        )
+    }
 
+    useEffect(() => {
+        const fetchPasswords = async () => {
+            const data = await getPasswords();
+            setLogins(data);
+        };
+
+        fetchPasswords();
+    }, []);
+
+    const handleButtonClick = () => {
+        setMessage('')
+        setShowAlert(true); 
+        setUsername('');
+        setPassword('');
+        
+        const timer = setTimeout(() => {
+            setShowAlert(false);
+        }, 2000);
+
+        return () => clearTimeout(timer);
+    };
 
     const handleUsernameChange = (event: { target: { value: SetStateAction<string> } }) => {
         setUsername(event.target.value);
@@ -17,6 +74,23 @@ export function Login() {
 
     const handlePasswordChange = (event: { target: { value: SetStateAction<string> } }) => {
         setPassword(event.target.value);
+    };
+
+    const validateLogin = () => {
+        const user = logins.find((login) => login.username === username);
+
+        if (user) {
+            if (user.password === password) {
+                localStorage.setItem('currentUser', username);
+                navigateToHome()
+                alert()
+                handleButtonClick();
+            } else {
+                setMessage('Incorrect password. Please try again.');
+            }
+        } else {
+            setMessage('Username not found. Please try again.');
+        }
     };
 
     return (
@@ -37,6 +111,7 @@ export function Login() {
                 </Typography>
                 <input
                     onChange={handleUsernameChange}
+                    value={username}
                     type="text"
                     id="standard-basic"
                     placeholder="Enter Username"
@@ -71,6 +146,7 @@ export function Login() {
                 </Typography>
                 <input
                     onChange={handlePasswordChange}
+                    value={password}
                     type="text"
                     id="standard-basic"
                     placeholder="Enter Password"
@@ -99,7 +175,8 @@ export function Login() {
                 />
             </Stack>
 
-            <span 
+            <span
+                 onClick={validateLogin} 
                 style={{
                     color: "green",
                     display: "inline-block",
@@ -134,7 +211,28 @@ export function Login() {
                 </Typography>
                 }
             </div> 
-
+            
+            <div style={{transition: '0.3s', height: '75px'}}>
+            {showAlert && (
+                <Alert 
+                    variant="outlined" 
+                    severity="success" 
+                    sx={{
+                        fontFamily: "'Indie Flower', cursive", 
+                        fontWeight: "bold", 
+                        fontSize: "2rem",
+                        display: 'flex',
+                        alignItems: 'center',
+                        '& .MuiAlert-icon': {
+                            fontSize: '2.6rem',
+                            marginRight: '8px',
+                        }
+                    }}
+                >
+                    Logged In!
+                </Alert>
+            )}
+            </div>
         </div>
     )
 }

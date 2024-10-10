@@ -25,16 +25,17 @@ import { SettingsIcon } from './components/icons/SettingsIcon';
 import { LeaderboardIcon } from './components/icons/LeaderboardIcon';
 import { LoginIcon } from "./components/icons/LoginIcon.tsx";
 import { RegisterIcon } from "./components/icons/RegisterIcon.tsx";
+import { LogoutIcon } from "./components/icons/LogoutIcon.tsx";
 
 //Background//
 import { BgMusic } from './components/background/BgMusic.tsx';
 
 //Functions//
-import { getCountryByTimeZone } from './components/functions/getLocation.tsx';
 import { getWord } from './components/functions/getWord.tsx';
 
 //API CALLS//
 import { addScore } from "./api/addScore.ts";
+import { Typography } from "@mui/material";
 
 /** 
 
@@ -59,12 +60,9 @@ Hard: 100 points.
 
 const regex = /^[a-zA-Z]+$/;
 
-const userCountry: string = getCountryByTimeZone();
-
-type Packet = {
-  name: string | null,
+type Score = {
+  username: string,
   score: number,
-  location: string
 }
 
 type Page = 'home' | 'settings' | 'leaderboard' | 'login' | 'game' | 'register';
@@ -77,24 +75,34 @@ function App() {
   const [usersPoints, setUsersPoints] = useState(0);
   const [volume, setVolume] = useState(0.5)
   const [mute, setMute] = useState(true)
-  const [usersName, setUsersName] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<Page>('home');
 
+  const [currentUser, setCurrentUser] = useState<string | null>(null);
+
   const sendPacket = () => {
-    const body: Packet = {
-      name: usersName,
-      score: usersPoints,
-      location: userCountry
+    if (currentUser) {
+      const body: Score = {
+        username: currentUser,
+        score: usersPoints,
+      }
+      addScore(body)
     }
-    addScore(body)
   }
 
   const navigateTo = (page: Page) => {
     setCurrentPage(page);
   };
 
-  const handleNameSubmit = (name: string) => {
-    setUsersName(name);
+  // Persist the logged-in user even after page reloads
+  useEffect(() => {
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+      setCurrentUser(savedUser);
+    }
+  }, []);
+
+  const navigateToHome = () => {
+    navigateTo('home');
   };
 
   // Function to get incorrect guesses
@@ -177,13 +185,12 @@ function App() {
 
   // Reset all relevant states when returning to the home screen
   const stopGame = () => {
-      sendPacket()
-      setUserGuesses([]);
-      setChosenWord(null);
-      setInputValue('');
-      setDifficulty(null);
-      setUsersName('')
-      navigateTo('home')
+    if (currentUser) {sendPacket()}
+    setUserGuesses([]);
+    setChosenWord(null);
+    setInputValue('');
+    setDifficulty(null);
+    navigateTo('home')
   };
 
   useEffect(() => {
@@ -214,12 +221,12 @@ function App() {
             <>
               <StartScreen 
                 onStart={() => { handleStartGame(); navigateTo('game'); }} 
-                onDifficultySelect={setDifficulty} 
-                handleNameSubmit={handleNameSubmit} 
+                onDifficultySelect={setDifficulty}
               />
               <SettingsIcon settingsScreen={() => navigateTo('settings')} />
               <LeaderboardIcon LeaderboardScreen={() => navigateTo('leaderboard')} />
-              <LoginIcon LoginScreen={() => navigateTo('login')} />
+              {currentUser ? (<><Typography>{currentUser}</Typography> <LogoutIcon/></>) : 
+              (<LoginIcon LoginScreen={() => navigateTo('login')} />)}
             </>
           );
         case 'settings':
@@ -244,7 +251,7 @@ function App() {
         case 'login':
           return (
             <>
-              <Login />
+              <Login navigateToHome={navigateToHome}/>
               <RegisterIcon RegisterScreen={() => navigateTo('register')}/>
               <HomeIcon homeScreen={() => navigateTo('home')} />
             </>

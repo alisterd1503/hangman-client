@@ -1,36 +1,21 @@
 import { Button, Stack, Typography } from '@mui/material';
-import { SetStateAction, useEffect, useState } from 'react';
+import { useState } from 'react';
 import '../../styles.css';
-import { getNames } from '../../api/getNames';
 
 const secondaryColour = "#db6e37"
-const primaryColour = "#FF8343";
 
 type StartScreenProps = {
     onStart: () => void,
     onDifficultySelect: (difficulty: string) => void,
-    handleNameSubmit: (name: string) => void;
 };
 
 export function StartScreen({ 
     onStart, 
     onDifficultySelect,
-    handleNameSubmit,
 }: StartScreenProps) {
 
   const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null);
-  const [name, setName] = useState('');
   const [message, setMessage] = useState('');
-  const [usedNames, setUsedNames] = useState<string[]>([]);
-
-  useEffect(() => {
-    const fetchScores = async () => {
-        const data = await getNames();
-        setUsedNames(data);
-    };
-
-    fetchScores();
-}, []);
 
   const handleDifficultyChange = (difficulty: string) => {
     setSelectedDifficulty(difficulty);
@@ -38,22 +23,9 @@ export function StartScreen({
     setMessage('')
   };
 
-    // Setting input value
-    const handleInputChange = (event: { target: { value: SetStateAction<string> } }) => {
-        setName(event.target.value);
-    };
-
     // Sets the input value when the submit button is clicked
     const handleButtonClick = () => {
-        handleNameSubmit(name)
         onStart()
-    };
-
-    // User can press enter to submit the input
-    const handleKeyPress = (event: { key: string }) => {
-        if (event.key === 'Enter') {
-            handleButtonClick();
-        }
     };
 
   return (
@@ -159,49 +131,12 @@ export function StartScreen({
 
         </Stack>
 
-        <input
-          type="text"
-          id="standard-basic"
-          value={name}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyPress}
-          placeholder="Enter Your Name"
-          autoComplete="off"
-          style={{
-            width: '250px',
-            height: '50px',
-            border: 'none',
-            borderBottom: '2px solid black',
-            fontFamily: "'Indie Flower', cursive",
-            fontSize: "2rem",
-            fontWeight: "bold",
-            background: 'none',
-            textAlign: 'center',
-            marginBottom: '60px',
-          }}
-          onFocus={(event) => {
-            event.target.style.outline = `none`;
-            event.target.style.borderBottom = `2px solid ${primaryColour}`;
-            event.target.placeholder = '';
-          }}
-          onBlur={(event) => {
-            event.target.style.borderBottom = '2px solid black';
-            event.target.placeholder = 'Enter Your Name';
-          }}
-        />
-
         <span 
             onClick={() => {
-                if (selectedDifficulty && name && (!usedNames.includes(name))) {
+                if (selectedDifficulty) {
                     handleButtonClick()
                 } else {
-                    if (!name) {
-                        setMessage('Please enter your name before starting.');
-                    } else if (!selectedDifficulty) {
-                        setMessage('Please select a difficulty before starting.');
-                    } else if (usedNames.includes(name)) {
-                        setMessage('This name is already take.');
-                    }
+                    setMessage('Please select a difficulty before starting.');
                 }
             }}
             style={{

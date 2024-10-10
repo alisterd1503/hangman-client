@@ -1,7 +1,7 @@
 import { Alert, Stack, Typography } from "@mui/material";
 import { SetStateAction, useEffect, useState } from "react";
 
-import { getNames } from '../../api/getNames';
+import { getUsernames } from '../../api/getUsernames';
 import { addUser } from '../../api/addUser'
 
 const primaryColour = "#FF8343";
@@ -46,10 +46,6 @@ export function Register() {
     const [password, setPassword] = useState('');
     const [showAlert, setShowAlert] = useState(false);
 
-
-    console.log(usedNames)
-    console.log("lets see: ",usedNames.includes(username))
-
     const alert = () => {
         return(
             <Alert 
@@ -74,7 +70,7 @@ export function Register() {
 
     useEffect(() => {
         const fetchScores = async () => {
-            const data = await getNames();
+            const data = await getUsernames();
             setUsedNames(data);
         };
     

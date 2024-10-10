@@ -1,7 +1,7 @@
-const API_URL = 'http://localhost:5001/api/names';
+const API_URL = 'http://localhost:5001/api/usernames';
 
 
-export const getNames = async (): Promise<string[]> => {
+export const getUsernames = async (): Promise<string[]> => {
     try {
         const response = await fetch(API_URL, {
             method: 'GET',
