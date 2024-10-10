@@ -1,6 +1,12 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import '../../styles.css';
+import test from '../../test.mp3'
+
+const playSound = (url: string) => {
+    const audio = new Audio(url);
+    audio.play();
+};
 
 const secondaryColour = "#db6e37"
 
@@ -133,6 +139,7 @@ export function StartScreen({
 
         <span 
             onClick={() => {
+                playSound(test)
                 if (selectedDifficulty) {
                     handleButtonClick()
                 } else {
