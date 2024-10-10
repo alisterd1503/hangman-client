@@ -83,6 +83,9 @@ function App() {
   const [mute, setMute] = useState(true)
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [result , setResult] = useState(false)
+  const [gameOver, setGameOver] = useState(false)
+
+  console.log(gameOver)
 
   const [currentUser, setCurrentUser] = useState<string | null>(null);
 
@@ -166,11 +169,14 @@ function App() {
     });
   }, [userGuesses, isLoser, isWinner, chosenWord]);
 
-  // Function to reset all variables and game
+  // Resets game when play again button pressed
   const resetGame = () => {
+      if (currentUser) {sendPacket()}
       setUserGuesses([]);
       setChosenWord(getWord(difficulty!));
       setInputValue('');
+      setGameOver(false)
+      setUsersPoints(0)
   };
 
   const handleInputChange = (event: { target: { value: SetStateAction<string> } }) => {
@@ -194,19 +200,21 @@ function App() {
       }
   };
 
-  // Reset all relevant states when returning to the home screen
+  // Resets game if the user clicks on the home screen
   const stopGame = () => {
-    if (currentUser) {sendPacket()}
+    if (gameOver) {sendPacket()}
     setUserGuesses([]);
     setChosenWord(null);
     setInputValue('');
     setDifficulty(null);
+    setGameOver(false)
     navigateTo('home')
   };
 
   useEffect(() => {
     if (isWinner) {
         setResult(true)
+        setGameOver(true)
         if (difficulty === 'easy') {
             setUsersPoints(prev => prev + 20);
         } else if (difficulty === 'hard') {
@@ -215,6 +223,7 @@ function App() {
             setUsersPoints(prev => prev + 50);
         }
     } else if (isLoser) {
+        setGameOver(true)
         if (difficulty === 'easy') {
             setUsersPoints(prev => prev - 10);
         } else if (difficulty === 'hard') {
