@@ -1,22 +1,10 @@
-import { Alert, Snackbar } from '@mui/material';
 import logoutIcon from '../../images/logout.png';
-import { useState } from 'react';
 
 export function LogoutIcon() {
-    const [open, setOpen] = useState(false);
 
     const clearLocalStorage = () => {
         localStorage.removeItem('currentUser');
-        setOpen(true);
-        const timer = setTimeout(() => {
-            setOpen(false);
-        }, 2000);
-
-        return () => clearTimeout(timer);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
+        window.location.href = window.location.href;
     };
 
     return (
@@ -45,31 +33,6 @@ export function LogoutIcon() {
                     }}
                 />
             </div>
-
-            <Snackbar
-                open={open}
-                autoHideDuration={2000}
-                onClose={handleClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-            >
-                <Alert 
-                    variant="outlined" 
-                    severity="success" 
-                    sx={{
-                        fontFamily: "'Indie Flower', cursive", 
-                        fontWeight: "bold", 
-                        fontSize: "2rem",
-                        display: 'flex',
-                        alignItems: 'center',
-                        '& .MuiAlert-icon': {
-                            fontSize: '2.6rem',
-                            marginRight: '8px',
-                        }
-                    }}
-                >
-                    Logged Out!
-                </Alert>
-            </Snackbar>
         </>
     );
 }

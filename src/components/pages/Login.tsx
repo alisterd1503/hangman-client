@@ -1,4 +1,4 @@
-import { Alert, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { SetStateAction, useEffect, useState } from "react";
 
 import { getPasswords } from '../../api/getPasswords';
@@ -14,37 +14,12 @@ type LoginProps = {
     navigateToHome: () => void
 }
 
-export function Login({
-    navigateToHome
-}: LoginProps) {
+export function Login({navigateToHome}: LoginProps) {
 
     const [logins, setLogins] = useState<Logins[]>([]);
     const [message, setMessage] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [showAlert, setShowAlert] = useState(false);
-
-    const alert = () => {
-        return(
-            <Alert 
-                variant="outlined" 
-                severity="success" 
-                sx={{
-                    fontFamily: "'Indie Flower', cursive", 
-                    fontWeight: "bold", 
-                    fontSize: "2rem",
-                    display: 'flex',
-                    alignItems: 'center',
-                    '& .MuiAlert-icon': {
-                        fontSize: '2.6rem',
-                        marginRight: '8px',
-                    }
-                }}
-            >
-                Account Created!
-            </Alert>
-        )
-    }
 
     useEffect(() => {
         const fetchPasswords = async () => {
@@ -54,19 +29,6 @@ export function Login({
 
         fetchPasswords();
     }, []);
-
-    const handleButtonClick = () => {
-        setMessage('')
-        setShowAlert(true); 
-        setUsername('');
-        setPassword('');
-        
-        const timer = setTimeout(() => {
-            setShowAlert(false);
-        }, 2000);
-
-        return () => clearTimeout(timer);
-    };
 
     const handleUsernameChange = (event: { target: { value: SetStateAction<string> } }) => {
         setUsername(event.target.value);
@@ -82,9 +44,10 @@ export function Login({
         if (user) {
             if (user.password === password) {
                 localStorage.setItem('currentUser', username);
+                setMessage('')
+                setUsername('');
+                setPassword('');
                 navigateToHome()
-                alert()
-                handleButtonClick();
             } else {
                 setMessage('Incorrect password. Please try again.');
             }
@@ -210,28 +173,6 @@ export function Login({
                     }}>{message}
                 </Typography>
                 }
-            </div> 
-            
-            <div style={{transition: '0.3s', height: '75px'}}>
-            {showAlert && (
-                <Alert 
-                    variant="outlined" 
-                    severity="success" 
-                    sx={{
-                        fontFamily: "'Indie Flower', cursive", 
-                        fontWeight: "bold", 
-                        fontSize: "2rem",
-                        display: 'flex',
-                        alignItems: 'center',
-                        '& .MuiAlert-icon': {
-                            fontSize: '2.6rem',
-                            marginRight: '8px',
-                        }
-                    }}
-                >
-                    Logged In!
-                </Alert>
-            )}
             </div>
         </div>
     )

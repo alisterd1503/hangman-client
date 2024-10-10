@@ -33,7 +33,7 @@ import { RecordsIcon } from "./components/icons/RecordsIcon.tsx";
 import { BgMusic } from './components/background/BgMusic.tsx';
 
 //Functions//
-import { getWord } from './components/functions/getWord.tsx';
+import { getWord } from './components/functions/getWord.ts';
 
 //API CALLS//
 import { addScore } from "./api/addScore.ts";
@@ -109,6 +109,11 @@ function App() {
 
   const navigateToHome = () => {
     navigateTo('home');
+    window.location.href = window.location.href;
+  };
+
+  const navigateToLogin = () => {
+    navigateTo('login');
   };
 
   // Function to get incorrect guesses
@@ -292,7 +297,7 @@ function App() {
         case 'register':
           return (
             <>
-              <RegisterPage />
+              <RegisterPage navigateToLogin={navigateToLogin}/>
               <LoginIcon LoginScreen={() => navigateTo('login')} />
               <HomeIcon homeScreen={() => navigateTo('login')} />
             </>

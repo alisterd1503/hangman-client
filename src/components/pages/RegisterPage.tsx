@@ -1,4 +1,4 @@
-import { Alert, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { SetStateAction, useEffect, useState } from "react";
 
 import { getUsernames } from '../../api/getUsernames';
@@ -13,35 +13,22 @@ import { validatePassword } from "../functions/validatePassword";
 
 const location: string = getCountryByTimeZone();
 
-export function RegisterPage() {
+type RegisterPageProps = {
+    navigateToLogin: () => void
+}
+
+const validateUsername = (username: string): boolean => {
+    const usernameRegex = /^[^\s]+$/;
+    return username.trim() !== '' && usernameRegex.test(username);
+};
+
+
+export function RegisterPage({navigateToLogin}:RegisterPageProps) {
 
     const [usedNames, setUsedNames] = useState<string[]>([]);
     const [message, setMessage] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [showAlert, setShowAlert] = useState(false);
-
-    const alert = () => {
-        return(
-            <Alert 
-                variant="outlined" 
-                severity="success" 
-                sx={{
-                    fontFamily: "'Indie Flower', cursive", 
-                    fontWeight: "bold", 
-                    fontSize: "2rem",
-                    display: 'flex',
-                    alignItems: 'center',
-                    '& .MuiAlert-icon': {
-                        fontSize: '2.6rem',
-                        marginRight: '8px',
-                    }
-                }}
-            >
-                Account Created!
-            </Alert>
-        )
-    }
 
     useEffect(() => {
         const fetchScores = async () => {
@@ -61,15 +48,9 @@ export function RegisterPage() {
             location: location
         }
         addUser(body)
-        setShowAlert(true); 
         setUsername('');
         setPassword('');
-        
-        const timer = setTimeout(() => {
-            setShowAlert(false);
-        }, 2000);
-
-        return () => clearTimeout(timer);
+        navigateToLogin()
     };
 
     const handleUsernameChange = (event: { target: { value: SetStateAction<string> } }) => {
@@ -164,19 +145,22 @@ export function RegisterPage() {
 
             <span
                  onClick={() => {
-                    const result = validatePassword(password)
-                    if (password && username && (!usedNames.includes(username)) && result.valid) {
+                    const passwordCheck = validatePassword(password)
+                    const usernameCheck = validateUsername(username)
+
+                    if (password && username && (!usedNames.includes(username)) && passwordCheck.valid && usernameCheck) {
                         handleButtonClick()
-                        alert()
                     } else {
                         if (!username) {
                             setMessage('Please enter a username.');
                         } else if (!password) {
                             setMessage('Please enter a password.');
-                        } else if (result.valid == false) {
-                            setMessage(result.message)
+                        } else if (passwordCheck.valid == false) {
+                            setMessage(passwordCheck.message)
                         } else if (usedNames.includes(username)) {
                             setMessage('Username already taken.');
+                        } else if (!usernameCheck) {
+                            setMessage('Username cannot contain spaces.')
                         }
                     }
                 }} 
@@ -214,28 +198,6 @@ export function RegisterPage() {
                 </Typography>
                 }
             </div> 
-            
-            <div style={{transition: '0.3s', height: '75px'}}>
-            {showAlert && (
-                <Alert 
-                    variant="outlined" 
-                    severity="success" 
-                    sx={{
-                        fontFamily: "'Indie Flower', cursive", 
-                        fontWeight: "bold", 
-                        fontSize: "2rem",
-                        display: 'flex',
-                        alignItems: 'center',
-                        '& .MuiAlert-icon': {
-                            fontSize: '2.6rem',
-                            marginRight: '8px',
-                        }
-                    }}
-                >
-                    Account Created!
-                </Alert>
-            )}
-            </div>
         </div>
     )
 }
