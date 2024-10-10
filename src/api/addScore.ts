@@ -19,9 +19,6 @@ export const addScore = async (score: Score): Promise<void> => {
         if (!response.ok) {
             throw new Error(`Error: ${response.statusText}`);
         }
-
-        const data = await response.json();
-        console.log('Score added:', data);
     } catch (error) {
         console.error('Error adding score:', error);
     }

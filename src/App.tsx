@@ -79,8 +79,6 @@ function App() {
   const [result , setResult] = useState(false)
   const [gameOver, setGameOver] = useState(false)
 
-  console.log(gameOver)
-
   const [currentUser, setCurrentUser] = useState<string | null>(null);
 
   const sendPacket = () => {

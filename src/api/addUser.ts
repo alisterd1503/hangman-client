@@ -14,9 +14,6 @@ export const addUser = async (packet: Register): Promise<void> => {
         if (!response.ok) {
             throw new Error(`Error: ${response.statusText}`);
         }
-
-        const data = await response.json();
-        console.log('Score added:', data);
     } catch (error) {
         console.error('Error adding score:', error);
     }
