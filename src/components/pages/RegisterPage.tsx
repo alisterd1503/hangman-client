@@ -9,27 +9,7 @@ import { Register } from "../../models/Register";
 const primaryColour = "#FF8343";
 
 import { getCountryByTimeZone } from '../functions/getLocation';
-
-function validPassword(password:string) {
-    const minLength = 6;
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasDigit = /\d/.test(password); 
-
-    if (password.length < minLength) {
-        return { valid: false, message: 'Password must be at least 6 characters long.' };
-    }
-    if (!hasUpperCase) {
-        return { valid: false, message: 'Password must contain at least one uppercase letter.' };
-    }
-    if (!hasLowerCase) {
-        return { valid: false, message: 'Password must contain at least one lowercase letter.' };
-    }
-    if (!hasDigit) {
-        return { valid: false, message: 'Password must contain at least one digit.' };
-    }
-    return { valid: true, message: 'Password is valid.' }; 
-}
+import { validatePassword } from "../functions/validatePassword";
 
 const location: string = getCountryByTimeZone();
 
@@ -184,7 +164,7 @@ export function RegisterPage() {
 
             <span
                  onClick={() => {
-                    const result = validPassword(password)
+                    const result = validatePassword(password)
                     if (password && username && (!usedNames.includes(username)) && result.valid) {
                         handleButtonClick()
                         alert()

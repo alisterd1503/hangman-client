@@ -378,8 +378,6 @@ function App() {
         {renderPage()}
       </div>
     );
-    
-      
 }
 
 export default App;
