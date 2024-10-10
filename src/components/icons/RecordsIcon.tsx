@@ -1,21 +1,21 @@
-import leaderboardIcon from '../../images/leaderboard.png'
+import recordsIcon from '../../images/records.png'
 
-type LeaderboardIconProps = {
-    LeaderboardScreen: () => void,
+type RecordsIconProps = {
+    RecordsScreen: () => void,
 }
 
-export function LeaderboardIcon ({
-    LeaderboardScreen
-}: LeaderboardIconProps) {
+export function RecordsIcon ({
+    RecordsScreen
+}: RecordsIconProps) {
     return (
         <div>
             <img
-            src={leaderboardIcon}
-            alt="Leaderboard"
-            onClick={LeaderboardScreen}
+            src={recordsIcon}
+            alt="Records"
+            onClick={RecordsScreen}
             style={{
                 position: 'absolute',
-                top: '20px',
+                bottom: '20px',
                 right: '20px',
                 width: '80px',
                 height: '80px',

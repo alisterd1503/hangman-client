@@ -3,6 +3,7 @@ const API_URL = 'http://localhost:5001/api/addScore';
 type Score = {
     username: string,
     score: number,
+    difficulty: string
 }
 
 export const addScore = async (score: Score): Promise<void> => {

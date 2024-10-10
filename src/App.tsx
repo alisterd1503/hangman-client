@@ -18,6 +18,7 @@ import { LeaderboardTable } from './components/pages/LeaderboardTable';
 import { StartScreen } from "./components/pages/StartScreen"
 import { Login } from "./components/pages/Login.tsx";
 import { Register } from "./components/pages/Register.tsx";
+import { Records } from "./components/pages/Records.tsx";
 
 //Icons//
 import { HomeIcon } from './components/icons/HomeIcon';
@@ -26,6 +27,7 @@ import { LeaderboardIcon } from './components/icons/LeaderboardIcon';
 import { LoginIcon } from "./components/icons/LoginIcon.tsx";
 import { RegisterIcon } from "./components/icons/RegisterIcon.tsx";
 import { LogoutIcon } from "./components/icons/LogoutIcon.tsx";
+import { RecordsIcon } from "./components/icons/RecordsIcon.tsx";
 
 //Background//
 import { BgMusic } from './components/background/BgMusic.tsx';
@@ -63,9 +65,10 @@ const regex = /^[a-zA-Z]+$/;
 type Score = {
   username: string,
   score: number,
+  difficulty: string
 }
 
-type Page = 'home' | 'settings' | 'leaderboard' | 'login' | 'game' | 'register';
+type Page = 'home' | 'settings' | 'leaderboard' | 'login' | 'game' | 'register' | 'records';
 
 function App() {
   const [difficulty, setDifficulty] = useState<string | null>(null);
@@ -80,10 +83,11 @@ function App() {
   const [currentUser, setCurrentUser] = useState<string | null>(null);
 
   const sendPacket = () => {
-    if (currentUser) {
+    if (currentUser && difficulty) {
       const body: Score = {
         username: currentUser,
         score: usersPoints,
+        difficulty: difficulty,
       }
       addScore(body)
     }
@@ -219,13 +223,26 @@ function App() {
         case 'home':
           return (
             <>
-              <StartScreen 
+              <StartScreen
                 onStart={() => { handleStartGame(); navigateTo('game'); }} 
                 onDifficultySelect={setDifficulty}
               />
               <SettingsIcon settingsScreen={() => navigateTo('settings')} />
               <LeaderboardIcon LeaderboardScreen={() => navigateTo('leaderboard')} />
-              {currentUser ? (<><Typography>{currentUser}</Typography> <LogoutIcon/></>) : 
+
+              {currentUser ? 
+              (<> 
+                <Typography
+                  style={{ 
+                      fontFamily: "'Indie Flower',cursive",
+                      fontWeight: "bold",
+                      fontSize: "2rem",
+                  }}>Welcome, {currentUser}! Ready to play?
+                </Typography>
+                <LogoutIcon/>
+                <RecordsIcon RecordsScreen={() => navigateTo('records')} />
+              </>) 
+              : 
               (<LoginIcon LoginScreen={() => navigateTo('login')} />)}
             </>
           );
@@ -248,6 +265,13 @@ function App() {
               <HomeIcon homeScreen={() => navigateTo('home')} />
             </>
           );
+          case 'records':
+            return (
+              <>
+                <Records />
+                <HomeIcon homeScreen={() => navigateTo('home')} />
+              </>
+            );
         case 'login':
           return (
             <>
@@ -261,7 +285,7 @@ function App() {
             <>
               <Register />
               <LoginIcon LoginScreen={() => navigateTo('login')} />
-              <HomeIcon homeScreen={() => navigateTo('home')} />
+              <HomeIcon homeScreen={() => navigateTo('login')} />
             </>
           );
         case 'game':
