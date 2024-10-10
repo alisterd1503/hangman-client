@@ -18,6 +18,6 @@ export const getUsernames = async (): Promise<string[]> => {
         return data;
     } catch (error) {
         console.error('Error fetching scores:', error);
-        return []; // Return an empty array on error
+        return [];
     }
 };

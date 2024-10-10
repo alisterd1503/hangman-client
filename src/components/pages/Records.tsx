@@ -1,16 +1,7 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
 import { getRecords } from "../../api/getRecords";
 import { useEffect, useState } from "react";
-
-type Record = {
-    id: number,
-    score: number,
-    difficulty: string,
-    date: string,
-    word: string,
-    result: boolean,
-    guesses: number,
-};
+import { Record } from "../../models/Record";
 
 function formatDate(isoString: string | number | Date) {
     const date = new Date(isoString);

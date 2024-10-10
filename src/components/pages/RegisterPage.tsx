@@ -4,6 +4,8 @@ import { SetStateAction, useEffect, useState } from "react";
 import { getUsernames } from '../../api/getUsernames';
 import { addUser } from '../../api/addUser'
 
+import { Register } from "../../models/Register";
+
 const primaryColour = "#FF8343";
 
 import { getCountryByTimeZone } from '../functions/getLocation';
@@ -31,14 +33,7 @@ function validPassword(password:string) {
 
 const location: string = getCountryByTimeZone();
 
-type Packet = {
-    username: string,
-    score: number,
-    location: string,
-    password: string
-}
-
-export function Register() {
+export function RegisterPage() {
 
     const [usedNames, setUsedNames] = useState<string[]>([]);
     const [message, setMessage] = useState('');
@@ -79,7 +74,7 @@ export function Register() {
 
     const handleButtonClick = () => {
         setMessage('')
-        const body: Packet = {
+        const body: Register = {
             username: username,
             password: password,
             score: 0,

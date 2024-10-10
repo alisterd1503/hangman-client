@@ -1,13 +1,7 @@
 const API_URL = 'http://localhost:5001/api/addUser';
+import { Register } from "../models/Register";
 
-type Packet = {
-    username: string,
-    score: number,
-    location: string
-    password: String
-}
-
-export const addUser = async (packet: Packet): Promise<void> => {
+export const addUser = async (packet: Register): Promise<void> => {
     try {
         const response = await fetch(API_URL, {
             method: 'POST',

@@ -17,7 +17,7 @@ import { Settings } from './components/pages/Settings';
 import { LeaderboardTable } from './components/pages/LeaderboardTable';
 import { StartScreen } from "./components/pages/StartScreen"
 import { Login } from "./components/pages/Login.tsx";
-import { Register } from "./components/pages/Register.tsx";
+import { RegisterPage } from "./components/pages/RegisterPage.tsx";
 import { Records } from "./components/pages/Records.tsx";
 
 //Icons//
@@ -38,6 +38,9 @@ import { getWord } from './components/functions/getWord.tsx';
 //API CALLS//
 import { addScore } from "./api/addScore.ts";
 import { Typography } from "@mui/material";
+
+//MODELS//
+import { Game } from "./models/Game.ts";
 
 /** 
 
@@ -62,15 +65,6 @@ Hard: 100 points.
 
 const regex = /^[a-zA-Z]+$/;
 
-type Score = {
-  username: string,
-  score: number,
-  difficulty: string
-  word: string,
-  result: boolean,
-  guesses: number,
-}
-
 type Page = 'home' | 'settings' | 'leaderboard' | 'login' | 'game' | 'register' | 'records';
 
 function App() {
@@ -91,7 +85,7 @@ function App() {
 
   const sendPacket = () => {
     if (currentUser && difficulty && chosenWord) {
-      const body: Score = {
+      const body: Game = {
         username: currentUser,
         score: usersPoints,
         difficulty: difficulty,
@@ -300,7 +294,7 @@ function App() {
         case 'register':
           return (
             <>
-              <Register />
+              <RegisterPage />
               <LoginIcon LoginScreen={() => navigateTo('login')} />
               <HomeIcon homeScreen={() => navigateTo('login')} />
             </>
