@@ -1,37 +1,28 @@
-import { Box, Stack, Typography } from "@mui/material";
-import muteIcon from '../../images/mute.png';
-import volumeUp from '../../images/volumeUp.png'
-import volumeDown from '../../images/volumeDown.png'
-import { clickSound } from "../sounds/clickSXF";
-import { CustomSlider } from "../functions/customSlider";
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { getUsers } from "../../api/getUsers";
 
-type SettingsProps = {
-    volume: number;
-    mute: boolean;
-    setVolume: (volume: number) => void;
-    setMute: (mute: boolean) => void;
+type Users = {
+    id: number,
+    username: string,
+    score: number,
+    location: string,
+    password: string
 }
 
-export function Settings({
-    volume,
-    mute,
-    setVolume,
-    setMute
-}: SettingsProps) {
+export function Admin() {
 
-    // Handle volume change
-    const handleChange = (_event: Event, newValue: number | number[]) => {
-        if (typeof newValue === 'number') {
-            setVolume(newValue);
-        }
-    };
+    const [users, setUsers] = useState<Users[]>([]);
 
-    // Toggle mute state
-    const toggleMute = () => {
-        clickSound()
-        setMute(!mute);
-    }
+    useEffect(() => {
+        const fetchScores = async () => {
+            const data = await getUsers();
+            setUsers(data);
+        };
 
+        fetchScores();
+    }, []);
+    
     return (
         <div style={{
             display: "flex",
@@ -39,88 +30,35 @@ export function Settings({
             alignItems: "center",
             justifyContent: "center",
             height: "60vh",
-            marginBottom: "300px"
         }}>
-            <Typography variant="h1" style={{ marginBottom: "100px", fontFamily: "'Indie Flower', cursive", fontWeight: "bold", fontSize: "8rem" }}>
-                Settings
+            <Typography variant="h1" style={{ fontFamily: "'Indie Flower', cursive", fontWeight: "bold", fontSize: "8rem" }}>
+                Admin
             </Typography>
-    
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-                {/* Volume Slider Stack */}
-                <Stack
-                    spacing={2}
-                    direction="row"
-                    sx={{
-                        alignItems: 'center',
-                        justifyContent: 'center', // Center content in the row
-                        mb: 4,
-                        padding: '30px',
-                        backgroundColor: 'transparent',
-                        borderRadius: '50px',
-                    }}
-                >
-                    <img
-                        src={volumeDown}
-                        alt={'volume Down'}
-                        style={{
-                            opacity: '0.8',
-                            width: '50px',
-                            height: '50px',
-                            transition: 'transform 0.3s, opacity 0.3s',
-                    }}/>
-                    <CustomSlider
-                        aria-label="Volume"
-                        value={volume}
-                        onChange={handleChange}
-                        min={0}
-                        max={100}
-                        sx={{ width: 400 }} // Make sure the slider takes up some space
-                    />
-                    <img
-                        src={volumeUp}
-                        alt={'volume Up'}
-                        style={{
-                            opacity: '0.8',
-                            width: '50px',
-                            height: '50px',
-                            transition: 'transform 0.3s, opacity 0.3s',
-                    }}/>
-                </Stack>
-    
-                {/* Mute Stack */}
-                <Stack 
-                    spacing={2} 
-                    direction="row" 
-                    sx={{ 
-                        alignItems: 'center', 
-                        justifyContent: 'center', // Center content in the row
-                        mb: 1 
-                    }}
-                >
-                    <Typography variant="h2" style={{ margin: 0, fontFamily: "'Indie Flower', cursive", fontWeight: "bold" }}>
-                        Mute
-                    </Typography>
-                    <img
-                        src={mute ? volumeUp : muteIcon}
-                        alt={mute ? "Mute" : "Unmute"}
-                        onClick={toggleMute}
-                        style={{
-                            width: '60px',
-                            height: '60px',
-                            cursor: 'pointer',
-                            transition: 'transform 0.3s, opacity 0.3s',
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'scale(1.1)';
-                            e.currentTarget.style.opacity = '0.8';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'scale(1)';
-                            e.currentTarget.style.opacity = '1';
-                        }}
-                    />
-                </Stack>
-            </Box>
+
+            <TableContainer component={Paper} sx={{ borderRadius: 5, boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', maxWidth: '100%', border: 'solid black 2px', height:'600px' }}>
+            <Table sx={{ minWidth: 800 }}>
+                <TableHead>
+                    <TableRow sx={{ backgroundColor: '#F48FB1' }}>
+                        {/* New Position Column */}
+                        <TableCell align="center" sx={{ color: '#FFF', fontWeight: 'bold', fontSize: '2.5rem', fontFamily: "'Indie Flower', cursive" }}>User</TableCell>
+                        <TableCell align="center" sx={{ color: '#FFF', fontWeight: 'bold', fontSize: '2.5rem', fontFamily: "'Indie Flower', cursive" }}>Score</TableCell>
+                        <TableCell align="center" sx={{ color: '#FFF', fontWeight: 'bold', fontSize: '2.5rem', fontFamily: "'Indie Flower', cursive" }}>Location</TableCell>
+                        <TableCell align="center" sx={{ color: '#FFF', fontWeight: 'bold', fontSize: '2.5rem', fontFamily: "'Indie Flower', cursive" }}>Password</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {users.map((row) => (
+                        <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': { backgroundColor: '#FFCCBC' } }}>
+                            {/* Display Position */}
+                            <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive"}}>{row.username}</TableCell>
+                            <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive" }}>{row.score}</TableCell>
+                            <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive" }}>{row.location}</TableCell>
+                            <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive" }}>{row.password}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+            </TableContainer>
         </div>
     );
     
