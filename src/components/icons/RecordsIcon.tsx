@@ -1,4 +1,5 @@
 import recordsIcon from '../../images/records.png'
+import { clickSound } from '../functions/clickSXF'
 
 type RecordsIconProps = {
     RecordsScreen: () => void,
@@ -12,7 +13,7 @@ export function RecordsIcon ({
             <img
             src={recordsIcon}
             alt="Records"
-            onClick={RecordsScreen}
+            onClick={() => {clickSound(),RecordsScreen()}}
             style={{
                 position: 'absolute',
                 bottom: '20px',

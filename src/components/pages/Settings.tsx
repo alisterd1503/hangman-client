@@ -3,6 +3,7 @@ import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
 import muteIcon from '../../images/mute.png';
 import unmuteIcon from '../../images/unmute.png';
+import { clickSound } from "../functions/clickSXF";
 
 type SettingsProps = {
     volume: number;
@@ -27,6 +28,7 @@ export function Settings({
 
     // Toggle mute state
     const toggleMute = () => {
+        clickSound()
         setMute(!mute);
     }
 

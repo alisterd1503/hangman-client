@@ -1,4 +1,5 @@
 import personIcon from '../../images/person.png'
+import { clickSound } from '../functions/clickSXF'
 
 type LoginIconProps = {
     LoginScreen: () => void,
@@ -12,7 +13,7 @@ export function LoginIcon({
             <img
             src={personIcon}
             alt="Home"
-            onClick={LoginScreen}
+            onClick={() => {clickSound(),LoginScreen()}}
             style={{
                 position: 'absolute',
                 bottom: '40px',

@@ -1,4 +1,5 @@
 import homeIcon from '../../images/home.png'
+import { clickSound } from '../functions/clickSXF'
 
 type HomeIconProps = {
     homeScreen: () => void,
@@ -12,7 +13,7 @@ export function HomeIcon({
             <img
             src={homeIcon}
             alt="Home"
-            onClick={homeScreen}
+            onClick={() => {clickSound(),homeScreen()}}
             style={{
                 position: 'absolute',
                 bottom: '40px',

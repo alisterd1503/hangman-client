@@ -11,6 +11,10 @@ const primaryColour = "#FF8343";
 import { getCountryByTimeZone } from '../functions/getLocation';
 import { validatePassword } from "../functions/validatePassword";
 
+import { clickSound } from "../functions/clickSXF";
+import { play } from "../functions/generalSFX";
+import error from '../../sounds/error.mp3'
+
 const location: string = getCountryByTimeZone();
 
 type RegisterPageProps = {
@@ -82,7 +86,7 @@ export function RegisterPage({navigateToLogin}:RegisterPageProps) {
                     value={username}
                     type="text"
                     id="standard-basic"
-                    placeholder="Enter Username"
+                    placeholder="Create Username"
                     autoComplete="off"
                     style={{
                         width: '250px',
@@ -103,7 +107,7 @@ export function RegisterPage({navigateToLogin}:RegisterPageProps) {
                     }}
                     onBlur={(event) => {
                         event.target.style.borderBottom = '2px solid black';
-                        event.target.placeholder = 'Enter Username';
+                        event.target.placeholder = 'Create Username';
                     }}
                 />
             </Stack>
@@ -117,7 +121,7 @@ export function RegisterPage({navigateToLogin}:RegisterPageProps) {
                     value={password}
                     type="text"
                     id="standard-basic"
-                    placeholder="Enter Password"
+                    placeholder="Create Password"
                     autoComplete="off"
                     style={{
                         width: '250px',
@@ -138,7 +142,7 @@ export function RegisterPage({navigateToLogin}:RegisterPageProps) {
                     }}
                     onBlur={(event) => {
                         event.target.style.borderBottom = '2px solid black';
-                        event.target.placeholder = 'Enter Password';
+                        event.target.placeholder = 'Create Password';
                     }}
                 />
             </Stack>
@@ -149,8 +153,10 @@ export function RegisterPage({navigateToLogin}:RegisterPageProps) {
                     const usernameCheck = validateUsername(username)
 
                     if (password && username && (!usedNames.includes(username)) && passwordCheck.valid && usernameCheck) {
+                        clickSound()
                         handleButtonClick()
                     } else {
+                        play(error)
                         if (!username) {
                             setMessage('Please enter a username.');
                         } else if (!password) {

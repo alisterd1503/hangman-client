@@ -1,12 +1,10 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import '../../styles.css';
-import test from '../../test.mp3'
-
-const playSound = (url: string) => {
-    const audio = new Audio(url);
-    audio.play();
-};
+import { clickSound } from '../functions/clickSXF'
+import { play } from '../functions/generalSFX'
+import start from '../../sounds/start.mp3'
+import error from '../../sounds/error.mp3'
 
 const secondaryColour = "#db6e37"
 
@@ -70,7 +68,7 @@ export function StartScreen({
                     }
                 }}
                 variant={selectedDifficulty === 'easy' ? 'contained' : 'outlined'}
-                onClick={() => handleDifficultyChange('easy')}
+                onClick={() => { clickSound(), handleDifficultyChange('easy')}}
                 >
                 Easy
             </Button>
@@ -90,7 +88,7 @@ export function StartScreen({
                     }
                 }}
                 variant={selectedDifficulty === 'medium' ? 'contained' : 'outlined'}
-                onClick={() => handleDifficultyChange('medium')}
+                onClick={() => { clickSound(), handleDifficultyChange('medium')}}
                 >
                 Medium
             </Button>
@@ -110,7 +108,7 @@ export function StartScreen({
                     }
                 }}
                 variant={selectedDifficulty === 'hard' ? 'contained' : 'outlined'}
-                onClick={() => handleDifficultyChange('hard')}
+                onClick={() => { clickSound(), handleDifficultyChange('hard')}}
                 >
                 Hard
             </Button>
@@ -130,7 +128,7 @@ export function StartScreen({
                     }
                 }}
                 variant={selectedDifficulty === 'random' ? 'contained' : 'outlined'}
-                onClick={() => handleDifficultyChange('random')}
+                onClick={() => { clickSound(), handleDifficultyChange('random')}}
                 >
                 Random
             </Button>
@@ -139,10 +137,11 @@ export function StartScreen({
 
         <span 
             onClick={() => {
-                playSound(test)
                 if (selectedDifficulty) {
+                    play(start)
                     handleButtonClick()
                 } else {
+                    play(error)
                     setMessage('Please select a difficulty before starting.');
                 }
             }}

@@ -1,4 +1,5 @@
 import registerIcon from '../../images/register.png'
+import { clickSound } from '../functions/clickSXF'
 
 type RegisterIconProps = {
     RegisterScreen: () => void,
@@ -12,7 +13,7 @@ export function RegisterIcon ({
             <img
             src={registerIcon}
             alt="Home"
-            onClick={RegisterScreen}
+            onClick={() => {clickSound(),RegisterScreen()}}
             style={{
                 position: 'absolute',
                 bottom: '20px',

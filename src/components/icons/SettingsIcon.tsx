@@ -1,4 +1,5 @@
 import settingsIcon from '../../images/settings.png'
+import { clickSound } from '../functions/clickSXF'
 
 type SettingsIconProps = {
     settingsScreen: () => void,
@@ -12,7 +13,7 @@ export function SettingsIcon({
             <img
             src={settingsIcon}
             alt="Settings"
-            onClick={settingsScreen}
+            onClick={() => {clickSound(),settingsScreen()}}
             style={{
                 position: 'absolute',
                 top: '20px',

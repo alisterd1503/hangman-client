@@ -29,8 +29,13 @@ import { RegisterIcon } from "./components/icons/RegisterIcon.tsx";
 import { LogoutIcon } from "./components/icons/LogoutIcon.tsx";
 import { RecordsIcon } from "./components/icons/RecordsIcon.tsx";
 
-//Background//
+//SOUNDS//
+import { play } from './components/functions/generalSFX.ts'
 import { BgMusic } from './components/background/BgMusic.tsx';
+import correct from './sounds/correct.mp3'
+import wrong from './sounds/wrong.mp3'
+import won from './sounds/win.mp3'
+import lost from './sounds/lost.mp3'
 
 //Functions//
 import { getWord } from './components/functions/getWord.ts';
@@ -154,6 +159,7 @@ function App() {
       // Increment correct points if the guess is correct
       if ((chosenWord!.includes(letter) && letter.length === 1) 
         || chosenWord && userGuesses.includes(chosenWord)) {
+          play(correct)
         if (difficulty === 'easy') {
             setUsersPoints(prev => prev + 10);
         } else if (difficulty === 'hard') {
@@ -161,7 +167,9 @@ function App() {
         } else {
             setUsersPoints(prev => prev + 15);
         }
-      } 
+      } else {
+        play(wrong)
+      }
       return newGuesses;
     });
   }, [userGuesses, isLoser, isWinner, chosenWord]);
@@ -210,6 +218,7 @@ function App() {
 
   useEffect(() => {
     if (isWinner) {
+      play(won)
         setResult(true)
         setGameOver(true)
         if (difficulty === 'easy') {
@@ -220,6 +229,7 @@ function App() {
             setUsersPoints(prev => prev + 50);
         }
     } else if (isLoser) {
+      play(lost)
         setGameOver(true)
         if (difficulty === 'easy') {
             setUsersPoints(prev => prev - 10);
@@ -299,7 +309,7 @@ function App() {
             <>
               <RegisterPage navigateToLogin={navigateToLogin}/>
               <LoginIcon LoginScreen={() => navigateTo('login')} />
-              <HomeIcon homeScreen={() => navigateTo('login')} />
+              <HomeIcon homeScreen={() => navigateTo('home')} />
             </>
           );
         case 'game':

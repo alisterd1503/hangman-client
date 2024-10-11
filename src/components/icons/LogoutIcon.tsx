@@ -1,8 +1,10 @@
 import logoutIcon from '../../images/logout.png';
+import { clickSound } from '../functions/clickSXF'
 
 export function LogoutIcon() {
 
     const clearLocalStorage = () => {
+        clickSound()
         localStorage.removeItem('currentUser');
         window.location.href = window.location.href;
     };

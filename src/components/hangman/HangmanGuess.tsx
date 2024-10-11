@@ -1,5 +1,6 @@
 import { Stack } from "@mui/material"
 import '../../styles.css';
+import { clickSound } from "../functions/clickSXF";
 
 const primaryColour = "#FF8343";
 const secondaryColour = "#db6e37"
@@ -50,7 +51,7 @@ export function HangmanGuess({
           }}
         />
           <span 
-                onClick={handleButtonClick}
+                onClick={() => {clickSound(), handleButtonClick}}
                 style={{
                   display: "inline-block",
                   fontSize: "4rem",

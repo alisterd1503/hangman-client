@@ -3,6 +3,10 @@ import { SetStateAction, useEffect, useState } from "react";
 
 import { getPasswords } from '../../api/getPasswords';
 
+import { clickSound } from "../functions/clickSXF";
+import { play } from "../functions/generalSFX";
+import error from '../../sounds/error.mp3'
+
 type Logins = {
     username: string,
     password: string
@@ -43,15 +47,18 @@ export function Login({navigateToHome}: LoginProps) {
 
         if (user) {
             if (user.password === password) {
+                clickSound()
                 localStorage.setItem('currentUser', username);
                 setMessage('')
                 setUsername('');
                 setPassword('');
                 navigateToHome()
             } else {
+                play(error)
                 setMessage('Incorrect password. Please try again.');
             }
         } else {
+            play(error)
             setMessage('Username not found. Please try again.');
         }
     };
@@ -139,7 +146,7 @@ export function Login({navigateToHome}: LoginProps) {
             </Stack>
 
             <span
-                 onClick={validateLogin} 
+                 onClick={validateLogin}
                 style={{
                     color: "green",
                     display: "inline-block",
