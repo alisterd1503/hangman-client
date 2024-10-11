@@ -1,6 +1,8 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Checkbox, IconButton } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState } from "react";
 import { getUsers } from "../../api/getUsers";
+import { removeUser } from "../../api/removeUser";
 
 type Users = {
     id: number,
@@ -11,8 +13,8 @@ type Users = {
 }
 
 export function Admin() {
-
     const [users, setUsers] = useState<Users[]>([]);
+    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
     useEffect(() => {
         const fetchScores = async () => {
@@ -22,7 +24,20 @@ export function Admin() {
 
         fetchScores();
     }, []);
-    
+
+    // Handle checkbox selection (only allow one user to be selected at a time)
+    const handleSelectUser = (id: number) => {
+        setSelectedUserId(prevId => prevId === id ? null : id); // Toggle selection
+    };
+
+    // Handle delete action (delete the selected user)
+    const handleDelete = () => {
+        if (selectedUserId !== null) {
+            removeUser(selectedUserId)
+            setSelectedUserId(null);
+        }
+    };
+
     return (
         <div style={{
             display: "flex",
@@ -39,7 +54,9 @@ export function Admin() {
             <Table sx={{ minWidth: 800 }}>
                 <TableHead>
                     <TableRow sx={{ backgroundColor: '#F48FB1' }}>
-                        {/* New Position Column */}
+                        {/* New Checkbox Column */}
+                        <TableCell align="center" sx={{ color: '#FFF', fontWeight: 'bold', fontSize: '2.5rem', fontFamily: "'Indie Flower', cursive" }}>Select</TableCell>
+                        <TableCell align="center" sx={{ color: '#FFF', fontWeight: 'bold', fontSize: '2.5rem', fontFamily: "'Indie Flower', cursive" }}>ID</TableCell>
                         <TableCell align="center" sx={{ color: '#FFF', fontWeight: 'bold', fontSize: '2.5rem', fontFamily: "'Indie Flower', cursive" }}>User</TableCell>
                         <TableCell align="center" sx={{ color: '#FFF', fontWeight: 'bold', fontSize: '2.5rem', fontFamily: "'Indie Flower', cursive" }}>Score</TableCell>
                         <TableCell align="center" sx={{ color: '#FFF', fontWeight: 'bold', fontSize: '2.5rem', fontFamily: "'Indie Flower', cursive" }}>Location</TableCell>
@@ -49,7 +66,15 @@ export function Admin() {
                 <TableBody>
                     {users.map((row) => (
                         <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': { backgroundColor: '#FFCCBC' } }}>
-                            {/* Display Position */}
+                            {/* Checkbox for selecting the user */}
+                            <TableCell align="center">
+                                <Checkbox
+                                    checked={selectedUserId === row.id}
+                                    onChange={() => handleSelectUser(row.id)}
+                                    color="primary"
+                                />
+                            </TableCell>
+                            <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive"}}>{row.id}</TableCell>
                             <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive"}}>{row.username}</TableCell>
                             <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive" }}>{row.score}</TableCell>
                             <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive" }}>{row.location}</TableCell>
@@ -59,7 +84,13 @@ export function Admin() {
                 </TableBody>
             </Table>
             </TableContainer>
+
+            {/* Display Delete Button if a user is selected */}
+            {selectedUserId !== null && (
+                <IconButton onClick={handleDelete} sx={{ mt: 2 }} color="error">
+                    <DeleteIcon sx={{ fontSize: '3rem' }} />
+                </IconButton>
+            )}
         </div>
     );
-    
 }
