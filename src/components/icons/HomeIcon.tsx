@@ -1,3 +1,4 @@
+import { Tooltip } from '@mui/material'
 import homeIcon from '../../images/home.png'
 import { clickSound } from '../sounds/clickSXF'
 
@@ -10,13 +11,28 @@ export function HomeIcon({
 }: HomeIconProps) {
     return (
         <div>
+            <Tooltip
+                title="home"
+                placement="right"
+                slotProps={{
+                    tooltip: {
+                        sx: {
+                            color: 'black',
+                            backgroundColor: 'transparent',
+                            fontSize:'30px',
+                            fontWeight: 'bold',
+                            fontFamily: "'Indie Flower', cursive"
+                        },
+                    },
+                }}
+            >
             <img
             src={homeIcon}
             alt="Home"
             onClick={() => {clickSound(),homeScreen()}}
             style={{
                 position: 'absolute',
-                bottom: '0px',
+                bottom: '40px',
                 left: '20px',
                 width: '80px',
                 height: '80px',
@@ -32,6 +48,7 @@ export function HomeIcon({
                 e.currentTarget.style.opacity = '1';
             }}
             />
+            </Tooltip>
         </div>
     )
 }

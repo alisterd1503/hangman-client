@@ -1,3 +1,4 @@
+import { Tooltip } from '@mui/material'
 import recordsIcon from '../../images/records.png'
 import { clickSound } from '../sounds/clickSXF'
 
@@ -10,16 +11,31 @@ export function RecordsIcon ({
 }: RecordsIconProps) {
     return (
         <div>
+            <Tooltip
+                title="History"
+                placement="left"
+                slotProps={{
+                    tooltip: {
+                        sx: {
+                            color: 'black',
+                            backgroundColor: 'transparent',
+                            fontSize:'30px',
+                            fontWeight: 'bold',
+                            fontFamily: "'Indie Flower', cursive"
+                        },
+                    },
+                }}
+            >
             <img
             src={recordsIcon}
             alt="Records"
             onClick={() => {clickSound(),RecordsScreen()}}
             style={{
                 position: 'absolute',
-                bottom: '20px',
+                bottom: '0px',
                 right: '20px',
-                width: '80px',
-                height: '80px',
+                width: '90px',
+                height: '90px',
                 cursor: 'pointer',
                 transition: 'transform 0.3s, opacity 0.3s',
             }}
@@ -32,6 +48,7 @@ export function RecordsIcon ({
                 e.currentTarget.style.opacity = '1';
             }}
             />
+            </Tooltip>
         </div>
     )
 }

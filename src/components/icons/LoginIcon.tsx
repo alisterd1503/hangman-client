@@ -1,3 +1,4 @@
+import { Tooltip } from '@mui/material'
 import personIcon from '../../images/person.png'
 import { clickSound } from '../sounds/clickSXF'
 
@@ -10,6 +11,21 @@ export function LoginIcon({
 }: LoginIconProps) {
     return (
         <div>
+            <Tooltip
+                title="login"
+                placement="left"
+                slotProps={{
+                    tooltip: {
+                        sx: {
+                            color: 'black',
+                            backgroundColor: 'transparent',
+                            fontSize:'30px',
+                            fontWeight: 'bold',
+                            fontFamily: "'Indie Flower', cursive"
+                        },
+                    },
+                }}
+            >
             <img
             src={personIcon}
             alt="Home"
@@ -32,6 +48,7 @@ export function LoginIcon({
                 e.currentTarget.style.opacity = '1';
             }}
             />
+            </Tooltip>
         </div>
     )
 }

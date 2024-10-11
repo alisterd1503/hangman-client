@@ -1,3 +1,4 @@
+import { Tooltip } from '@mui/material';
 import logoutIcon from '../../images/logout.png';
 import { clickSound } from '../sounds/clickSXF'
 
@@ -12,6 +13,21 @@ export function LogoutIcon() {
     return (
         <>
             <div>
+                <Tooltip
+                    title="logout"
+                    placement="right"
+                    slotProps={{
+                        tooltip: {
+                            sx: {
+                                color: 'black',
+                                backgroundColor: 'transparent',
+                                fontSize:'30px',
+                                fontWeight: 'bold',
+                                fontFamily: "'Indie Flower', cursive"
+                            },
+                        },
+                    }}
+                >
                 <img
                     src={logoutIcon}
                     alt="Logout"
@@ -20,8 +36,8 @@ export function LogoutIcon() {
                         position: 'absolute',
                         bottom: '0px',
                         left: '20px',
-                        width: '80px',
-                        height: '80px',
+                        width: '75px',
+                        height: '75px',
                         cursor: 'pointer',
                         transition: 'transform 0.3s, opacity 0.3s',
                     }}
@@ -34,6 +50,7 @@ export function LogoutIcon() {
                         e.currentTarget.style.opacity = '1';
                     }}
                 />
+                </Tooltip>
             </div>
         </>
     );

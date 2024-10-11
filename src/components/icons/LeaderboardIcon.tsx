@@ -1,3 +1,4 @@
+import { Tooltip } from '@mui/material'
 import leaderboardIcon from '../../images/leaderboard.png'
 import { clickSound } from '../sounds/clickSXF'
 
@@ -10,6 +11,21 @@ export function LeaderboardIcon ({
 }: LeaderboardIconProps) {
     return (
         <div>
+            <Tooltip
+                title="leaderboard"
+                placement="left"
+                slotProps={{
+                    tooltip: {
+                        sx: {
+                            color: 'black',
+                            backgroundColor: 'transparent',
+                            fontSize:'30px',
+                            fontWeight: 'bold',
+                            fontFamily: "'Indie Flower', cursive"
+                        },
+                    },
+                }}
+            >
             <img
             src={leaderboardIcon}
             alt="Leaderboard"
@@ -32,6 +48,7 @@ export function LeaderboardIcon ({
                 e.currentTarget.style.opacity = '1';
             }}
             />
+            </Tooltip>
         </div>
     )
 }

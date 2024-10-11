@@ -1,3 +1,4 @@
+import { Tooltip } from '@mui/material'
 import settingsIcon from '../../images/settings.png'
 import { clickSound } from '../sounds/clickSXF'
 
@@ -10,6 +11,21 @@ export function SettingsIcon({
 }: SettingsIconProps) {
     return (
         <div>
+            <Tooltip
+                title="Settings"
+                placement="right"
+                slotProps={{
+                    tooltip: {
+                        sx: {
+                            color: 'black',
+                            backgroundColor: 'transparent',
+                            fontSize:'30px',
+                            fontWeight: 'bold',
+                            fontFamily: "'Indie Flower', cursive"
+                        },
+                    },
+                }}
+            >
             <img
             src={settingsIcon}
             alt="Settings"
@@ -32,6 +48,7 @@ export function SettingsIcon({
                 e.currentTarget.style.opacity = '1';
             }}
             />
+            </Tooltip>
         </div>
     )
 }

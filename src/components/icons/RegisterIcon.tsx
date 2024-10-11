@@ -1,3 +1,4 @@
+import { Tooltip } from '@mui/material'
 import registerIcon from '../../images/register.png'
 import { clickSound } from '../sounds/clickSXF'
 
@@ -10,6 +11,21 @@ export function RegisterIcon ({
 }: RegisterIconProps) {
     return (
         <div>
+            <Tooltip
+                title="Register"
+                placement="left"
+                slotProps={{
+                    tooltip: {
+                        sx: {
+                            color: 'black',
+                            backgroundColor: 'transparent',
+                            fontSize:'30px',
+                            fontWeight: 'bold',
+                            fontFamily: "'Indie Flower', cursive"
+                        },
+                    },
+                }}
+            >
             <img
             src={registerIcon}
             alt="Home"
@@ -32,6 +48,7 @@ export function RegisterIcon ({
                 e.currentTarget.style.opacity = '1';
             }}
             />
+            </Tooltip>
         </div>
     )
 }
