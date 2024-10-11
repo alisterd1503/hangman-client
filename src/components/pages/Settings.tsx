@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import muteIcon from '../../images/mute.png';
 import volumeUp from '../../images/volumeUp.png'
 import volumeDown from '../../images/volumeDown.png'
-import { clickSound } from "../functions/clickSXF";
+import { clickSound } from "../sounds/clickSXF";
 import { CustomSlider } from "../functions/customSlider";
 
 type SettingsProps = {

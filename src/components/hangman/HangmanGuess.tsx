@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material"
 import '../../styles.css';
-import { clickSound } from "../functions/clickSXF";
+import { clickSound } from "../sounds/clickSXF";
 
 const primaryColour = "#FF8343";
 const secondaryColour = "#db6e37"

@@ -1,8 +1,8 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import '../../styles.css';
-import { clickSound } from '../functions/clickSXF'
-import { play } from '../functions/generalSFX'
+import { clickSound } from '../sounds/clickSXF'
+import { play } from '../sounds/generalSFX'
 import start from '../../sounds/start.mp3'
 import error from '../../sounds/error.mp3'
 

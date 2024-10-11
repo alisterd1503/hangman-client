@@ -1,5 +1,5 @@
 import homeIcon from '../../images/home.png'
-import { clickSound } from '../functions/clickSXF'
+import { clickSound } from '../sounds/clickSXF'
 
 type HomeIconProps = {
     homeScreen: () => void,

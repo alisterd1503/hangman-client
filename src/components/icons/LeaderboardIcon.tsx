@@ -1,5 +1,5 @@
 import leaderboardIcon from '../../images/leaderboard.png'
-import { clickSound } from '../functions/clickSXF'
+import { clickSound } from '../sounds/clickSXF'
 
 type LeaderboardIconProps = {
     LeaderboardScreen: () => void,

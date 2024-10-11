@@ -1,5 +1,5 @@
 import settingsIcon from '../../images/settings.png'
-import { clickSound } from '../functions/clickSXF'
+import { clickSound } from '../sounds/clickSXF'
 
 type SettingsIconProps = {
     settingsScreen: () => void,

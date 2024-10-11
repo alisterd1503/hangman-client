@@ -1,5 +1,5 @@
 import personIcon from '../../images/person.png'
-import { clickSound } from '../functions/clickSXF'
+import { clickSound } from '../sounds/clickSXF'
 
 type LoginIconProps = {
     LoginScreen: () => void,

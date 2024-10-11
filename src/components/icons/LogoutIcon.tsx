@@ -1,5 +1,5 @@
 import logoutIcon from '../../images/logout.png';
-import { clickSound } from '../functions/clickSXF'
+import { clickSound } from '../sounds/clickSXF'
 
 export function LogoutIcon() {
 

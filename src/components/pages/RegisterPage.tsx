@@ -11,8 +11,8 @@ const primaryColour = "#FF8343";
 import { getCountryByTimeZone } from '../functions/getLocation';
 import { validatePassword } from "../functions/validatePassword";
 
-import { clickSound } from "../functions/clickSXF";
-import { play } from "../functions/generalSFX";
+import { clickSound } from "../sounds/clickSXF";
+import { play } from "../sounds/generalSFX";
 import error from '../../sounds/error.mp3'
 
 const location: string = getCountryByTimeZone();

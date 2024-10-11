@@ -30,8 +30,8 @@ import { LogoutIcon } from "./components/icons/LogoutIcon.tsx";
 import { RecordsIcon } from "./components/icons/RecordsIcon.tsx";
 
 //SOUNDS//
-import { play } from './components/functions/generalSFX.ts'
-import { BgMusic } from './components/background/BgMusic.tsx';
+import { play } from './components/sounds/generalSFX.ts'
+import { BgMusic } from './components/sounds/BgMusic.tsx';
 import correct from './sounds/correct.mp3'
 import wrong from './sounds/wrong.mp3'
 import won from './sounds/win.mp3'

@@ -3,8 +3,8 @@ import { SetStateAction, useEffect, useState } from "react";
 
 import { getPasswords } from '../../api/getPasswords';
 
-import { clickSound } from "../functions/clickSXF";
-import { play } from "../functions/generalSFX";
+import { clickSound } from "../sounds/clickSXF";
+import { play } from "../sounds/generalSFX";
 import error from '../../sounds/error.mp3'
 
 type Logins = {
