@@ -31,9 +31,9 @@ export function Admin() {
     };
 
     // Handle delete action (delete the selected user)
-    const handleDelete = () => {
+    const handleDelete = async () => {
         if (selectedUserId !== null) {
-            removeUser(selectedUserId)
+            await removeUser(selectedUserId)
             setSelectedUserId(null);
         }
     };

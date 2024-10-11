@@ -7,7 +7,7 @@ export const removeUser = async (id: number): Promise<void> => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(id),
+            body: JSON.stringify({id}),
         });
 
         if (!response.ok) {
