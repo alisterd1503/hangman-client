@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5001/api/passwords';
+const API_URL = 'https://alisters-hangman.herokuapp.com/api/passwords';
 
 type Passwords = {
     username: string,

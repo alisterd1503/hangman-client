@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5001/api/usernames';
+const API_URL = 'https://alisters-hangman.herokuapp.com/api/usernames';
 
 
 export const getUsernames = async (): Promise<string[]> => {

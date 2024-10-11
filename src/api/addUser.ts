@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5001/api/addUser';
+const API_URL = 'https://alisters-hangman.herokuapp.com/api/addUser';
 import { Register } from "../models/Register";
 
 export const addUser = async (packet: Register): Promise<void> => {

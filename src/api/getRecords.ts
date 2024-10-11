@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5001/api/getRecords';
+const API_URL = 'https://alisters-hangman.herokuapp.com/api/getRecords';
 import { Record } from "../models/Record";
 
 export const getRecords = async (username: string): Promise<Record[]> => {

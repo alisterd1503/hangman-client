@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5001/api/addScore';
+const API_URL = 'https://alisters-hangman.herokuapp.com/api/addScore';
 
 type Score = {
     username: string,

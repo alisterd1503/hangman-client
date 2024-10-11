@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5001/api/getScores';
+const API_URL = 'https://alisters-hangman.herokuapp.com/api/getScores';
 
 type DB_Packet = {
     id: number
