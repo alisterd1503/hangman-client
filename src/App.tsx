@@ -254,20 +254,22 @@ function App() {
               <SettingsIcon settingsScreen={() => navigateTo('settings')} />
               <LeaderboardIcon LeaderboardScreen={() => navigateTo('leaderboard')} />
 
-              {currentUser ? 
-              (<> 
-                <Typography
-                  style={{ 
-                      fontFamily: "'Indie Flower',cursive",
-                      fontWeight: "bold",
-                      fontSize: "2rem",
-                  }}>Welcome, {currentUser}! Ready to play?
-                </Typography>
-                <LogoutIcon/>
-                <RecordsIcon RecordsScreen={() => navigateTo('records')} />
-              </>) 
-              : 
-              (<LoginIcon LoginScreen={() => navigateTo('login')} />)}
+              <div style={{height: '50px'}}>
+                {currentUser ? 
+                (<> 
+                  <Typography
+                    style={{ 
+                        fontFamily: "'Indie Flower',cursive",
+                        fontWeight: "bold",
+                        fontSize: "2rem",
+                    }}>Welcome, {currentUser}! Ready to play?
+                  </Typography>
+                  <LogoutIcon/>
+                  <RecordsIcon RecordsScreen={() => navigateTo('records')} />
+                </>) 
+                : 
+                (<LoginIcon LoginScreen={() => navigateTo('login')} />)}
+              </div>
             </>
           );
         case 'settings':

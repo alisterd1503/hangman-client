@@ -18,7 +18,7 @@ export function LogoutIcon() {
                     onClick={clearLocalStorage}
                     style={{
                         position: 'absolute',
-                        bottom: '20px',
+                        bottom: '0px',
                         left: '20px',
                         width: '80px',
                         height: '80px',

@@ -40,7 +40,8 @@ export function StartScreen({
       flexDirection: "column", 
       alignItems: "center", 
       justifyContent: "center", 
-      height: "100vh"
+      height: "100vh",
+      marginBottom: "-50px"
     }}>
 
         <Typography variant="h1" style={{ marginBottom: "40px", fontFamily: "'Indie Flower', cursive", fontWeight: "bold", fontSize: "8rem" }}>

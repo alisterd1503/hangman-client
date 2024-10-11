@@ -16,7 +16,7 @@ export function HomeIcon({
             onClick={() => {clickSound(),homeScreen()}}
             style={{
                 position: 'absolute',
-                bottom: '40px',
+                bottom: '0px',
                 left: '20px',
                 width: '80px',
                 height: '80px',

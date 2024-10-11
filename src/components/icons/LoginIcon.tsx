@@ -16,7 +16,7 @@ export function LoginIcon({
             onClick={() => {clickSound(),LoginScreen()}}
             style={{
                 position: 'absolute',
-                bottom: '40px',
+                bottom: '0px',
                 right: '20px',
                 width: '80px',
                 height: '80px',

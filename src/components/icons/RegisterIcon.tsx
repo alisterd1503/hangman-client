@@ -16,7 +16,7 @@ export function RegisterIcon ({
             onClick={() => {clickSound(),RegisterScreen()}}
             style={{
                 position: 'absolute',
-                bottom: '20px',
+                bottom: '0px',
                 right: '20px',
                 width: '80px',
                 height: '80px',
