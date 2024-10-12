@@ -1,5 +1,5 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Checkbox, Tooltip, Stack } from "@mui/material";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { getUsers } from "../../api/getUsers";
 import { removeUser } from "../../api/removeUser";
 import deleteIcon from "../../images/delete.png"
@@ -10,6 +10,9 @@ import { clickSound } from "../sounds/clickSXF";
 import { updateName } from "../../api/updateName";
 import { updateScore } from "../../api/udpateScore";
 import { updatePassword } from "../../api/updatePassword";
+import checkedIcon from '../../images/checked.png'
+import uncheckedIcon from '../../images/unchecked.png'
+const primaryColour = "#FF8343";
 
 type Users = {
     id: number,
@@ -37,9 +40,8 @@ type NewPassword = {
 export function Admin() {
     const [users, setUsers] = useState<Users[]>([]);
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
-    const inputValue = 'chicken';
-    const stringNum = "4"
-    const num = parseInt(stringNum)
+    const [input, setInput] = useState("");
+    const [inputType, setInputType] = useState<"username" | "score" | "password" | null>(null);
 
     useEffect(() => {
         const fetchScores = async () => {
@@ -50,52 +52,70 @@ export function Admin() {
         fetchScores();
     }, []);
 
-    // Handle checkbox selection (only allow one user to be selected at a time)
-    const handleSelectUser = (id: number) => {
-        setSelectedUserId(prevId => prevId === id ? null : id); // Toggle selection
+    const handleInputChange = (event: { target: { value: SetStateAction<string> } }) => {
+        setInput(event.target.value);
     };
 
-    // Handle delete the selected user
+    const handleSelectUser = (id: number) => {
+        setSelectedUserId((prevId) => (prevId === id ? null : id));
+        setInput("");
+        setInputType(null);
+    };
+
     const handleDelete = async () => {
         if (selectedUserId !== null) {
-            await removeUser(selectedUserId)
+            await removeUser(selectedUserId);
             const updatedUsers = await getUsers();
             setUsers(updatedUsers);
             setSelectedUserId(null);
         }
     };
 
-    // Handle updating users username
+    // Handle updating username
     const updateUsername = async () => {
-        if (selectedUserId !== null && inputValue) {
-            const body: NewName = { newName:inputValue, id: selectedUserId}
-            await updateName(body)
+        if (selectedUserId !== null && input) {
+            const body: NewName = { newName: input, id: selectedUserId };
+            await updateName(body);
             const updatedUsers = await getUsers();
             setUsers(updatedUsers);
             setSelectedUserId(null);
+            setInput(""); // Reset input after update
+            setInputType(null);
         }
     };
 
-    // Handle updating users score
+    // Handle updating score
     const updateUserScore = async () => {
-        if (selectedUserId !== null && stringNum) {
-            const body: NewScore = { newScore:num, id: selectedUserId}
-            await updateScore(body)
+        const num = parseInt(input);
+        if (selectedUserId !== null && !isNaN(num)) {
+            const body: NewScore = { newScore: num, id: selectedUserId };
+            await updateScore(body);
             const updatedUsers = await getUsers();
             setUsers(updatedUsers);
             setSelectedUserId(null);
+            setInput(""); // Reset input after update
+            setInputType(null);
         }
     };
 
-    // Handle updating a username
+    // Handle updating password
     const updateUserPassword = async () => {
-        if (selectedUserId !== null && inputValue) {
-            const body: NewPassword = { newPassword:inputValue, id: selectedUserId}
-            await updatePassword(body)
+        if (selectedUserId !== null && input) {
+            const body: NewPassword = { newPassword: input, id: selectedUserId };
+            await updatePassword(body);
             const updatedUsers = await getUsers();
             setUsers(updatedUsers);
             setSelectedUserId(null);
+            setInput(""); // Reset input after update
+            setInputType(null);
         }
+    };
+
+    const handleUpdateClick = () => {
+        clickSound()
+        if (inputType === "username") updateUsername();
+        if (inputType === "score") updateUserScore();
+        if (inputType === "password") updateUserPassword();
     };
 
     return (
@@ -104,10 +124,9 @@ export function Admin() {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            height: "90vh",
-            marginBottom: "100px"
+            height: "105vh",
         }}>
-            <Typography variant="h1" style={{ fontFamily: "'Indie Flower', cursive", fontWeight: "bold", fontSize: "8rem" }}>
+            <Typography variant="h1" style={{ fontFamily: "'Indie Flower', cursive", fontWeight: "bold", fontSize: "7rem" }}>
                 Admin
             </Typography>
 
@@ -126,14 +145,23 @@ export function Admin() {
                 </TableHead>
                 <TableBody>
                     {users.map((row) => (
-                        <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': { backgroundColor: '#FFCCBC' } }}>
-                            {/* Checkbox for selecting the user */}
+                        <TableRow 
+                            key={row.id} 
+                            sx={{
+                                "&:last-child td, &:last-child th": { border: 0 },
+                                backgroundColor: selectedUserId === row.id ? "#FFCCBC" : "transparent",
+                                "&:hover": { backgroundColor: "#FFCCBC" },
+                            }}
+                        >
+       
                             <TableCell align="center">
-                                <Checkbox
-                                    checked={selectedUserId === row.id}
-                                    onChange={() => handleSelectUser(row.id)}
-                                    color="primary"
-                                />
+                            <Checkbox
+                                checked={selectedUserId === row.id}
+                                onChange={() => handleSelectUser(row.id)}
+                                icon={<img src={uncheckedIcon} alt="Unchecked" style={{ width: '30px', height: '30px' }} />}
+                                checkedIcon={<img src={checkedIcon} alt="Checked" style={{ width: '30px', height: '30px' }} />}
+                                disableRipple
+                            />
                             </TableCell>
                             <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive"}}>{row.id}</TableCell>
                             <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive"}}>{row.username}</TableCell>
@@ -147,160 +175,225 @@ export function Admin() {
             </TableContainer>
 
             {/* Display Delete Button if a user is selected */}
-            <div style={{height: "100px"}}>
+            <div style={{height: "255px"}}>
             {selectedUserId !== null && (<>
-                <Stack
-                    direction="row"
-                    spacing={15}
-                    sx={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
-                    >
-                    <Tooltip
-                        title="delete user"
-                        placement="bottom"
-                        slotProps={{
-                            tooltip: {
-                                sx: {
-                                    color: 'black',
-                                    backgroundColor: 'transparent',
-                                    fontSize:'30px',
-                                    fontWeight: 'bold',
-                                    fontFamily: "'Indie Flower', cursive"
-                                },
-                            },
+                    <Stack
+                        direction="row"
+                        spacing={15}
+                        sx={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            marginBottom: "30px"
                         }}
-                    >
-                    <img
-                    src={deleteIcon}
-                    alt="Home"
-                    onClick={() => {clickSound(),handleDelete()}}
-                    style={{
-                        width: '50px',
-                        height: '50px',
-                        cursor: 'pointer',
-                        transition: 'transform 0.3s, opacity 0.3s',
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'scale(1.1)';
-                        e.currentTarget.style.opacity = '0.8';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'scale(1)';
-                        e.currentTarget.style.opacity = '1';
-                    }}
-                    />
-                    </Tooltip>
+                        >
+                        <Tooltip
+                            title="delete user"
+                            placement="bottom"
+                            slotProps={{
+                                tooltip: {
+                                    sx: {
+                                        color: 'black',
+                                        backgroundColor: 'transparent',
+                                        fontSize:'30px',
+                                        fontWeight: 'bold',
+                                        fontFamily: "'Indie Flower', cursive"
+                                    },
+                                },
+                            }}
+                        >
+                        <img
+                        src={deleteIcon}
+                        alt="Home"
+                        onClick={() => {clickSound(),handleDelete()}}
+                        style={{
+                            width: '50px',
+                            height: '50px',
+                            cursor: 'pointer',
+                            transition: 'transform 0.3s, opacity 0.3s',
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'scale(1.1)';
+                            e.currentTarget.style.opacity = '0.8';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'scale(1)';
+                            e.currentTarget.style.opacity = '1';
+                        }}
+                        />
+                        </Tooltip>
 
-                    <Tooltip
-                        title="edit name"
-                        placement="bottom"
-                        slotProps={{
-                            tooltip: {
-                                sx: {
-                                    color: 'black',
-                                    backgroundColor: 'transparent',
-                                    fontSize:'30px',
-                                    fontWeight: 'bold',
-                                    fontFamily: "'Indie Flower', cursive"
+                        <Tooltip
+                            title="edit name"
+                            placement="bottom"
+                            slotProps={{
+                                tooltip: {
+                                    sx: {
+                                        color: 'black',
+                                        backgroundColor: 'transparent',
+                                        fontSize:'30px',
+                                        fontWeight: 'bold',
+                                        fontFamily: "'Indie Flower', cursive"
+                                    },
                                 },
-                            },
+                            }}
+                        >
+                        <img
+                        src={nameIcon}
+                        alt="Home"
+                        onClick={() => {clickSound(),setInputType("username")}}
+                        style={{
+                            width: '50px',
+                            height: '50px',
+                            cursor: 'pointer',
+                            transition: 'transform 0.3s, opacity 0.3s',
                         }}
-                    >
-                    <img
-                    src={nameIcon}
-                    alt="Home"
-                    onClick={() => {clickSound(),updateUsername()}}
-                    style={{
-                        width: '50px',
-                        height: '50px',
-                        cursor: 'pointer',
-                        transition: 'transform 0.3s, opacity 0.3s',
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'scale(1.1)';
-                        e.currentTarget.style.opacity = '0.8';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'scale(1)';
-                        e.currentTarget.style.opacity = '1';
-                    }}
-                    />
-                    </Tooltip>
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'scale(1.1)';
+                            e.currentTarget.style.opacity = '0.8';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'scale(1)';
+                            e.currentTarget.style.opacity = '1';
+                        }}
+                        />
+                        </Tooltip>
 
-                    <Tooltip
-                        title="edit score"
-                        placement="bottom"
-                        slotProps={{
-                            tooltip: {
-                                sx: {
-                                    color: 'black',
-                                    backgroundColor: 'transparent',
-                                    fontSize:'30px',
-                                    fontWeight: 'bold',
-                                    fontFamily: "'Indie Flower', cursive"
+                        <Tooltip
+                            title="edit score"
+                            placement="bottom"
+                            slotProps={{
+                                tooltip: {
+                                    sx: {
+                                        color: 'black',
+                                        backgroundColor: 'transparent',
+                                        fontSize:'30px',
+                                        fontWeight: 'bold',
+                                        fontFamily: "'Indie Flower', cursive"
+                                    },
                                 },
-                            },
+                            }}
+                        >
+                        <img
+                        src={appleIcon}
+                        alt="Home"
+                        onClick={() => {clickSound(),setInputType("score")}}
+                        style={{
+                            width: '70px',
+                            height: '70px',
+                            cursor: 'pointer',
+                            transition: 'transform 0.3s, opacity 0.3s',
                         }}
-                    >
-                    <img
-                    src={appleIcon}
-                    alt="Home"
-                    onClick={() => {clickSound(),updateUserScore()}}
-                    style={{
-                        width: '70px',
-                        height: '70px',
-                        cursor: 'pointer',
-                        transition: 'transform 0.3s, opacity 0.3s',
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'scale(1.1)';
-                        e.currentTarget.style.opacity = '0.8';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'scale(1)';
-                        e.currentTarget.style.opacity = '1';
-                    }}
-                    />
-                    </Tooltip>
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'scale(1.1)';
+                            e.currentTarget.style.opacity = '0.8';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'scale(1)';
+                            e.currentTarget.style.opacity = '1';
+                        }}
+                        />
+                        </Tooltip>
 
-                    <Tooltip
-                        title="edit password"
-                        placement="bottom"
-                        slotProps={{
-                            tooltip: {
-                                sx: {
-                                    color: 'black',
-                                    backgroundColor: 'transparent',
-                                    fontSize:'30px',
-                                    fontWeight: 'bold',
-                                    fontFamily: "'Indie Flower', cursive"
+                        <Tooltip
+                            title="edit password"
+                            placement="bottom"
+                            slotProps={{
+                                tooltip: {
+                                    sx: {
+                                        color: 'black',
+                                        backgroundColor: 'transparent',
+                                        fontSize:'30px',
+                                        fontWeight: 'bold',
+                                        fontFamily: "'Indie Flower', cursive"
+                                    },
                                 },
-                            },
+                            }}
+                        >
+                        <img
+                        src={passwordIcon}
+                        alt="Home"
+                        onClick={() => {clickSound(),setInputType("password")}}
+                        style={{
+                            width: '50px',
+                            height: '50px',
+                            cursor: 'pointer',
+                            transition: 'transform 0.3s, opacity 0.3s',
                         }}
-                    >
-                    <img
-                    src={passwordIcon}
-                    alt="Home"
-                    onClick={() => {clickSound(),updateUserPassword()}}
-                    style={{
-                        width: '50px',
-                        height: '50px',
-                        cursor: 'pointer',
-                        transition: 'transform 0.3s, opacity 0.3s',
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'scale(1.1)';
-                        e.currentTarget.style.opacity = '0.8';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'scale(1)';
-                        e.currentTarget.style.opacity = '1';
-                    }}
-                    />
-                    </Tooltip>
-                </Stack>
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'scale(1.1)';
+                            e.currentTarget.style.opacity = '0.8';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'scale(1)';
+                            e.currentTarget.style.opacity = '1';
+                        }}
+                        />
+                        </Tooltip>
+                    </Stack>
+
+                    {inputType && (
+                    <Stack direction="row" spacing={2} sx={{ justifyContent: "center", alignItems: "center", height: "55px" }}>
+                        <input
+                            onChange={handleInputChange}
+                            value={input}
+                            type={inputType === "score" ? "number" : "text"}
+                            id="standard-basic"
+                            placeholder={
+                                inputType === "username"
+                                    ? "New Username"
+                                    : inputType === "score"
+                                    ? "New Score"
+                                    : "New Password"
+                            }
+                            autoComplete="off"
+                            style={{
+                                width: '250px',
+                                height: '50px',
+                                border: 'none',
+                                borderBottom: '2px solid black',
+                                fontFamily: "'Indie Flower', cursive",
+                                fontSize: "2rem",
+                                fontWeight: "bold",
+                                background: 'none',
+                                textAlign: 'center',
+                            }}
+                            onFocus={(event) => {
+                                event.target.style.outline = `none`;
+                                event.target.style.borderBottom = `2px solid ${primaryColour}`;
+                                event.target.placeholder = '';
+                            }}
+                            onBlur={(event) => {
+                                event.target.style.borderBottom = '2px solid black';
+                                event.target.placeholder = 'Enter Value';
+                            }}
+                        />
+
+                        <span
+                            onClick={handleUpdateClick}
+                            style={{
+                                color: "green",
+                                display: "inline-block",
+                                fontSize: "3rem",
+                                height: "65px",
+                                fontFamily: "'Indie Flower', cursive",
+                                fontWeight: "bold",
+                                cursor: "pointer",
+                                transition: "transform 0.3s, background-color 0.3s",
+                                marginTop: "20px"
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.color = 'darkgreen',
+                                e.currentTarget.style.transform = 'scale(1.1)'
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.color = 'green',
+                                e.currentTarget.style.transform = 'scale(1)'
+                            }}
+                            >
+                            UPDATE
+                        </span>
+                    </Stack>
+                    )}
                 </>)}
             </div>
         </div>
