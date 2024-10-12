@@ -1,4 +1,4 @@
-const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/updatepassword';
+const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/updatePassword';
 
 type NewPassword = {
     id: number,
