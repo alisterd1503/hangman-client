@@ -43,7 +43,7 @@ export function RegisterPage({navigateToLogin}:RegisterPageProps) {
         fetchScores();
     }, [])
 
-    const handleButtonClick = () => {
+    const handleButtonClick = async () => {
         setMessage('')
         const body: Register = {
             username: username,
@@ -51,7 +51,7 @@ export function RegisterPage({navigateToLogin}:RegisterPageProps) {
             score: 0,
             location: location
         }
-        addUser(body)
+        await addUser(body)
         setUsername('');
         setPassword('');
         navigateToLogin()

@@ -88,7 +88,7 @@ function App() {
 
   const [currentUser, setCurrentUser] = useState<string | null>(null);
 
-  const sendPacket = () => {
+  const sendPacket = async () => {
     if (currentUser && difficulty && chosenWord) {
       const body: Game = {
         username: currentUser,
@@ -98,7 +98,7 @@ function App() {
         result: result,
         guesses: userGuesses.length
       }
-      addScore(body)
+      await addScore(body)
     }
   }
 
