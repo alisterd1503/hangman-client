@@ -1,8 +1,12 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Checkbox, IconButton } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Checkbox, Tooltip, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getUsers } from "../../api/getUsers";
 import { removeUser } from "../../api/removeUser";
+import deleteIcon from "../../images/delete.png"
+import nameIcon from "../../images/name.png"
+import passwordIcon from "../../images/password.png"
+import appleIcon from "../../images/apple.png"
+import { clickSound } from "../sounds/clickSXF";
 
 type Users = {
     id: number,
@@ -34,6 +38,8 @@ export function Admin() {
     const handleDelete = async () => {
         if (selectedUserId !== null) {
             await removeUser(selectedUserId)
+            const updatedUsers = await getUsers();
+            setUsers(updatedUsers);
             setSelectedUserId(null);
         }
     };
@@ -44,13 +50,14 @@ export function Admin() {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            height: "60vh",
+            height: "90vh",
+            marginBottom: "100px"
         }}>
             <Typography variant="h1" style={{ fontFamily: "'Indie Flower', cursive", fontWeight: "bold", fontSize: "8rem" }}>
                 Admin
             </Typography>
 
-            <TableContainer component={Paper} sx={{ borderRadius: 5, boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', maxWidth: '100%', border: 'solid black 2px', height:'600px' }}>
+            <TableContainer component={Paper} sx={{ borderRadius: 5, boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', maxWidth: '100%', border: 'solid black 2px', height:'600px', marginBottom:'20px' }}>
             <Table sx={{ minWidth: 800 }}>
                 <TableHead>
                     <TableRow sx={{ backgroundColor: '#F48FB1' }}>
@@ -86,11 +93,162 @@ export function Admin() {
             </TableContainer>
 
             {/* Display Delete Button if a user is selected */}
-            {selectedUserId !== null && (
-                <IconButton onClick={handleDelete} sx={{ mt: 2 }} color="error">
-                    <DeleteIcon sx={{ fontSize: '3rem' }} />
-                </IconButton>
-            )}
+            <div style={{height: "100px"}}>
+            {selectedUserId !== null && (<>
+                <Stack
+                    direction="row"
+                    spacing={15}
+                    sx={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                    >
+                    <Tooltip
+                        title="delete user"
+                        placement="bottom"
+                        slotProps={{
+                            tooltip: {
+                                sx: {
+                                    color: 'black',
+                                    backgroundColor: 'transparent',
+                                    fontSize:'30px',
+                                    fontWeight: 'bold',
+                                    fontFamily: "'Indie Flower', cursive"
+                                },
+                            },
+                        }}
+                    >
+                    <img
+                    src={deleteIcon}
+                    alt="Home"
+                    onClick={() => {clickSound(),handleDelete()}}
+                    style={{
+                        width: '50px',
+                        height: '50px',
+                        cursor: 'pointer',
+                        transition: 'transform 0.3s, opacity 0.3s',
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'scale(1.1)';
+                        e.currentTarget.style.opacity = '0.8';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'scale(1)';
+                        e.currentTarget.style.opacity = '1';
+                    }}
+                    />
+                    </Tooltip>
+
+                    <Tooltip
+                        title="edit name"
+                        placement="bottom"
+                        slotProps={{
+                            tooltip: {
+                                sx: {
+                                    color: 'black',
+                                    backgroundColor: 'transparent',
+                                    fontSize:'30px',
+                                    fontWeight: 'bold',
+                                    fontFamily: "'Indie Flower', cursive"
+                                },
+                            },
+                        }}
+                    >
+                    <img
+                    src={nameIcon}
+                    alt="Home"
+                    onClick={() => {clickSound(),handleDelete()}}
+                    style={{
+                        width: '50px',
+                        height: '50px',
+                        cursor: 'pointer',
+                        transition: 'transform 0.3s, opacity 0.3s',
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'scale(1.1)';
+                        e.currentTarget.style.opacity = '0.8';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'scale(1)';
+                        e.currentTarget.style.opacity = '1';
+                    }}
+                    />
+                    </Tooltip>
+
+                    <Tooltip
+                        title="edit score"
+                        placement="bottom"
+                        slotProps={{
+                            tooltip: {
+                                sx: {
+                                    color: 'black',
+                                    backgroundColor: 'transparent',
+                                    fontSize:'30px',
+                                    fontWeight: 'bold',
+                                    fontFamily: "'Indie Flower', cursive"
+                                },
+                            },
+                        }}
+                    >
+                    <img
+                    src={appleIcon}
+                    alt="Home"
+                    onClick={() => {clickSound(),handleDelete()}}
+                    style={{
+                        width: '70px',
+                        height: '70px',
+                        cursor: 'pointer',
+                        transition: 'transform 0.3s, opacity 0.3s',
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'scale(1.1)';
+                        e.currentTarget.style.opacity = '0.8';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'scale(1)';
+                        e.currentTarget.style.opacity = '1';
+                    }}
+                    />
+                    </Tooltip>
+
+                    <Tooltip
+                        title="edit password"
+                        placement="bottom"
+                        slotProps={{
+                            tooltip: {
+                                sx: {
+                                    color: 'black',
+                                    backgroundColor: 'transparent',
+                                    fontSize:'30px',
+                                    fontWeight: 'bold',
+                                    fontFamily: "'Indie Flower', cursive"
+                                },
+                            },
+                        }}
+                    >
+                    <img
+                    src={passwordIcon}
+                    alt="Home"
+                    onClick={() => {clickSound(),handleDelete()}}
+                    style={{
+                        width: '50px',
+                        height: '50px',
+                        cursor: 'pointer',
+                        transition: 'transform 0.3s, opacity 0.3s',
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'scale(1.1)';
+                        e.currentTarget.style.opacity = '0.8';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'scale(1)';
+                        e.currentTarget.style.opacity = '1';
+                    }}
+                    />
+                    </Tooltip>
+                </Stack>
+                </>)}
+            </div>
         </div>
     );
 }

@@ -51,7 +51,7 @@ export function HangmanGuess({
           }}
         />
           <span 
-                onClick={() => {clickSound(), handleButtonClick}}
+                onClick={() => {clickSound(), handleButtonClick()}}
                 style={{
                   display: "inline-block",
                   fontSize: "4rem",
