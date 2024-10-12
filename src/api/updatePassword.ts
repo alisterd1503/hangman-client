@@ -1,24 +1,24 @@
-const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/updateName';
+const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/updatepassword';
 
-type NewName = {
+type NewPassword = {
     id: number,
-    newName: string,
+    newPassword: string,
 }
 
-export const updateName = async (name: NewName): Promise<void> => {
+export const updatePassword = async (password: NewPassword): Promise<void> => {
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(name),
+            body: JSON.stringify(password),
         });
 
         if (!response.ok) {
             throw new Error(`Error: ${response.statusText}`);
         }
     } catch (error) {
-        console.error('Error adding score:', error);
+        console.error('Error adding password:', error);
     }
 };

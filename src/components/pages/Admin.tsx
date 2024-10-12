@@ -8,6 +8,8 @@ import passwordIcon from "../../images/password.png"
 import appleIcon from "../../images/apple.png"
 import { clickSound } from "../sounds/clickSXF";
 import { updateName } from "../../api/updateName";
+import { updateScore } from "../../api/udpateScore";
+import { updatePassword } from "../../api/updatePassword";
 
 type Users = {
     id: number,
@@ -22,10 +24,22 @@ type NewName = {
     newName: string,
 }
 
+type NewScore = {
+    id: number,
+    newScore: number,
+}
+
+type NewPassword = {
+    id: number,
+    newPassword: string,
+}
+
 export function Admin() {
     const [users, setUsers] = useState<Users[]>([]);
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
     const inputValue = 'chicken';
+    const stringNum = "4"
+    const num = parseInt(stringNum)
 
     useEffect(() => {
         const fetchScores = async () => {
@@ -41,7 +55,7 @@ export function Admin() {
         setSelectedUserId(prevId => prevId === id ? null : id); // Toggle selection
     };
 
-    // Handle delete action (delete the selected user)
+    // Handle delete the selected user
     const handleDelete = async () => {
         if (selectedUserId !== null) {
             await removeUser(selectedUserId)
@@ -51,11 +65,33 @@ export function Admin() {
         }
     };
 
-    // Handle delete action (delete the selected user)
+    // Handle updating users username
     const updateUsername = async () => {
         if (selectedUserId !== null && inputValue) {
             const body: NewName = { newName:inputValue, id: selectedUserId}
             await updateName(body)
+            const updatedUsers = await getUsers();
+            setUsers(updatedUsers);
+            setSelectedUserId(null);
+        }
+    };
+
+    // Handle updating users score
+    const updateUserScore = async () => {
+        if (selectedUserId !== null && stringNum) {
+            const body: NewScore = { newScore:num, id: selectedUserId}
+            await updateScore(body)
+            const updatedUsers = await getUsers();
+            setUsers(updatedUsers);
+            setSelectedUserId(null);
+        }
+    };
+
+    // Handle updating a username
+    const updateUserPassword = async () => {
+        if (selectedUserId !== null && inputValue) {
+            const body: NewPassword = { newPassword:inputValue, id: selectedUserId}
+            await updatePassword(body)
             const updatedUsers = await getUsers();
             setUsers(updatedUsers);
             setSelectedUserId(null);
@@ -211,7 +247,7 @@ export function Admin() {
                     <img
                     src={appleIcon}
                     alt="Home"
-                    onClick={() => {clickSound(),handleDelete()}}
+                    onClick={() => {clickSound(),updateUserScore()}}
                     style={{
                         width: '70px',
                         height: '70px',
@@ -247,7 +283,7 @@ export function Admin() {
                     <img
                     src={passwordIcon}
                     alt="Home"
-                    onClick={() => {clickSound(),handleDelete()}}
+                    onClick={() => {clickSound(),updateUserPassword()}}
                     style={{
                         width: '50px',
                         height: '50px',
