@@ -7,6 +7,7 @@ import nameIcon from "../../images/name.png"
 import passwordIcon from "../../images/password.png"
 import appleIcon from "../../images/apple.png"
 import { clickSound } from "../sounds/clickSXF";
+import { updateName } from "../../api/updateName";
 
 type Users = {
     id: number,
@@ -16,9 +17,15 @@ type Users = {
     password: string
 }
 
+type NewName = {
+    id: number,
+    newName: string,
+}
+
 export function Admin() {
     const [users, setUsers] = useState<Users[]>([]);
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+    const inputValue = 'chicken';
 
     useEffect(() => {
         const fetchScores = async () => {
@@ -38,6 +45,17 @@ export function Admin() {
     const handleDelete = async () => {
         if (selectedUserId !== null) {
             await removeUser(selectedUserId)
+            const updatedUsers = await getUsers();
+            setUsers(updatedUsers);
+            setSelectedUserId(null);
+        }
+    };
+
+    // Handle delete action (delete the selected user)
+    const updateUsername = async () => {
+        if (selectedUserId !== null && inputValue) {
+            const body: NewName = { newName:inputValue, id: selectedUserId}
+            await updateName(body)
             const updatedUsers = await getUsers();
             setUsers(updatedUsers);
             setSelectedUserId(null);
@@ -157,7 +175,7 @@ export function Admin() {
                     <img
                     src={nameIcon}
                     alt="Home"
-                    onClick={() => {clickSound(),handleDelete()}}
+                    onClick={() => {clickSound(),updateUsername()}}
                     style={{
                         width: '50px',
                         height: '50px',
