@@ -10,6 +10,7 @@ const primaryColour = "#FF8343";
 
 import { getCountryByTimeZone } from '../functions/getLocation';
 import { validatePassword } from "../functions/validatePassword";
+import { validateUsername } from "../functions/validateUsername";
 
 import { clickSound } from "../sounds/clickSXF";
 import { play } from "../sounds/generalSFX";
@@ -20,12 +21,6 @@ const location: string = getCountryByTimeZone();
 type RegisterPageProps = {
     navigateToLogin: () => void
 }
-
-const validateUsername = (username: string): boolean => {
-    const usernameRegex = /^[^\s]+$/;
-    return username.trim() !== '' && usernameRegex.test(username);
-};
-
 
 export function RegisterPage({navigateToLogin}:RegisterPageProps) {
 
@@ -150,23 +145,17 @@ export function RegisterPage({navigateToLogin}:RegisterPageProps) {
             <span
                  onClick={() => {
                     const passwordCheck = validatePassword(password)
-                    const usernameCheck = validateUsername(username)
+                    const usernameCheck = validateUsername(username, usedNames)
 
-                    if (password && username && (!usedNames.includes(username)) && passwordCheck.valid && usernameCheck) {
+                    if (passwordCheck.valid && usernameCheck.valid) {
                         clickSound()
                         handleButtonClick()
                     } else {
                         play(error)
-                        if (!username) {
-                            setMessage('Please enter a username.');
-                        } else if (!password) {
-                            setMessage('Please enter a password.');
+                        if (usernameCheck.valid == false) {
+                            setMessage(usernameCheck.message)
                         } else if (passwordCheck.valid == false) {
                             setMessage(passwordCheck.message)
-                        } else if (usedNames.includes(username)) {
-                            setMessage('Username already taken.');
-                        } else if (!usernameCheck) {
-                            setMessage('Username cannot contain spaces.')
                         }
                     }
                 }} 

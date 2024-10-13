@@ -10,6 +10,11 @@ import { updateName } from "../../api/updateName";
 import { updatePassword } from "../../api/updatePassword";
 import nameIcon from "../../images/name.png"
 import passwordIcon from "../../images/password.png"
+import { validatePassword } from "../functions/validatePassword";
+import { validateUsername } from "../functions/validateUsername";
+import { play } from "../sounds/generalSFX";
+import { getUsernames } from "../../api/getUsernames";
+import error from '../../sounds/error.mp3'
 
 const location: string = getCountryByTimeZone();
 const primaryColour = "#FF8343";
@@ -42,6 +47,8 @@ export function Settings({
     const [currentUserId, setCurrentUserId] = useState<number | null>(null)
     const [input, setInput] = useState("");
     const [inputType, setInputType] = useState<"username" | "password" | null>(null);
+    const [message, setMessage] = useState('');
+    const [usedNames, setUsedNames] = useState<string[]>([]);
 
     useEffect(() => {
         const storageData = localStorage.getItem('currentUser');
@@ -52,7 +59,16 @@ export function Settings({
             setCurrentUser(username)
           }
         }
-      }, []);
+    }, []);
+
+    useEffect(() => {
+        const fetchScores = async () => {
+            const data = await getUsernames();
+            setUsedNames(data);
+        };
+    
+        fetchScores();
+    }, [])
 
     // Handle volume change
     const handleChange = (_event: Event, newValue: number | number[]) => {
@@ -93,8 +109,28 @@ export function Settings({
 
     const handleUpdateClick = () => {
         clickSound()
-        if (inputType === "username") updateUsername();
-        if (inputType === "password") updateUserPassword();
+
+        if (inputType === "username") {
+            const usernameCheck = validateUsername(input, usedNames)
+            if (usernameCheck.valid) {
+                setMessage('')
+                updateUsername()
+            } else {
+                play(error)
+                setMessage(usernameCheck.message)
+            }
+
+        } else if (inputType === "password") {
+            const passwordCheck = validatePassword(input)
+            if (passwordCheck.valid) {
+                setMessage('')
+                updateUserPassword();
+            } else {
+                play(error)
+                setMessage(passwordCheck.message)
+            }
+        }
+        setInput('')
     };
 
     return (
@@ -129,7 +165,7 @@ export function Settings({
                             alignItems: "flex-start",
                             border: "solid black 3px",
                             borderStyle: "dashed",
-                            padding: "20px",
+                            padding: "15px",
                             borderRadius: "10px",
                         }}
                     >
@@ -299,6 +335,17 @@ export function Settings({
                         )}
                         </div>
                         </Stack>
+                        <div style={{transition: '0.3s', height: '35px'}}>
+                            {message &&
+                                <Typography
+                                    style={{ 
+                                        fontFamily: "'Indie Flower',cursive",
+                                        fontWeight: "bold",
+                                        fontSize: "1.5rem",
+                                    }}>{message}
+                                </Typography>
+                            }
+                        </div> 
                     </Stack>
                 )}
 
@@ -311,8 +358,8 @@ export function Settings({
                         alignItems: "flex-start",
                         border: "solid black 3px",
                         borderStyle: "dashed",
-                        padding: "20px",
-                        borderRadius: "10px"
+                        padding: "15px",
+                        borderRadius: "10px",
                     }}
                 >
                     {/* Volume Slider Stack */}
