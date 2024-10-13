@@ -131,7 +131,7 @@ export function Settings({
                         sx={{
                             justifyContent: "center",
                             alignItems: "flex-start",
-                            border: "solid black 5px",
+                            border: "solid black 3px",
                             borderStyle: "dashed",
                             padding: "20px",
                             borderRadius: "10px",
@@ -141,12 +141,22 @@ export function Settings({
                             Profile
                         </Typography>
                         <hr style={{ border: 'none', height: '2px', backgroundColor: 'black', width: '100%', marginTop: -10, marginBottom: 10 }} />
-                        <Typography variant="h3" style={{ fontFamily: "'Indie Flower', cursive", fontWeight: "bold" }}>
-                                username: {currentUser}
-                        </Typography>
-                        <Typography variant="h3" style={{ fontFamily: "'Indie Flower', cursive", fontWeight: "bold" }}>
-                                location: {location}
-                        </Typography>
+                        <Stack direction="row" spacing={3} sx={{ justifyContent: "center", alignItems: "flex-end", marginBottom: "30px" }}>
+                            <Typography variant="h3" style={{ fontFamily: "'Indie Flower', cursive", fontWeight: "bold" }}>
+                                    username:
+                            </Typography>
+                            <Typography variant="h3" style={{ fontFamily: "'Indie Flower', cursive" }}>
+                                    {currentUser}
+                            </Typography>
+                        </Stack>
+                        <Stack direction="row" spacing={3} sx={{ justifyContent: "center", alignItems: "flex-end", marginBottom: "30px" }}>
+                            <Typography variant="h3" style={{ fontFamily: "'Indie Flower', cursive", fontWeight: "bold" }}>
+                                    location:
+                            </Typography>
+                            <Typography variant="h3" style={{ fontFamily: "'Indie Flower', cursive" }}>
+                                    {location}
+                            </Typography>
+                        </Stack>
 
                         <Stack
                         direction="row"
@@ -303,7 +313,7 @@ export function Settings({
                     sx={{
                         justifyContent: "center",
                         alignItems: "flex-start",
-                        border: "solid black 5px",
+                        border: "solid black 3px",
                         borderStyle: "dashed",
                         padding: "20px",
                         borderRadius: "10px"
