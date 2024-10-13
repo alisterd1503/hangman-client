@@ -6,13 +6,13 @@ export const CustomSlider = styled(Slider)({
     height: 8,
     
     '& .MuiSlider-thumb': {
-      opacity: 0.8,
+      opacity: 0.9,
       backgroundImage: `url(${circle})`,
-      backgroundSize: 'contain',   // Ensure the image fits properly
+      backgroundSize: 'contain',
       backgroundRepeat: 'no-repeat',
-      borderRadius: '50%',         // Ensure it's fully circular
-      height: 30,                  // Set the size of the thumb to match the circle image
-      width: 30,                   // Ensure width and height are the same
+      borderRadius: '50%',         
+      height: 20,                  
+      width: 20,              
       backgroundColor: 'transparent',
       border: 'none',
       '&:hover': {
@@ -21,11 +21,12 @@ export const CustomSlider = styled(Slider)({
     },
   
     '& .MuiSlider-rail': {
+      opacity: 0.7,
       backgroundImage: `url(${slider})`,
       backgroundSize: 'cover', 
       backgroundRepeat: 'no-repeat',
       borderRadius: 4,
-      height: 100, 
+      height: 50, 
       backgroundColor: 'transparent',
       border: 'none'
     },
