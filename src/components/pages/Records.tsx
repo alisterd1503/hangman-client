@@ -22,9 +22,12 @@ export function Records() {
     const [currentUser, setCurrentUser] = useState<string | null>(null);
 
     useEffect(() => {
-        const savedUser = localStorage.getItem('currentUser');
-        if (savedUser) {
-          setCurrentUser(savedUser);
+        const storageData = localStorage.getItem('currentUser');
+        if (storageData) {
+          const { username } = JSON.parse(storageData);
+          if (username) {
+            setCurrentUser(username);
+          }
         }
       }, []);
 

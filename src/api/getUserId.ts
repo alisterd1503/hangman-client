@@ -15,9 +15,10 @@ export const getUserId = async (username: string): Promise<number> => {
         }
 
         const data = await response.json();
-        return data;
+        return data.id;
     } catch (error) {
         console.error('Error fetching records:', error);
-        return 0;
+        throw error
+        return 3;
     }
 };

@@ -6,6 +6,7 @@ import { getPasswords } from '../../api/getPasswords';
 import { clickSound } from "../sounds/clickSXF";
 import { play } from "../sounds/generalSFX";
 import error from '../../sounds/error.mp3'
+import { getUserId } from "../../api/getUserId";
 
 type Logins = {
     username: string,
@@ -42,23 +43,31 @@ export function Login({navigateToHome}: LoginProps) {
         setPassword(event.target.value);
     };
 
-    const validateLogin = () => {
+    const validateLogin = async () => {
         const user = logins.find((login) => login.username === username);
-
+    
         if (user) {
             if (user.password === password) {
-                clickSound()
-                localStorage.setItem('currentUser', username);
-                setMessage('')
+                clickSound();
+    
+                const userId = await getUserId(username);
+                const currentUser = {
+                    username: username,
+                    userId: userId
+                };
+    
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    
+                setMessage('');
                 setUsername('');
                 setPassword('');
-                navigateToHome()
+                navigateToHome();
             } else {
-                play(error)
+                play(error);
                 setMessage('Incorrect password. Please try again.');
             }
         } else {
-            play(error)
+            play(error);
             setMessage('Username not found. Please try again.');
         }
     };

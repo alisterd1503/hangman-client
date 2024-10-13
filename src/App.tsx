@@ -108,9 +108,12 @@ function App() {
 
   // Persist the logged-in user even after page reloads
   useEffect(() => {
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
-      setCurrentUser(savedUser);
+    const storageData = localStorage.getItem('currentUser');
+    if (storageData) {
+      const { username } = JSON.parse(storageData);
+      if (username) {
+        setCurrentUser(username);
+      }
     }
   }, []);
 
@@ -255,6 +258,7 @@ function App() {
               />
               <SettingsIcon settingsScreen={() => navigateTo('settings')} />
               <LeaderboardIcon LeaderboardScreen={() => navigateTo('leaderboard')} />
+    
               {currentUser === 'Alister' && <AdminIcon AdminScreen={() => navigateTo('admin')} />}
 
               <div style={{height: '50px'}}>

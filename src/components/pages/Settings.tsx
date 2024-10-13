@@ -10,7 +10,6 @@ import { updateName } from "../../api/updateName";
 import { updatePassword } from "../../api/updatePassword";
 import nameIcon from "../../images/name.png"
 import passwordIcon from "../../images/password.png"
-import { getUserId } from "../../api/getUserId";
 
 const location: string = getCountryByTimeZone();
 const primaryColour = "#FF8343";
@@ -39,22 +38,19 @@ export function Settings({
     setVolume,
     setMute
 }: SettingsProps) {
-
     const [currentUser, setCurrentUser] = useState<string | null>(null)
     const [currentUserId, setCurrentUserId] = useState<number | null>(null)
     const [input, setInput] = useState("");
     const [inputType, setInputType] = useState<"username" | "password" | null>(null);
 
     useEffect(() => {
-        const savedUser = localStorage.getItem('currentUser');
-        setCurrentUser(savedUser);
-        if (currentUser) {
-            const fetchUserId = async () => {
-                const data = await getUserId(currentUser);
-                setCurrentUserId(data);
-            };
-    
-        fetchUserId();
+        const storageData = localStorage.getItem('currentUser');
+        if (storageData) {
+            const { username, userId } = JSON.parse(storageData);
+          if (userId && username) {
+            setCurrentUserId(userId);
+            setCurrentUser(username)
+          }
         }
       }, []);
 
@@ -124,7 +120,7 @@ export function Settings({
                 }}
             >
                 {/* Profile section */}
-                {currentUser && (
+                {currentUserId && (
                     <Stack
                         direction="column"
                         spacing={1}
