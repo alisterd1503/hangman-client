@@ -47,8 +47,8 @@ export function Settings({
 
     useEffect(() => {
         const savedUser = localStorage.getItem('currentUser');
+        setCurrentUser(savedUser);
         if (currentUser) {
-            setCurrentUser(savedUser);
             const fetchUserId = async () => {
                 const data = await getUserId(currentUser);
                 setCurrentUserId(data);
