@@ -120,6 +120,7 @@ export function Settings({
                 sx={{
                     justifyContent: "center",
                     alignItems: "flex-start",
+                    height: "800px"
                 }}
             >
                 {/* Profile section */}
