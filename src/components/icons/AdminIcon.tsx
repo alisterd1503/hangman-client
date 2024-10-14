@@ -33,9 +33,9 @@ export function AdminIcon({
             style={{
                 position: 'absolute',
                 top: '120px',
-                left: '20px',
-                width: '75px',
-                height: '75px',
+                left: '5px',
+                width: '95px',
+                height: '95px',
                 cursor: 'pointer',
                 transition: 'transform 0.3s, opacity 0.3s',
             }}

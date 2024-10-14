@@ -34,8 +34,8 @@ export function RecordsIcon ({
                 position: 'absolute',
                 bottom: '0px',
                 right: '20px',
-                width: '90px',
-                height: '90px',
+                width: '80px',
+                height: '80px',
                 cursor: 'pointer',
                 transition: 'transform 0.3s, opacity 0.3s',
             }}

@@ -35,13 +35,15 @@ type SettingsProps = {
     mute: boolean;
     setVolume: (volume: number) => void;
     setMute: (mute: boolean) => void;
+    navigateToLogin: () => void;
 }
 
 export function Settings({
     volume,
     mute,
     setVolume,
-    setMute
+    setMute,
+    navigateToLogin
 }: SettingsProps) {
     const [currentUser, setCurrentUser] = useState<string | null>(null)
     const [currentUserId, setCurrentUserId] = useState<number | null>(null)
@@ -131,6 +133,7 @@ export function Settings({
             }
         }
         setInput('')
+        navigateToLogin()
     };
 
     return (

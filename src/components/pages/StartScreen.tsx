@@ -48,7 +48,7 @@ export function StartScreen({
             Hangman Game
         </Typography>
 
-        <Typography variant="h5" style={{ marginBottom: "10px", fontFamily: "'Indie Flower', cursive", fontWeight: "bold", fontSize: "3rem" }}>
+        <Typography variant="h5" style={{ marginBottom: "30px", fontFamily: "'Indie Flower', cursive", fontWeight: "bold", fontSize: "3rem" }}>
             Choose Difficulty
         </Typography>
 
@@ -57,7 +57,7 @@ export function StartScreen({
             <Button
                 sx={{ 
                     fontFamily: "'Indie Flower', cursive", 
-                    border: `solid ${secondaryColour} 2px`,
+                    border: selectedDifficulty ===  'easy' ? `solid #a65228 4px` : `solid ${secondaryColour} 4px`,
                     borderRadius: '10px', 
                     fontSize: '2rem', 
                     fontWeight: 'bold',
@@ -77,7 +77,7 @@ export function StartScreen({
             <Button 
                 sx={{ 
                     fontFamily: "'Indie Flower', cursive", 
-                    border: `solid ${secondaryColour} 2px`,
+                    border: selectedDifficulty ===  'medium' ? `solid #a65228 4px` : `solid ${secondaryColour} 4px`,
                     borderRadius: '10px',
                     fontSize: '2rem',  
                     fontWeight: 'bold',
@@ -97,7 +97,7 @@ export function StartScreen({
             <Button 
                 sx={{ 
                     fontFamily: "'Indie Flower', cursive", 
-                    border: `solid ${secondaryColour} 2px`,
+                    border: selectedDifficulty ===  'hard' ? `solid #a65228 4px` : `solid ${secondaryColour} 4px`,
                     borderRadius: '10px',
                     fontSize: '2rem',  
                     fontWeight: 'bold',
@@ -117,7 +117,7 @@ export function StartScreen({
             <Button 
                 sx={{ 
                     fontFamily: "'Indie Flower', cursive", 
-                    border: `solid ${secondaryColour} 2px`,
+                    border: selectedDifficulty ===  'random' ? `solid #a65228 4px` : `solid ${secondaryColour} 4px`,
                     borderRadius: '10px',
                     fontSize: '2rem',  
                     fontWeight: 'bold',

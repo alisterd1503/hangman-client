@@ -34,8 +34,8 @@ export function HomeIcon({
                 position: 'absolute',
                 bottom: '40px',
                 left: '20px',
-                width: '80px',
-                height: '80px',
+                width: '65px',
+                height: '65px',
                 cursor: 'pointer',
                 transition: 'transform 0.3s, opacity 0.3s',
             }}

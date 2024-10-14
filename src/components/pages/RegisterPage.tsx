@@ -72,74 +72,85 @@ export function RegisterPage({navigateToLogin}:RegisterPageProps) {
                 Register
             </Typography>
 
-            <Stack direction="row" spacing={2} sx={{ justifyContent: "center", alignItems: "center" }}>
-                <Typography variant="h3" style={{ marginBottom: "30px", fontFamily: "'Indie Flower', cursive", fontWeight: "bold", fontSize: "3rem" }}>
-                    Username:
-                </Typography>
-                <input
-                    onChange={handleUsernameChange}
-                    value={username}
-                    type="text"
-                    id="standard-basic"
-                    placeholder="Create Username"
-                    autoComplete="off"
-                    style={{
-                        width: '250px',
-                        height: '50px',
-                        border: 'none',
-                        borderBottom: '2px solid black',
-                        fontFamily: "'Indie Flower', cursive",
-                        fontSize: "2rem",
-                        fontWeight: "bold",
-                        background: 'none',
-                        textAlign: 'center',
-                        marginBottom: '60px',
-                    }}
-                    onFocus={(event) => {
-                        event.target.style.outline = `none`;
-                        event.target.style.borderBottom = `2px solid ${primaryColour}`;
-                        event.target.placeholder = '';
-                    }}
-                    onBlur={(event) => {
-                        event.target.style.borderBottom = '2px solid black';
-                        event.target.placeholder = 'Create Username';
-                    }}
-                />
-            </Stack>
+            <Stack
+                direction="column"
+                spacing={-3}
+                sx={{
+                    justifyContent: "center",
+                    alignItems: "flex-start",
+                }}
+            >
+                {/* USERNAME */}
+                <Stack direction="row" spacing={2} sx={{ justifyContent: "center", alignItems: "center" }}>
+                    <Typography variant="h3" style={{ marginBottom: "30px", fontFamily: "'Indie Flower', cursive", fontWeight: "bold", fontSize: "3rem" }}>
+                        Username:
+                    </Typography>
+                    <input
+                        onChange={handleUsernameChange}
+                        value={username}
+                        type="text"
+                        id="standard-basic"
+                        placeholder="Create Username"
+                        autoComplete="off"
+                        style={{
+                            width: '250px',
+                            height: '50px',
+                            border: 'none',
+                            borderBottom: '2px solid black',
+                            fontFamily: "'Indie Flower', cursive",
+                            fontSize: "2rem",
+                            fontWeight: "bold",
+                            background: 'none',
+                            textAlign: 'center',
+                            marginBottom: '60px',
+                        }}
+                        onFocus={(event) => {
+                            event.target.style.outline = `none`;
+                            event.target.style.borderBottom = `2px solid ${primaryColour}`;
+                            event.target.placeholder = '';
+                        }}
+                        onBlur={(event) => {
+                            event.target.style.borderBottom = '2px solid black';
+                            event.target.placeholder = 'Create Username';
+                        }}
+                    />
+                </Stack>
 
-            <Stack direction="row" spacing={2} sx={{ justifyContent: "center", alignItems: "center" }}>
-                <Typography variant="h3" style={{ marginBottom: "30px", fontFamily: "'Indie Flower', cursive", fontWeight: "bold", fontSize: "3rem" }}>
-                    Password:
-                </Typography>
-                <input
-                    onChange={handlePasswordChange}
-                    value={password}
-                    type="text"
-                    id="standard-basic"
-                    placeholder="Create Password"
-                    autoComplete="off"
-                    style={{
-                        width: '250px',
-                        height: '50px',
-                        border: 'none',
-                        borderBottom: '2px solid black',
-                        fontFamily: "'Indie Flower', cursive",
-                        fontSize: "2rem",
-                        fontWeight: "bold",
-                        background: 'none',
-                        textAlign: 'center',
-                        marginBottom: '60px',
-                    }}
-                    onFocus={(event) => {
-                        event.target.style.outline = `none`;
-                        event.target.style.borderBottom = `2px solid ${primaryColour}`;
-                        event.target.placeholder = '';
-                    }}
-                    onBlur={(event) => {
-                        event.target.style.borderBottom = '2px solid black';
-                        event.target.placeholder = 'Create Password';
-                    }}
-                />
+                {/* PASSWORD */}
+                <Stack direction="row" spacing={2} sx={{ justifyContent: "center", alignItems: "center" }}>
+                    <Typography variant="h3" style={{ marginBottom: "30px", fontFamily: "'Indie Flower', cursive", fontWeight: "bold", fontSize: "3rem" }}>
+                        Password:
+                    </Typography>
+                    <input
+                        onChange={handlePasswordChange}
+                        value={password}
+                        type="text"
+                        id="standard-basic"
+                        placeholder="Create Password"
+                        autoComplete="off"
+                        style={{
+                            width: '250px',
+                            height: '50px',
+                            border: 'none',
+                            borderBottom: '2px solid black',
+                            fontFamily: "'Indie Flower', cursive",
+                            fontSize: "2rem",
+                            fontWeight: "bold",
+                            background: 'none',
+                            textAlign: 'center',
+                            marginBottom: '60px',
+                        }}
+                        onFocus={(event) => {
+                            event.target.style.outline = `none`;
+                            event.target.style.borderBottom = `2px solid ${primaryColour}`;
+                            event.target.placeholder = '';
+                        }}
+                        onBlur={(event) => {
+                            event.target.style.borderBottom = '2px solid black';
+                            event.target.placeholder = 'Create Password';
+                        }}
+                    />
+                </Stack>
             </Stack>
 
             <span

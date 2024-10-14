@@ -287,6 +287,7 @@ function App() {
                 mute={mute} 
                 setVolume={setVolume} 
                 setMute={setMute} 
+                navigateToLogin={navigateToLogin}
               />
               <HomeIcon homeScreen={() => navigateTo('home')} />
             </>
