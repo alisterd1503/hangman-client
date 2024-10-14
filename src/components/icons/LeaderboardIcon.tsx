@@ -32,20 +32,21 @@ export function LeaderboardIcon ({
             onClick={() => {clickSound(),LeaderboardScreen()}}
             style={{
                 position: 'absolute',
-                top: '20px',
+                opacity: '0.4',
+                top: '0px',
                 right: '20px',
-                width: '80px',
-                height: '80px',
+                width: '110px',
+                height: '110px',
                 cursor: 'pointer',
                 transition: 'transform 0.3s, opacity 0.3s',
             }}
             onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'scale(1.1)';
-                e.currentTarget.style.opacity = '0.8';
+                e.currentTarget.style.opacity = '0.9';
             }}
             onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.opacity = '0.4';
             }}
             />
             </Tooltip>

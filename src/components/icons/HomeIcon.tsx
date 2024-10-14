@@ -32,10 +32,11 @@ export function HomeIcon({
             onClick={() => {clickSound(),homeScreen()}}
             style={{
                 position: 'absolute',
+                opacity: '0.4',
                 bottom: '40px',
                 left: '20px',
-                width: '65px',
-                height: '65px',
+                width: '80px',
+                height: '80px',
                 cursor: 'pointer',
                 transition: 'transform 0.3s, opacity 0.3s',
             }}
@@ -45,7 +46,7 @@ export function HomeIcon({
             }}
             onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.opacity = '0.4';
             }}
             />
             </Tooltip>

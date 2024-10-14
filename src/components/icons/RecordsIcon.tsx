@@ -32,10 +32,11 @@ export function RecordsIcon ({
             onClick={() => {clickSound(),RecordsScreen()}}
             style={{
                 position: 'absolute',
+                opacity: '0.4',
                 bottom: '0px',
                 right: '20px',
-                width: '80px',
-                height: '80px',
+                width: '100px',
+                height: '100px',
                 cursor: 'pointer',
                 transition: 'transform 0.3s, opacity 0.3s',
             }}
@@ -45,7 +46,7 @@ export function RecordsIcon ({
             }}
             onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.opacity = '0.4';
             }}
             />
             </Tooltip>

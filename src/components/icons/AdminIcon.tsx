@@ -32,10 +32,11 @@ export function AdminIcon({
             onClick={() => {clickSound(),AdminScreen()}}
             style={{
                 position: 'absolute',
-                top: '120px',
-                left: '5px',
-                width: '95px',
-                height: '95px',
+                opacity: '0.4',
+                top: '260px',
+                left: '0px',
+                width: '120px',
+                height: '120px',
                 cursor: 'pointer',
                 transition: 'transform 0.3s, opacity 0.3s',
             }}
@@ -45,7 +46,7 @@ export function AdminIcon({
             }}
             onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.opacity = '0.4';
             }}
             />
             </Tooltip>

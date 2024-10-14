@@ -29,6 +29,7 @@ import { RegisterIcon } from "./components/icons/RegisterIcon.tsx";
 import { LogoutIcon } from "./components/icons/LogoutIcon.tsx";
 import { RecordsIcon } from "./components/icons/RecordsIcon.tsx";
 import { AdminIcon } from "./components/icons/AdminIcon.tsx";
+import { RulesIcon } from "./components/icons/RulesIcon.tsx";
 
 //SOUNDS//
 import { play } from './components/sounds/generalSFX.ts'
@@ -48,6 +49,7 @@ import { Typography } from "@mui/material";
 //MODELS//
 import { Game } from "./models/Game.ts";
 import { Admin } from "./components/pages/Admin.tsx";
+import { Rules } from "./components/pages/Rules.tsx";
 
 /** 
 
@@ -72,7 +74,7 @@ Hard: 100 points.
 
 const regex = /^[a-zA-Z]+$/;
 
-type Page = 'home' | 'settings' | 'leaderboard' | 'login' | 'game' | 'register' | 'records' | 'admin';
+type Page = 'home' | 'settings' | 'leaderboard' | 'login' | 'game' | 'register' | 'records' | 'admin' | 'rules';
 
 function App() {
   const [difficulty, setDifficulty] = useState<string | null>(null);
@@ -258,6 +260,7 @@ function App() {
               />
               <SettingsIcon settingsScreen={() => navigateTo('settings')} />
               <LeaderboardIcon LeaderboardScreen={() => navigateTo('leaderboard')} />
+              <RulesIcon rulesScreen={() => navigateTo('rules')} />
     
               {currentUser === 'Alister' && <AdminIcon AdminScreen={() => navigateTo('admin')} />}
 
@@ -299,10 +302,17 @@ function App() {
               <HomeIcon homeScreen={() => navigateTo('home')} />
             </>
           );
-          case 'records':
+        case 'records':
+          return (
+            <>
+              <Records />
+              <HomeIcon homeScreen={() => navigateTo('home')} />
+            </>
+          );
+        case 'rules':
             return (
               <>
-                <Records />
+                <Rules />
                 <HomeIcon homeScreen={() => navigateTo('home')} />
               </>
             );

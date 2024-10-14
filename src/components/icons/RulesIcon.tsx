@@ -1,18 +1,18 @@
 import { Tooltip } from '@mui/material'
-import loginIcon from '../../images/login.png'
+import rulesIcon from '../../images/rules.png'
 import { clickSound } from '../sounds/clickSXF'
 
-type LoginIconProps = {
-    LoginScreen: () => void,
+type RulesIconProps = {
+    rulesScreen: () => void,
 }
 
-export function LoginIcon({
-    LoginScreen
-}: LoginIconProps) {
+export function RulesIcon ({
+    rulesScreen
+}: RulesIconProps) {
     return (
         <div>
             <Tooltip
-                title="login"
+                title="Rules"
                 placement="left"
                 slotProps={{
                     tooltip: {
@@ -27,14 +27,14 @@ export function LoginIcon({
                 }}
             >
             <img
-            src={loginIcon}
-            alt="Home"
-            onClick={() => {clickSound(),LoginScreen()}}
+            src={rulesIcon}
+            alt="Records"
+            onClick={() => {clickSound(),rulesScreen()}}
             style={{
                 position: 'absolute',
                 opacity: '0.4',
-                bottom: '0px',
-                right: '20px',
+                top: '130px',
+                left: '20px',
                 width: '120px',
                 height: '120px',
                 cursor: 'pointer',

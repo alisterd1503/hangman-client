@@ -34,10 +34,11 @@ export function LogoutIcon() {
                     onClick={clearLocalStorage}
                     style={{
                         position: 'absolute',
+                        opacity: 0.4,
                         bottom: '0px',
                         left: '20px',
-                        width: '75px',
-                        height: '75px',
+                        width: '90px',
+                        height: '90px',
                         cursor: 'pointer',
                         transition: 'transform 0.3s, opacity 0.3s',
                     }}
@@ -47,7 +48,7 @@ export function LogoutIcon() {
                     }}
                     onMouseLeave={(e) => {
                         e.currentTarget.style.transform = 'scale(1)';
-                        e.currentTarget.style.opacity = '1';
+                        e.currentTarget.style.opacity = '0.4';
                     }}
                 />
                 </Tooltip>

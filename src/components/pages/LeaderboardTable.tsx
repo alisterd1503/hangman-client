@@ -33,7 +33,7 @@ export function LeaderboardTable() {
             </Typography>
 
             {/* Table with custom styles */}
-            <TableContainer component={Paper} sx={{ borderRadius: 5, boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', maxWidth: '100%', border: 'solid black 2px', height:'600px' }}>
+            <TableContainer component={Paper} sx={{ borderRadius: 5, boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', maxWidth: '100%', border: 'solid black 2px', height:'600px', marginBottom: "60px" }}>
                 <Table sx={{ minWidth: 800 }}>
                     <TableHead>
                         <TableRow sx={{ backgroundColor: '#F48FB1' }}>
