@@ -46,14 +46,7 @@ export function Login({navigateToHome}: LoginProps) {
         const result = await checkLogin(body);
 
         if (result.success) {
-            const userId = await getUserId(username);
-            const currentUser = {
-                username: username,
-                userId: userId
-            };
-
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-
+            await getUserId(username);
             setMessage('');
             setUsername('');
             setPassword('');

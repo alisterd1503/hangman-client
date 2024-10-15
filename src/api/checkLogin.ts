@@ -18,6 +18,8 @@ export const checkLogin = async (login: Login): Promise<{ success: boolean; mess
         // If response is okay, parse the JSON
         if (response.ok) {
             const data = await response.json();
+            const { token } = await response.json();
+            localStorage.setItem('token', token);
             return { success: true, message: data.message };
         } else {
             const errorData = await response.json();
