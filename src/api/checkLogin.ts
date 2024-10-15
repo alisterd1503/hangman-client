@@ -15,12 +15,11 @@ export const checkLogin = async (login: Login): Promise<{ success: boolean; mess
             body: JSON.stringify(login),
         });
 
-        // If response is okay, parse the JSON
         if (response.ok) {
             const data = await response.json();
-            const { token } = await response.json();
+            const { token, message } = data;
             localStorage.setItem('token', token);
-            return { success: true, message: data.message };
+            return { success: true, message };
         } else {
             const errorData = await response.json();
             return { success: false, message: errorData.message };

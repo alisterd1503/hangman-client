@@ -19,27 +19,14 @@ function formatDate(isoString: string | number | Date) {
 
 export function Records() {
     const [records, setRecords] = useState<Record[]>([]);
-    const [currentUser, setCurrentUser] = useState<string | null>(null);
-
+    
     useEffect(() => {
-        const storageData = localStorage.getItem('currentUser');
-        if (storageData) {
-          const { username } = JSON.parse(storageData);
-          if (username) {
-            setCurrentUser(username);
-          }
-        }
-      }, []);
-
-    useEffect(() => {
-        if (currentUser) {
-            const fetchScores = async () => {
-                const data = await getRecords(currentUser);
-                setRecords(data);
-            };
-            fetchScores();
-        }
-    }, [currentUser]);
+        const fetchScores = async () => {
+            const data = await getRecords();
+            setRecords(data);
+        };
+        fetchScores();
+    }, []);
 
     return (
         <div style={{

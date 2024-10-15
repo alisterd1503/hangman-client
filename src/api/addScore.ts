@@ -1,12 +1,8 @@
+import { Game } from "../models/Game";
+
 const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/addScore';
 
-type Score = {
-    username: string,
-    score: number,
-    difficulty: string
-}
-
-export const addScore = async (score: Score): Promise<void> => {
+export const addScore = async (score: Game): Promise<void> => {
     try {
         const response = await fetch(API_URL, {
             method: 'POST',

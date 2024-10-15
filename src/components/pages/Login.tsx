@@ -6,7 +6,6 @@ import { checkLogin } from "../../api/checkLogin";
 import { clickSound } from "../sounds/clickSXF";
 import { play } from "../sounds/generalSFX";
 import error from '../../sounds/error.mp3'
-import { getUserId } from "../../api/getUserId";
 import openEyeIcon from "../../images/eyeOpen.png"
 import closedEyeIcon from "../../images/eyeClosed.png"
 
@@ -38,15 +37,12 @@ export function Login({navigateToHome}: LoginProps) {
 
     const validateLogin = async () => {
         clickSound()
-
         const body: Login = {
             username: username,
             password: password
         }
         const result = await checkLogin(body);
-
         if (result.success) {
-            await getUserId(username);
             setMessage('');
             setUsername('');
             setPassword('');
@@ -86,7 +82,7 @@ export function Login({navigateToHome}: LoginProps) {
                         onChange={handleUsernameChange}
                         value={username}
                         type="text"
-                        id="standard-basic"
+                        id="username"
                         placeholder="Enter Username"
                         autoComplete="off"
                         style={{
@@ -122,7 +118,7 @@ export function Login({navigateToHome}: LoginProps) {
                         onChange={handlePasswordChange}
                         value={password}
                         type={seePassword ? "text" : "password"}
-                        id="standard-basic"
+                        id="password"
                         placeholder="Enter Password"
                         autoComplete="off"
                         style={{

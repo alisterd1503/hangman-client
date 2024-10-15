@@ -1,5 +1,6 @@
 import { SetStateAction, useCallback, useEffect, useState } from "react"
 import Confetti from 'react-confetti'
+import { jwtDecode } from "jwt-decode"
 
 import './styles.css';
 
@@ -100,6 +101,7 @@ function App() {
         result: result,
         guesses: userGuesses.length
       }
+      console.log("body:",body)
       await addScore(body)
     }
   }
@@ -108,16 +110,16 @@ function App() {
     setCurrentPage(page);
   };
 
-  // Persist the logged-in user even after page reloads
   useEffect(() => {
-    const storageData = localStorage.getItem('currentUser');
-    if (storageData) {
-      const { username } = JSON.parse(storageData);
-      if (username) {
-        setCurrentUser(username);
-      }
+    // Get the token from local storage
+    const token = localStorage.getItem('token');
+
+    if (token) {
+        // Decode the token
+        const decodedToken = jwtDecode<{ username: string }>(token);
+        setCurrentUser(decodedToken.username);
     }
-  }, []);
+}, []);
 
   const navigateToHome = () => {
     navigateTo('home');

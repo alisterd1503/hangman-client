@@ -6,7 +6,7 @@ export function LogoutIcon() {
 
     const clearLocalStorage = () => {
         clickSound()
-        localStorage.removeItem('currentUser');
+        localStorage.removeItem('token');
         window.location.href = window.location.href;
     };
 
