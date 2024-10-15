@@ -1,7 +1,7 @@
 import { Stack, Typography } from "@mui/material";
-import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction, useState } from "react";
 
-import { getPasswords } from '../../api/getPasswords';
+import { checkLogin } from "../../api/checkLogin";
 
 import { clickSound } from "../sounds/clickSXF";
 import { play } from "../sounds/generalSFX";
@@ -10,33 +10,23 @@ import { getUserId } from "../../api/getUserId";
 import openEyeIcon from "../../images/eyeOpen.png"
 import closedEyeIcon from "../../images/eyeClosed.png"
 
-type Logins = {
-    username: string,
-    password: string
-}
-
 const primaryColour = "#FF8343";
 
 type LoginProps = {
     navigateToHome: () => void
 }
 
+type Login = {
+    username: string,
+    password: string,
+}
+
 export function Login({navigateToHome}: LoginProps) {
 
-    const [logins, setLogins] = useState<Logins[]>([]);
     const [message, setMessage] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [seePassword, setSeePassword] = useState(false) 
-
-    useEffect(() => {
-        const fetchPasswords = async () => {
-            const data = await getPasswords();
-            setLogins(data);
-        };
-
-        fetchPasswords();
-    }, []);
 
     const handleUsernameChange = (event: { target: { value: SetStateAction<string> } }) => {
         setUsername(event.target.value);
@@ -47,31 +37,30 @@ export function Login({navigateToHome}: LoginProps) {
     };
 
     const validateLogin = async () => {
-        const user = logins.find((login) => login.username === username);
-    
-        if (user) {
-            if (user.password === password) {
-                clickSound();
-    
-                const userId = await getUserId(username);
-                const currentUser = {
-                    username: username,
-                    userId: userId
-                };
-    
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-    
-                setMessage('');
-                setUsername('');
-                setPassword('');
-                navigateToHome();
-            } else {
-                play(error);
-                setMessage('Incorrect password. Please try again.');
-            }
+        clickSound()
+
+        const body: Login = {
+            username: username,
+            password: password
+        }
+        const result = await checkLogin(body);
+
+        if (result.success) {
+            const userId = await getUserId(username);
+            const currentUser = {
+                username: username,
+                userId: userId
+            };
+
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            setMessage('');
+            setUsername('');
+            setPassword('');
+            navigateToHome();
         } else {
             play(error);
-            setMessage('Username not found. Please try again.');
+            if (result.message) setMessage(result.message)
         }
     };
 
