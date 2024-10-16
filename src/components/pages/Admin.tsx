@@ -46,7 +46,6 @@ export function Admin() {
     useEffect(() => {
         const fetchScores = async () => {
             const data = await getUsers();
-            console.log("DATA: ", data)
             setUsers(data);
         };
 
