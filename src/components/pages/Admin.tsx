@@ -1,15 +1,15 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Checkbox, Tooltip, Stack } from "@mui/material";
 import { SetStateAction, useEffect, useState } from "react";
-import { getUsers } from "../../api/getUsers";
-import { removeUser } from "../../api/removeUser";
+import { getUsers } from "../../api/admin/getUsers";
+import { removeUser } from "../../api/admin/removeUser";
 import deleteIcon from "../../images/delete.png"
 import nameIcon from "../../images/name.png"
 import passwordIcon from "../../images/password.png"
 import appleIcon from "../../images/apple.png"
 import { clickSound } from "../sounds/clickSXF";
-import { updateName } from "../../api/updateName";
-import { updateScore } from "../../api/udpateScore";
-import { updatePassword } from "../../api/updatePassword";
+import { updateName } from "../../api/admin/updateName";
+import { updateScore } from "../../api/admin/udpateScore";
+import { updatePassword } from "../../api/admin/updatePassword";
 import checkedIcon from '../../images/checked.png'
 import uncheckedIcon from '../../images/unchecked.png'
 const primaryColour = "#FF8343";
@@ -79,7 +79,7 @@ export function Admin() {
             const updatedUsers = await getUsers();
             setUsers(updatedUsers);
             setSelectedUserId(null);
-            setInput(""); // Reset input after update
+            setInput("");
             setInputType(null);
         }
     };
@@ -93,7 +93,7 @@ export function Admin() {
             const updatedUsers = await getUsers();
             setUsers(updatedUsers);
             setSelectedUserId(null);
-            setInput(""); // Reset input after update
+            setInput("");
             setInputType(null);
         }
     };
@@ -106,7 +106,7 @@ export function Admin() {
             const updatedUsers = await getUsers();
             setUsers(updatedUsers);
             setSelectedUserId(null);
-            setInput(""); // Reset input after update
+            setInput("");
             setInputType(null);
         }
     };

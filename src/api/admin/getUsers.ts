@@ -1,4 +1,4 @@
-const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/getUsers';
+const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/admin/getUsers';
 
 type Users = {
     id: number,

@@ -90,6 +90,7 @@ function App() {
   const [gameOver, setGameOver] = useState(false)
 
   const [currentUser, setCurrentUser] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   const sendPacket = async () => {
     if (currentUser && difficulty && chosenWord) {
@@ -111,8 +112,9 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-        const decodedToken = jwtDecode<{ username: string }>(token);
+        const decodedToken = jwtDecode<{ username: string, role: string }>(token);
         setCurrentUser(decodedToken.username);
+        setUserRole(decodedToken.role);
     }
   }, []);
 
@@ -259,7 +261,7 @@ function App() {
               <LeaderboardIcon LeaderboardScreen={() => navigateTo('leaderboard')} />
               <RulesIcon rulesScreen={() => navigateTo('rules')} />
     
-              {currentUser === 'Alister' && <AdminIcon AdminScreen={() => navigateTo('admin')} />}
+              {userRole === 'admin' && <AdminIcon AdminScreen={() => navigateTo('admin')} />}
 
               <div style={{height: '50px'}}>
                 {currentUser ? 
