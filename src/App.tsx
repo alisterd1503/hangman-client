@@ -88,9 +88,11 @@ function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [result , setResult] = useState(false)
   const [gameOver, setGameOver] = useState(false)
+  const [pointsToShow, setPointsToShow] = useState<number | null>(null);
 
   const [currentUser, setCurrentUser] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
+
 
   const sendPacket = async () => {
     if (currentUser && difficulty && chosenWord) {
@@ -154,6 +156,16 @@ function App() {
       .split("")
       .every((letter: string) => userGuesses.includes(letter)))
 
+  useEffect(() => {
+    if (pointsToShow !== null) {
+      const timer = setTimeout(() => {
+        setPointsToShow(null); // Hide points after animation
+      }, 1000); // Duration for showing points (1 second)
+
+      return () => clearTimeout(timer); // Cleanup timeout
+    }
+  }, [pointsToShow]);
+
   // Adding users guesses to an array
   const addUserGuess = useCallback((letter: string) => {
     if (userGuesses.includes(letter) || isLoser || isWinner) {
@@ -168,10 +180,13 @@ function App() {
           play(correct)
         if (difficulty === 'easy') {
             setUsersPoints(prev => prev + 10);
+            setPointsToShow(10);
         } else if (difficulty === 'hard') {
             setUsersPoints(prev => prev + 20);
+            setPointsToShow(20)
         } else {
             setUsersPoints(prev => prev + 15);
+            setPointsToShow(15)
         }
       } else {
         play(wrong)
@@ -229,20 +244,26 @@ function App() {
         setGameOver(true)
         if (difficulty === 'easy') {
             setUsersPoints(prev => prev + 20);
+            setPointsToShow(20);
         } else if (difficulty === 'hard') {
             setUsersPoints(prev => prev + 40);
+            setPointsToShow(40);
         } else {
             setUsersPoints(prev => prev + 50);
+            setPointsToShow(50);
         }
     } else if (isLoser) {
       play(lost)
         setGameOver(true)
         if (difficulty === 'easy') {
             setUsersPoints(prev => prev - 10);
+            setPointsToShow(-10);
         } else if (difficulty === 'hard') {
             setUsersPoints(prev => prev - 20);
+            setPointsToShow(-20);
         } else {
             setUsersPoints(prev => prev - 15);
+            setPointsToShow(-15);
         }
 
     }
@@ -343,7 +364,7 @@ function App() {
             <>
             {/* Home screen button */}
             <HomeIcon homeScreen={stopGame} />
-            <Points usersPoints={usersPoints} />
+            <Points usersPoints={usersPoints} pointsToShow={pointsToShow} />
     
             {/* Displays confetti */}
             {isWinner && (
