@@ -94,14 +94,12 @@ function App() {
   const sendPacket = async () => {
     if (currentUser && difficulty && chosenWord) {
       const body: Game = {
-        username: currentUser,
         score: usersPoints,
         difficulty: difficulty,
         word: chosenWord,
         result: result,
         guesses: userGuesses.length
       }
-      console.log("body:",body)
       await addScore(body)
     }
   }
@@ -111,15 +109,12 @@ function App() {
   };
 
   useEffect(() => {
-    // Get the token from local storage
     const token = localStorage.getItem('token');
-
     if (token) {
-        // Decode the token
         const decodedToken = jwtDecode<{ username: string }>(token);
         setCurrentUser(decodedToken.username);
     }
-}, []);
+  }, []);
 
   const navigateToHome = () => {
     navigateTo('home');

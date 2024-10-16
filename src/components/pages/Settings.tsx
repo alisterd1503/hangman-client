@@ -15,20 +15,10 @@ import { validateUsername } from "../functions/validateUsername";
 import { play } from "../sounds/generalSFX";
 import { getUsernames } from "../../api/getUsernames";
 import error from '../../sounds/error.mp3'
+import { jwtDecode } from "jwt-decode";
 
 const location: string = getCountryByTimeZone();
 const primaryColour = "#FF8343";
-
-type NewName = {
-    id: number,
-    newName: string,
-}
-
-type NewPassword = {
-    id: number,
-    newPassword: string,
-}
-
 
 type SettingsProps = {
     volume: number;
@@ -46,20 +36,18 @@ export function Settings({
     navigateToLogin
 }: SettingsProps) {
     const [currentUser, setCurrentUser] = useState<string | null>(null)
-    const [currentUserId, setCurrentUserId] = useState<number | null>(null)
     const [input, setInput] = useState("");
     const [inputType, setInputType] = useState<"username" | "password" | null>(null);
     const [message, setMessage] = useState('');
     const [usedNames, setUsedNames] = useState<string[]>([]);
 
     useEffect(() => {
-        const storageData = localStorage.getItem('currentUser');
-        if (storageData) {
-            const { username, userId } = JSON.parse(storageData);
-          if (userId && username) {
-            setCurrentUserId(userId);
-            setCurrentUser(username)
-          }
+        // Get the token from local storage
+        const token = localStorage.getItem('token');
+    
+        if (token) {
+            const decodedToken = jwtDecode<{ username: string }>(token);
+            setCurrentUser(decodedToken.username);
         }
     }, []);
 
@@ -91,9 +79,8 @@ export function Settings({
 
     // Handle updating username
     const updateUsername = async () => {
-        if (currentUserId !== null && input) {
-            const body: NewName = { newName: input, id: currentUserId };
-            await updateName(body);
+        if (input) {
+            await updateName(input);
             setInput("");
             setInputType(null);
         }
@@ -101,9 +88,8 @@ export function Settings({
 
     // Handle updating password
     const updateUserPassword = async () => {
-        if (currentUserId !== null && input) {
-            const body: NewPassword = { newPassword: input, id: currentUserId };
-            await updatePassword(body);
+        if (input) {
+            await updatePassword(input);
             setInput("");
             setInputType(null);
         }
@@ -159,7 +145,7 @@ export function Settings({
                 }}
             >
                 {/* Profile section */}
-                {currentUserId && (
+                {currentUser && (
                     <Stack
                         direction="column"
                         spacing={1}
