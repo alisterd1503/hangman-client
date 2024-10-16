@@ -2,7 +2,7 @@ import { Stack, Typography } from "@mui/material";
 import { SetStateAction, useEffect, useState } from "react";
 
 import { getUsernames } from '../../api/getUsernames';
-import { addUser } from '../../api/addUser'
+import { addUser } from '../../api/registerUser'
 
 import { Register } from "../../models/Register";
 
@@ -43,7 +43,6 @@ export function RegisterPage({navigateToLogin}:RegisterPageProps) {
         const body: Register = {
             username: username,
             password: password,
-            score: 0,
             location: location
         }
         await addUser(body)
