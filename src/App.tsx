@@ -14,12 +14,12 @@ import { Points } from './components/hangman/Points';
 import { PlayAgain } from './components/hangman/PlayAgain';
 
 //Pages//
-import { Settings } from './components/pages/Settings';
+import { Settings } from './components/pages/SettingsPage.tsx';
 import { LeaderboardTable } from './components/pages/LeaderboardTable';
-import { StartScreen } from "./components/pages/StartScreen"
-import { Login } from "./components/pages/Login.tsx";
+import { StartScreen } from "./components/pages/StartPage.tsx"
+import { Login } from "./components/pages/LoginPage.tsx";
 import { RegisterPage } from "./components/pages/RegisterPage.tsx";
-import { Records } from "./components/pages/Records.tsx";
+import { Records } from "./components/pages/RecordsPage.tsx";
 
 //Icons//
 import { HomeIcon } from './components/icons/HomeIcon';
@@ -49,27 +49,27 @@ import { Typography } from "@mui/material";
 
 //MODELS//
 import { Game } from "./models/Game.ts";
-import { Admin } from "./components/pages/Admin.tsx";
-import { Rules } from "./components/pages/Rules.tsx";
+import { Admin } from "./components/pages/AdminPage.tsx";
+import { Rules } from "./components/pages/RulesPage.tsx";
 
 /** 
+For each correct letter:
 
-Easy: 10 points for each correct letter.
-Medium: 15 points for each correct letter.
-Hard: 20 points for each correct letter.
+Easy: 10 points
+Medium: 15 points
+Hard: 20 points
 
-Easy: -2 points for each incorrect guess.
-Medium: -5 points for each incorrect guess.
-Hard: -8 points for each incorrect guess.
+If player gets word: 
 
-Easy: No multiplier (1x).
-Medium: 1.5x multiplier.
-Hard: 2x multiplier.
+Easy: 20 points
+Medium: 30 points
+Hard: 40 points
 
-Easy: 30 points.
-Medium: 50 points.
-Hard: 100 points.
+If player doesnt get word: 
 
+Easy: -10 points
+Medium: -15 points
+Hard: -20 points
 
 **/
 
@@ -249,8 +249,8 @@ function App() {
             setUsersPoints(prev => prev + 40);
             setPointsToShow(40);
         } else {
-            setUsersPoints(prev => prev + 50);
-            setPointsToShow(50);
+            setUsersPoints(prev => prev + 30);
+            setPointsToShow(30);
         }
     } else if (isLoser) {
       play(lost)
