@@ -7,10 +7,12 @@ type NewName = {
 
 export const updateName = async (newName: NewName): Promise<void> => {
     try {
+        const token = localStorage.getItem('token');
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify(newName),
         });

@@ -5,15 +5,17 @@ type Users = {
     username: string,
     score: number,
     location: string,
-    password: string
+    role: string
 }
 
 export const getUsers = async (): Promise<Users[]> => {
     try {
+        const token = localStorage.getItem('token');
         const response = await fetch(API_URL, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
         });
 
