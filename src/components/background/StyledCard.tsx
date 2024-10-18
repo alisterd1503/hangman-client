@@ -6,13 +6,14 @@ interface CustomCardProps {
     children: ReactNode;
     padding?: string;
     marginBottom?: string;
-    paddingBottom?: string;
+    fontSize?: string;
+    width?: string
 }
 
 const primaryColor = "#F0E5CF"
 const secondaryColor = "#F7F6F2"
 
-const CustomCard: React.FC<CustomCardProps> = ({ title, children, padding, marginBottom, paddingBottom }) => {
+const CustomCard: React.FC<CustomCardProps> = ({ title, children, padding, marginBottom, fontSize, width}) => {
     return (
         <div>
             <Stack
@@ -25,7 +26,7 @@ const CustomCard: React.FC<CustomCardProps> = ({ title, children, padding, margi
                     borderStyle: "dashed", 
                     borderRadius: "10px", 
                     backgroundColor: primaryColor,
-                    width: "100%",
+                    width: width ? width : "100%",
                     marginBottom: marginBottom ? marginBottom : "0px"
                 }}
             >
@@ -33,14 +34,15 @@ const CustomCard: React.FC<CustomCardProps> = ({ title, children, padding, margi
                     variant="h3" 
                     style={{ 
                         paddingTop: "5px", 
-                        paddingBottom: paddingBottom ? paddingBottom : "5px", 
+                        paddingBottom: "5px", 
                         borderBottom:"solid black 5px", 
                         width: "100%", 
-                        height: "50px",
+                        height: "100%",
                         fontWeight: "bold", 
                         fontFamily: "'Indie Flower', cursive", 
                         backgroundColor: secondaryColor, 
-                        textAlign: "center"
+                        textAlign: "center",
+                        fontSize: fontSize ? fontSize : "3.5rem"
                     }}
                 >
                     {title}

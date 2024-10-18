@@ -9,7 +9,7 @@ const thirdColor =  "#D1BB9E"
 const arrowStyles: React.CSSProperties = {
     position: 'absolute',
     zIndex: 2,
-    top: '50%',
+    top: '53%',
     fontSize: '4rem',
     color: 'black',
     background: 'none',
@@ -64,14 +64,14 @@ export function Rules() {
                     }
                 >
                     <div>
-                        <StyledCard title="Game Objective" padding="20px" marginBottom="50px" paddingBottom="50px">
+                        <StyledCard title="Game Objective" padding="20px" marginBottom="50px">
                             <Typography style={{ fontSize: "1.5rem", fontFamily: "'Indie Flower', cursive", width:"90%" }}>
                                 The objective of Hangman is to guess the secret word by suggesting letters within a certain number of guesses. 
                                 Each letter you guess that is not in the word will bring you closer to losing the game, so choose wisely!
                             </Typography>
                         </StyledCard>
 
-                        <StyledCard title="How to Play" padding="20px" paddingBottom="50px">
+                        <StyledCard title="How to Play" padding="20px">
                                 <Typography variant="body1" style={{ fontSize: "1.5rem", fontFamily: "'Indie Flower', cursive", textAlign: "left", width: "90%", marginLeft: "150px"}}>
                                     1. A random word is chosen and displayed as dashes.
                                     <br />
@@ -87,7 +87,7 @@ export function Rules() {
                     </div>
 
                     <div>
-                        <StyledCard title="Game Objective" padding="20px" marginBottom="50px" paddingBottom="50px">
+                        <StyledCard title="Game Objective" padding="20px" marginBottom="50px">
                             <Stack
                             spacing={2}
                             direction="row"
