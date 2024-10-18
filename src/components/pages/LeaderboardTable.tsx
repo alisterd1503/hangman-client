@@ -2,6 +2,9 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 import { getScores } from "../../api/getScores"
 import { useEffect, useState } from "react";
 
+const primaryColor = "#F0E5CF"
+const thirdColor =  "#D1BB9E"
+
 type DB_Packet = {
     id: number
     username: string | null,
@@ -36,7 +39,7 @@ export function LeaderboardTable() {
             <TableContainer component={Paper} sx={{ borderRadius: 5, boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', maxWidth: '100%', border: 'solid black 2px', height:'600px', marginBottom: "60px" }}>
                 <Table sx={{ minWidth: 800 }}>
                     <TableHead>
-                        <TableRow sx={{ backgroundColor: '#F48FB1' }}>
+                        <TableRow sx={{ backgroundColor: thirdColor }}>
                             {/* New Position Column */}
                             <TableCell align="center" sx={{ color: '#FFF', fontWeight: 'bold', fontSize: '1.5rem', fontFamily: "'Indie Flower', cursive"}}>Position</TableCell>
                             <TableCell align="center" sx={{ color: '#FFF', fontWeight: 'bold', fontSize: '2.5rem', fontFamily: "'Indie Flower', cursive" }}>Name</TableCell>
@@ -46,12 +49,12 @@ export function LeaderboardTable() {
                     </TableHead>
                     <TableBody>
                         {scores.map((row, index) => (
-                            <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': { backgroundColor: '#FFCCBC' } }}>
+                            <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': { backgroundColor: primaryColor } }}>
                                 {/* Display Position */}
-                                <TableCell align="center" sx={{ fontSize: '3rem', color: '#D84315', fontFamily: "'Indie Flower', cursive" }}>#{index + 1}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive"}}>{row.username}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive" }}>{row.score}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive" }}>{row.location}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: '3rem', fontFamily: "'Indie Flower', cursive" }}>#{index + 1}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: '2rem', fontFamily: "'Indie Flower', cursive"}}>{row.username}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: '2rem', fontFamily: "'Indie Flower', cursive" }}>{row.score}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: '2rem', fontFamily: "'Indie Flower', cursive" }}>{row.location}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

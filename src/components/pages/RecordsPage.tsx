@@ -3,6 +3,9 @@ import { getRecords } from "../../api/getRecords";
 import { useEffect, useState } from "react";
 import { Record } from "../../models/Record";
 
+const primaryColor = "#F0E5CF"
+const thirdColor =  "#D1BB9E"
+
 function formatDate(isoString: string | number | Date) {
     const date = new Date(isoString);
 
@@ -43,7 +46,7 @@ export function Records() {
             <TableContainer component={Paper} sx={{ borderRadius: 5, boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)', maxWidth: '100%', border: 'solid black 2px', height:'600px' }}>
                 <Table sx={{ minWidth: 800 }}>
                     <TableHead>
-                        <TableRow sx={{ backgroundColor: '#F48FB1' }}>
+                        <TableRow sx={{ backgroundColor: thirdColor }}>
                             {/* New Position Column */}
                             <TableCell align="center" sx={{ color: '#FFF', fontWeight: 'bold', fontSize: '2.5rem', fontFamily: "'Indie Flower', cursive" }}>Word</TableCell>
                             <TableCell align="center" sx={{ color: '#FFF', fontWeight: 'bold', fontSize: '2.5rem', fontFamily: "'Indie Flower', cursive" }}>Result</TableCell>
@@ -55,14 +58,14 @@ export function Records() {
                     </TableHead>
                     <TableBody>
                         {records.map((row) => (
-                            <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': { backgroundColor: '#FFCCBC' } }}>
+                            <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': { backgroundColor: primaryColor } }}>
                                 {/* Display Position */}
-                                <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive"}}>{row.word}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive"}}>{row.result ? 'won' : 'lost'}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive"}}>{row.guesses}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive"}}>{row.difficulty}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive" }}>{row.score}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: '2rem', color: '#D84315', fontFamily: "'Indie Flower', cursive" }}>{formatDate(row.date)}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: '2rem', fontFamily: "'Indie Flower', cursive"}}>{row.word}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: '2rem', fontFamily: "'Indie Flower', cursive"}}>{row.result ? 'won' : 'lost'}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: '2rem', fontFamily: "'Indie Flower', cursive"}}>{row.guesses}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: '2rem', fontFamily: "'Indie Flower', cursive"}}>{row.difficulty}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: '2rem', fontFamily: "'Indie Flower', cursive" }}>{row.score}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: '2rem', fontFamily: "'Indie Flower', cursive" }}>{formatDate(row.date)}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
