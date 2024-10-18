@@ -13,10 +13,84 @@
         background-image: url('./background.jpg');
         background-repeat: repeat;
       }
+
+      /* Style for large screens */
+      #root {
+        display: block;
+      }
+
+      .mobile-message {
+        display: none;
+      }
+
+      .custom-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: dashed black 8px;
+        border-radius: 10px;
+        background-color: #F0E5CF;
+        width: 80%;
+        margin-bottom: 20px;
+      }
+
+      .custom-card-title {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        border-bottom: solid black 5px;
+        width: 100%;
+        text-align: center;
+        font-family: 'Indie Flower', cursive;
+        background-color: #F7F6F2;
+        font-size: 3.5rem;
+        font-weight: bold;
+      }
+
+      .custom-card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        font-size: 1.5rem;
+        font-family: 'Indie Flower', cursive;
+        text-align: center;
+      }
+
+      /* Hide game content and show message on small screens */
+      @media (max-width: 768px) {
+        #root {
+          display: none;
+        }
+
+        .mobile-message {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          font-family: 'Indie Flower', cursive;
+          font-size: 2rem;
+          color: #333;
+        }
+      }
     </style>
   </head>
   <body>
     <div id="root"></div>
+
+    <div class="mobile-message">
+      <div class="custom-card">
+        <div class="custom-card-title">
+            Warning!
+        </div>
+        <div class="custom-card-body">
+            This game is not optimized for small screens. Please visit from a desktop or larger device for the best experience.
+        </div>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
