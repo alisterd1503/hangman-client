@@ -16,9 +16,12 @@ import { play } from "../sounds/generalSFX";
 import { getUsernames } from "../../api/getUsernames";
 import error from '../../sounds/error.mp3'
 import { jwtDecode } from "jwt-decode";
+import StyledCard from "../background/StyledCard"
 
 const location: string = getCountryByTimeZone();
-const primaryColour = "#FF8343";
+const primaryColor = "#F0E5CF"
+//const secondaryColor = "#F7F6F2"
+//const thirdColor =  "#D1BB9E"
 
 type SettingsProps = {
     volume: number;
@@ -131,7 +134,7 @@ export function Settings({
             height: "100vh",
             marginBottom: "30px",
         }}>
-            <Typography variant="h1" style={{ marginBottom: "60px", fontFamily: "'Indie Flower', cursive", fontWeight: "bold", fontSize: "8rem" }}>
+            <Typography variant="h1" style={{ marginBottom: "40px", fontFamily: "'Indie Flower', cursive", fontWeight: "bold", fontSize: "8rem" }}>
                 Settings
             </Typography>
 
@@ -146,279 +149,63 @@ export function Settings({
             >
                 {/* Profile section */}
                 {currentUser && (
-                    <Stack
-                        direction="column"
-                        spacing={1}
-                        sx={{
-                            justifyContent: "center",
-                            alignItems: "flex-start",
-                            border: "solid black 3px",
-                            borderStyle: "dashed",
-                            padding: "15px",
-                            borderRadius: "10px",
-                        }}
-                    >
-                        <Typography variant="h2" style={{ fontFamily: "'Indie Flower', cursive", fontWeight: "bold" }}>
-                            Profile
-                        </Typography>
-                        <hr style={{ border: 'none', height: '2px', backgroundColor: 'black', width: '100%', marginTop: -10, marginBottom: 10 }} />
-                        <Stack direction="row" spacing={3} sx={{ justifyContent: "center", alignItems: "flex-end", marginBottom: "30px" }}>
-                            <Typography variant="h3" style={{ fontFamily: "'Indie Flower', cursive", fontWeight: "bold" }}>
-                                    username:
-                            </Typography>
-                            <Typography variant="h3" style={{ fontFamily: "'Indie Flower', cursive" }}>
-                                    {currentUser}
-                            </Typography>
-                        </Stack>
-                        <Stack direction="row" spacing={3} sx={{ justifyContent: "center", alignItems: "flex-end", marginBottom: "30px" }}>
-                            <Typography variant="h3" style={{ fontFamily: "'Indie Flower', cursive", fontWeight: "bold" }}>
-                                    location:
-                            </Typography>
-                            <Typography variant="h3" style={{ fontFamily: "'Indie Flower', cursive" }}>
-                                    {location}
-                            </Typography>
-                        </Stack>
-
+                    <StyledCard title="Profile" padding="10px">
                         <Stack
-                        direction="row"
-                        spacing={3}
-                        sx={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                            marginBottom: "30px"
-                        }}
-                    >
-                        <Tooltip
-                            title="edit name"
-                            placement="bottom"
-                            slotProps={{
-                                tooltip: {
-                                    sx: {
-                                        color: 'black',
-                                        backgroundColor: 'transparent',
-                                        fontSize:'30px',
-                                        fontWeight: 'bold',
-                                        fontFamily: "'Indie Flower', cursive"
-                                    },
-                                },
+                            direction="column"
+                            spacing={2}
+                            sx={{
+                                justifyContent: "center",
+                                alignItems: "flex-start",
                             }}
                         >
-                        <img
-                        src={nameIcon}
-                        alt="Home"
-                        onClick={() => {clickSound(),setInputType("username")}}
-                        style={{
-                            width: '50px',
-                            height: '50px',
-                            cursor: 'pointer',
-                            transition: 'transform 0.3s, opacity 0.3s',
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'scale(1.1)';
-                            e.currentTarget.style.opacity = '0.8';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'scale(1)';
-                            e.currentTarget.style.opacity = '1';
-                        }}
-                        />
-                        </Tooltip>
-
-                        <Tooltip
-                            title="edit password"
-                            placement="bottom"
-                            slotProps={{
-                                tooltip: {
-                                    sx: {
-                                        color: 'black',
-                                        backgroundColor: 'transparent',
-                                        fontSize:'30px',
-                                        fontWeight: 'bold',
-                                        fontFamily: "'Indie Flower', cursive"
-                                    },
-                                },
-                            }}
-                        >
-                        <img
-                        src={passwordIcon}
-                        alt="Home"
-                        onClick={() => {clickSound(),setInputType("password")}}
-                        style={{
-                            width: '50px',
-                            height: '50px',
-                            cursor: 'pointer',
-                            transition: 'transform 0.3s, opacity 0.3s',
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'scale(1.1)';
-                            e.currentTarget.style.opacity = '0.8';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'scale(1)';
-                            e.currentTarget.style.opacity = '1';
-                        }}
-                        />
-                        </Tooltip>
-
-                        <div style={{height:"55px", width: "335px"}}>
-                        {inputType && (
-                            <Stack direction="row" spacing={2} sx={{ justifyContent: "center", alignItems: "center", height: "55px" }}>
-                                <input
-                                    onChange={handleInputChange}
-                                    value={input}
-                                    type={"text"}
-                                    id="standard-basic"
-                                    placeholder={
-                                        inputType === "username"
-                                            ? "New Username"
-                                            : "New Password"
-                                    }
-                                    autoComplete="off"
-                                    style={{
-                                        width: '200px',
-                                        height: '50px',
-                                        border: 'none',
-                                        borderBottom: '2px solid black',
-                                        fontFamily: "'Indie Flower', cursive",
-                                        fontSize: "2rem",
-                                        fontWeight: "bold",
-                                        background: 'none',
-                                        textAlign: 'center',
-                                    }}
-                                    onFocus={(event) => {
-                                        event.target.style.outline = `none`;
-                                        event.target.style.borderBottom = `2px solid ${primaryColour}`;
-                                        event.target.placeholder = '';
-                                    }}
-                                    onBlur={(event) => {
-                                        event.target.style.borderBottom = '2px solid black';
-                                        event.target.placeholder = 'Enter Value';
-                                    }}
-                                />
-
-                                <span
-                                    onClick={handleUpdateClick}
-                                    style={{
-                                        color: "green",
-                                        display: "inline-block",
-                                        fontSize: "2rem",
-                                        height: "65px",
-                                        fontFamily: "'Indie Flower', cursive",
-                                        fontWeight: "bold",
-                                        cursor: "pointer",
-                                        transition: "transform 0.3s, background-color 0.3s",
-                                        marginTop: "40px"
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.color = 'darkgreen',
-                                        e.currentTarget.style.transform = 'scale(1.1)'
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.color = 'green',
-                                        e.currentTarget.style.transform = 'scale(1)'
-                                    }}
-                                    >
-                                    UPDATE
-                                </span>
-                            </Stack>
-                        )}
-                        </div>
-                        </Stack>
-                        <div style={{transition: '0.3s', height: '35px'}}>
-                            {message &&
-                                <Typography
-                                    style={{ 
-                                        fontFamily: "'Indie Flower',cursive",
-                                        fontWeight: "bold",
-                                        fontSize: "1.5rem",
-                                    }}>{message}
+                            <Stack direction="row" spacing={3} sx={{ justifyContent: "center", alignItems: "flex-end", marginBottom: "30px" }}>
+                                <Typography variant="h3" style={{ fontFamily: "'Indie Flower', cursive", fontWeight: "bold" }}>
+                                        username:
                                 </Typography>
-                            }
-                        </div> 
-                    </Stack>
-                )}
+                                <Typography variant="h3" style={{ fontFamily: "'Indie Flower', cursive" }}>
+                                        {currentUser}
+                                </Typography>
+                            </Stack>
+                            <Stack direction="row" spacing={3} sx={{ justifyContent: "center", alignItems: "flex-end", marginBottom: "30px" }}>
+                                <Typography variant="h3" style={{ fontFamily: "'Indie Flower', cursive", fontWeight: "bold" }}>
+                                        location:
+                                </Typography>
+                                <Typography variant="h3" style={{ fontFamily: "'Indie Flower', cursive" }}>
+                                        {location}
+                                </Typography>
+                            </Stack>
 
-                {/* Volume section */}
-                <Stack
-                    direction="column"
-                    spacing={0.5}
-                    sx={{
-                        justifyContent: "center",
-                        alignItems: "flex-start",
-                        border: "solid black 3px",
-                        borderStyle: "dashed",
-                        padding: "15px",
-                        borderRadius: "10px",
-                    }}
-                >
-                    {/* Volume Slider Stack */}
-
-                    <Typography variant="h2" style={{ fontFamily: "'Indie Flower', cursive", fontWeight: "bold" }}>
-                        Volume Control
-                    </Typography>
-                    <hr style={{ border: 'none', height: '2px', backgroundColor: 'black', width: '100%', marginTop: -10, marginBottom: 10 }} />
-                    <Stack
-                        spacing={2}
-                        direction="row"
-                        sx={{
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            mb: 4,
-                            backgroundColor: 'transparent',
-                            borderRadius: '50px',
-                        }}
-                    >
-                        <Typography variant="h2" style={{ fontFamily: "'Indie Flower', cursive", fontWeight: "bold" }}>
-                            volume
-                        </Typography>
-                        <img
-                            src={volumeDown}
-                            alt={'volume Down'}
+                            <Stack
+                            direction="row"
+                            spacing={3}
+                            sx={{
+                                justifyContent: "center",
+                                alignItems: "center",
+                                marginBottom: "30px"
+                            }}
+                        >
+                            <Tooltip
+                                title="edit name"
+                                placement="bottom"
+                                slotProps={{
+                                    tooltip: {
+                                        sx: {
+                                            color: 'black',
+                                            backgroundColor: 'transparent',
+                                            fontSize:'30px',
+                                            fontWeight: 'bold',
+                                            fontFamily: "'Indie Flower', cursive"
+                                        },
+                                    },
+                                }}
+                            >
+                            <img
+                            src={nameIcon}
+                            alt="Home"
+                            onClick={() => {clickSound(),setInputType("username")}}
                             style={{
-                                opacity: '0.8',
-                                width: '30px',
-                                height: '30px',
-                                transition: 'transform 0.3s, opacity 0.3s',
-                        }}/>
-                        <CustomSlider
-                            aria-label="Volume"
-                            value={volume}
-                            onChange={handleChange}
-                            min={0}
-                            max={100}
-                            sx={{ width: 200 }}
-                        />
-                        <img
-                            src={volumeUp}
-                            alt={'volume Up'}
-                            style={{
-                                opacity: '0.8',
-                                width: '30px',
-                                height: '30px',
-                                transition: 'transform 0.3s, opacity 0.3s',
-                        }}/>
-                    </Stack>
-        
-                    {/* Mute Stack */}
-                    <Stack 
-                        spacing={2} 
-                        direction="row" 
-                        sx={{ 
-                            alignItems: 'center', 
-                            justifyContent: 'center',
-                            mb: 1 
-                        }}
-                    >
-                        <Typography variant="h2" style={{ margin: 0, fontFamily: "'Indie Flower', cursive", fontWeight: "bold" }}>
-                            mute
-                        </Typography>
-                        <img
-                            src={mute ? volumeUp : muteIcon}
-                            alt={mute ? "mute" : "unmute"}
-                            onClick={toggleMute}
-                            style={{
-                                width: '40px',
-                                height: '40px',
+                                width: '50px',
+                                height: '50px',
                                 cursor: 'pointer',
                                 transition: 'transform 0.3s, opacity 0.3s',
                             }}
@@ -430,10 +217,214 @@ export function Settings({
                                 e.currentTarget.style.transform = 'scale(1)';
                                 e.currentTarget.style.opacity = '1';
                             }}
-                        />
-                    </Stack>
+                            />
+                            </Tooltip>
 
-                </Stack>
+                            <Tooltip
+                                title="edit password"
+                                placement="bottom"
+                                slotProps={{
+                                    tooltip: {
+                                        sx: {
+                                            color: 'black',
+                                            backgroundColor: 'transparent',
+                                            fontSize:'30px',
+                                            fontWeight: 'bold',
+                                            fontFamily: "'Indie Flower', cursive"
+                                        },
+                                    },
+                                }}
+                            >
+                            <img
+                            src={passwordIcon}
+                            alt="Home"
+                            onClick={() => {clickSound(),setInputType("password")}}
+                            style={{
+                                width: '50px',
+                                height: '50px',
+                                cursor: 'pointer',
+                                transition: 'transform 0.3s, opacity 0.3s',
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = 'scale(1.1)';
+                                e.currentTarget.style.opacity = '0.8';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = 'scale(1)';
+                                e.currentTarget.style.opacity = '1';
+                            }}
+                            />
+                            </Tooltip>
+
+                            <div style={{height:"55px", width: "335px"}}>
+                            {inputType && (
+                                <Stack direction="row" spacing={2} sx={{ justifyContent: "center", alignItems: "center", height: "55px" }}>
+                                    <input
+                                        onChange={handleInputChange}
+                                        value={input}
+                                        type={"text"}
+                                        id="standard-basic"
+                                        placeholder={
+                                            inputType === "username"
+                                                ? "New Username"
+                                                : "New Password"
+                                        }
+                                        autoComplete="off"
+                                        style={{
+                                            width: '200px',
+                                            height: '50px',
+                                            border: 'none',
+                                            borderBottom: '2px solid black',
+                                            fontFamily: "'Indie Flower', cursive",
+                                            fontSize: "2rem",
+                                            fontWeight: "bold",
+                                            background: 'none',
+                                            textAlign: 'center',
+                                        }}
+                                        onFocus={(event) => {
+                                            event.target.style.outline = `none`;
+                                            event.target.style.borderBottom = `2px solid ${primaryColor}`;
+                                            event.target.placeholder = '';
+                                        }}
+                                        onBlur={(event) => {
+                                            event.target.style.borderBottom = '2px solid black';
+                                            event.target.placeholder = 'Enter Value';
+                                        }}
+                                    />
+
+                                    <span
+                                        onClick={handleUpdateClick}
+                                        style={{
+                                            color: "green",
+                                            display: "inline-block",
+                                            fontSize: "2rem",
+                                            height: "65px",
+                                            fontFamily: "'Indie Flower', cursive",
+                                            fontWeight: "bold",
+                                            cursor: "pointer",
+                                            transition: "transform 0.3s, background-color 0.3s",
+                                            marginTop: "40px"
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.color = 'darkgreen',
+                                            e.currentTarget.style.transform = 'scale(1.1)'
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.color = 'green',
+                                            e.currentTarget.style.transform = 'scale(1)'
+                                        }}
+                                        >
+                                        UPDATE
+                                    </span>
+                                </Stack>
+                            )}
+                            </div>
+                            </Stack>
+                            <div style={{transition: '0.3s', height: '35px'}}>
+                                {message &&
+                                    <Typography
+                                        style={{ 
+                                            fontFamily: "'Indie Flower',cursive",
+                                            fontWeight: "bold",
+                                            fontSize: "1.5rem",
+                                        }}>{message}
+                                    </Typography>
+                                }
+                            </div>
+                        </Stack>
+
+                    </StyledCard>
+                )}
+
+                {/* Volume section */}
+                <StyledCard title="Volume" padding="10px">
+                    <Stack
+                        direction="column"
+                        spacing={2}
+                        sx={{
+                            justifyContent: "center",
+                            alignItems: "flex-start",
+                        }}
+                    >
+                        {/* Volume Slider Stack */}
+                        <Stack
+                            spacing={2}
+                            direction="row"
+                            sx={{
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                mb: 4,
+                                backgroundColor: 'transparent',
+                                borderRadius: '50px',
+                            }}
+                        >
+                            <Typography variant="h2" style={{ fontFamily: "'Indie Flower', cursive", fontWeight: "bold" }}>
+                                volume
+                            </Typography>
+                            <img
+                                src={volumeDown}
+                                alt={'volume Down'}
+                                style={{
+                                    opacity: '0.8',
+                                    width: '30px',
+                                    height: '30px',
+                                    transition: 'transform 0.3s, opacity 0.3s',
+                            }}/>
+                            <CustomSlider
+                                aria-label="Volume"
+                                value={volume}
+                                onChange={handleChange}
+                                min={0}
+                                max={100}
+                                sx={{ width: 200 }}
+                            />
+                            <img
+                                src={volumeUp}
+                                alt={'volume Up'}
+                                style={{
+                                    opacity: '0.8',
+                                    width: '30px',
+                                    height: '30px',
+                                    transition: 'transform 0.3s, opacity 0.3s',
+                            }}/>
+                        </Stack>
+            
+                        {/* Mute Stack */}
+                        <Stack 
+                            spacing={2} 
+                            direction="row" 
+                            sx={{ 
+                                alignItems: 'center', 
+                                justifyContent: 'center',
+                                mb: 1 
+                            }}
+                        >
+                            <Typography variant="h2" style={{ margin: 0, fontFamily: "'Indie Flower', cursive", fontWeight: "bold" }}>
+                                mute
+                            </Typography>
+                            <img
+                                src={mute ? volumeUp : muteIcon}
+                                alt={mute ? "mute" : "unmute"}
+                                onClick={toggleMute}
+                                style={{
+                                    width: '40px',
+                                    height: '40px',
+                                    cursor: 'pointer',
+                                    transition: 'transform 0.3s, opacity 0.3s',
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = 'scale(1.1)';
+                                    e.currentTarget.style.opacity = '0.8';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = 'scale(1)';
+                                    e.currentTarget.style.opacity = '1';
+                                }}
+                            />
+                        </Stack>
+                    </Stack>
+                </StyledCard>
+
             </Stack>
 
         </div>
