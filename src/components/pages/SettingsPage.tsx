@@ -106,6 +106,7 @@ export function Settings({
             if (usernameCheck.valid) {
                 setMessage('')
                 updateUsername()
+                navigateToLogin()
             } else {
                 play(error)
                 setMessage(usernameCheck.message)
@@ -116,13 +117,13 @@ export function Settings({
             if (passwordCheck.valid) {
                 setMessage('')
                 updateUserPassword();
+                navigateToLogin()
             } else {
                 play(error)
                 setMessage(passwordCheck.message)
             }
         }
         setInput('')
-        navigateToLogin()
     };
 
     return (
