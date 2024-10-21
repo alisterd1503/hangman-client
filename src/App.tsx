@@ -1,6 +1,7 @@
 import { SetStateAction, useCallback, useEffect, useState } from "react"
-import Confetti from 'react-confetti'
 import { jwtDecode } from "jwt-decode"
+import { Typography } from "@mui/material";
+import Confetti from 'react-confetti'
 
 import './styles.css';
 
@@ -20,6 +21,8 @@ import { StartScreen } from "./components/pages/StartPage.tsx"
 import { Login } from "./components/pages/LoginPage.tsx";
 import { RegisterPage } from "./components/pages/RegisterPage.tsx";
 import { Records } from "./components/pages/RecordsPage.tsx";
+import { Admin } from "./components/pages/AdminPage.tsx";
+import { Rules } from "./components/pages/RulesPage.tsx";
 
 //Icons//
 import { HomeIcon } from './components/icons/HomeIcon';
@@ -40,48 +43,51 @@ import wrong from './sounds/wrong.mp3'
 import won from './sounds/win.mp3'
 import lost from './sounds/lost.mp3'
 
-//Functions//
-import { getWord } from './components/functions/getWord.ts';
+//UTILS//
+import { getWord } from './utils/getWord.ts';
 
 //API CALLS//
 import { addScore } from "./api/addScore.ts";
-import { Typography } from "@mui/material";
+import { getScores } from "./api/getScores.ts";
+import { getRecords } from "./api/getRecords.ts";
 
 //MODELS//
 import { Game } from "./models/Game.ts";
-import { Admin } from "./components/pages/AdminPage.tsx";
-import { Rules } from "./components/pages/RulesPage.tsx";
+import { Record } from "./models/Record.ts";
 
-/** 
-For each correct letter:
-
-Easy: 10 points
-Medium: 15 points
-Hard: 20 points
-
-If player gets word: 
-
-Easy: 20 points
-Medium: 30 points
-Hard: 40 points
-
-If player doesnt get word: 
-
-Easy: -10 points
-Medium: -15 points
-Hard: -20 points
-
-**/
-
-const regex = /^[a-zA-Z]+$/;
+//CONSTANTS//
+import {
+  EASY_CORRECT_LETTER, 
+  EASY_INCORRECT_LETTER, 
+  EASY_WORD_GUESSED, 
+  EASY_WORD_NOT_GUESSED, 
+  HARD_CORRECT_LETTER, 
+  HARD_INCORRECT_LETTER, 
+  HARD_WORD_GUESSED, 
+  HARD_WORD_NOT_GUESSED, 
+  MEDIUM_CORRECT_LETTER, 
+  MEDIUM_INCORRECT_LETTER, 
+  MEDIUM_WORD_GUESSED, 
+  MEDIUM_WORD_NOT_GUESSED, 
+  REGEX 
+} from "./utils/constants.ts";
 
 type Page = 'home' | 'settings' | 'leaderboard' | 'login' | 'game' | 'register' | 'records' | 'admin' | 'rules';
+
+type DB_Packet = {
+  id: number
+  username: string | null,
+  score: number,
+  location: string
+}
+
+//TODO: ADD USEEFFECT TO RBING IN LEADERBOARD AND RECORDS DATA
 
 function App() {
   const [difficulty, setDifficulty] = useState<string | null>(null);
   const [chosenWord, setChosenWord] = useState<string | null>(null);
-  const [userGuesses, setUserGuesses] = useState<string[]>([]);
-  const [inputValue, setInputValue] = useState('');
+  const [letterGuesses, setLetterGuesses] = useState<string[]>([]);
+  const [wordGuesses, setWordGuesses] = useState('');
   const [usersPoints, setUsersPoints] = useState(0);
   const [volume, setVolume] = useState(0.5)
   const [mute, setMute] = useState(true)
@@ -89,11 +95,21 @@ function App() {
   const [result , setResult] = useState(false)
   const [gameOver, setGameOver] = useState(false)
   const [pointsToShow, setPointsToShow] = useState<number | null>(null);
-
   const [currentUser, setCurrentUser] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [scores, setScores] = useState<DB_Packet[]>([]);
+  const [records, setRecords] = useState<Record[]>([]);
+    
+    useEffect(() => {
+        const fetchScores = async () => {
+            const data = await getRecords();
+            setRecords(data);
+        };
+        fetchScores();
+    }, []);
 
 
+  // Function that adds the score to the database
   const sendPacket = async () => {
     if (currentUser && difficulty && chosenWord) {
       const body: Game = {
@@ -101,16 +117,27 @@ function App() {
         difficulty: difficulty,
         word: chosenWord,
         result: result,
-        guesses: userGuesses.length
+        guesses: letterGuesses.length
       }
       await addScore(body)
     }
   }
 
+  useEffect(() => {
+      const fetchScores = async () => {
+          const data = await getScores();
+          setScores(data);
+      };
+
+      fetchScores();
+  }, []);
+
+  // Function to navigate to relevant pages
   const navigateTo = (page: Page) => {
     setCurrentPage(page);
   };
 
+  // Setting the logged in user's name and role
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -120,18 +147,9 @@ function App() {
     }
   }, []);
 
-  const navigateToHome = () => {
-    navigateTo('home');
-    window.location.href = window.location.href;
-  };
-
-  const navigateToLogin = () => {
-    navigateTo('login');
-  };
-
-  // Function to get incorrect guesses
+  // Function that tracks the incorrect letter guesses
   const getIncorrectGuesses = () => {
-      return userGuesses.filter(guess => {
+      return letterGuesses.filter(guess => {
           if (guess.length === 1) {
               return !chosenWord!.includes(guess);
           }
@@ -139,84 +157,96 @@ function App() {
       });
   };
 
+  const incorrectGuesses = getIncorrectGuesses();
+
   // Function to start the game
   const handleStartGame = () => {
       setChosenWord(getWord(difficulty!));
       setUsersPoints(0);
   };
 
-  // Variable to track incorrect guesses
-  const incorrectGuesses = getIncorrectGuesses();
-
   // Variable to track if player lost
   const isLoser = incorrectGuesses.length >= 10;
 
   // Variable to track if player won
-  const isWinner = chosenWord && (userGuesses.includes(chosenWord) || chosenWord
+  const isWinner = chosenWord && (letterGuesses.includes(chosenWord) || chosenWord
       .split("")
-      .every((letter: string) => userGuesses.includes(letter)))
+      .every((letter: string) => letterGuesses.includes(letter)))
 
+  // Displaying the points when user guesses
   useEffect(() => {
     if (pointsToShow !== null) {
       const timer = setTimeout(() => {
-        setPointsToShow(null); // Hide points after animation
-      }, 1000); // Duration for showing points (1 second)
+        setPointsToShow(null);
+      }, 1000);
 
-      return () => clearTimeout(timer); // Cleanup timeout
+      return () => clearTimeout(timer);
     }
   }, [pointsToShow]);
 
   // Adding users guesses to an array
   const addUserGuess = useCallback((letter: string) => {
-    if (userGuesses.includes(letter) || isLoser || isWinner) {
+    if (letterGuesses.includes(letter) || isLoser || isWinner) {
       return;
     }
-    setUserGuesses(currentLetters => {
+    setLetterGuesses(currentLetters => {
       const newGuesses = [...currentLetters, letter];
 
-      // Increment correct points if the guess is correct
+      // Adding points of the guess is correct
       if ((chosenWord!.includes(letter) && letter.length === 1) 
-        || chosenWord && userGuesses.includes(chosenWord)) {
+        || chosenWord && letterGuesses.includes(chosenWord)) {
           play(correct)
         if (difficulty === 'easy') {
-            setUsersPoints(prev => prev + 10);
-            setPointsToShow(10);
+            setUsersPoints(prev => prev + EASY_CORRECT_LETTER);
+            setPointsToShow(EASY_CORRECT_LETTER);
         } else if (difficulty === 'hard') {
-            setUsersPoints(prev => prev + 20);
-            setPointsToShow(20)
+            setUsersPoints(prev => prev + HARD_CORRECT_LETTER);
+            setPointsToShow(HARD_CORRECT_LETTER)
         } else {
-            setUsersPoints(prev => prev + 15);
-            setPointsToShow(15)
+            setUsersPoints(prev => prev + MEDIUM_CORRECT_LETTER);
+            setPointsToShow(MEDIUM_CORRECT_LETTER)
         }
+      // Deducting points of the guess is correct
       } else {
         play(wrong)
+        if (difficulty === 'easy') {
+          setUsersPoints(prev => prev + EASY_INCORRECT_LETTER);
+          setPointsToShow(EASY_INCORRECT_LETTER);
+        } else if (difficulty === 'hard') {
+            setUsersPoints(prev => prev + HARD_INCORRECT_LETTER);
+            setPointsToShow(HARD_INCORRECT_LETTER)
+        } else {
+            setUsersPoints(prev => prev + MEDIUM_INCORRECT_LETTER);
+            setPointsToShow(MEDIUM_INCORRECT_LETTER)
+        }
       }
       return newGuesses;
     });
-  }, [userGuesses, isLoser, isWinner, chosenWord]);
+  }, [letterGuesses, isLoser, isWinner, chosenWord]);
 
   // Resets game when play again button pressed
   const resetGame = () => {
       if (currentUser) {sendPacket()}
-      setUserGuesses([]);
+      setLetterGuesses([]);
       setChosenWord(getWord(difficulty!));
-      setInputValue('');
+      setWordGuesses('');
       setGameOver(false)
       setUsersPoints(0)
   };
 
+  // TODO: PUT ALL THIS INTO HANGMAN COMPONENT
   const handleInputChange = (event: { target: { value: SetStateAction<string> } }) => {
-      setInputValue(event.target.value);
+      setWordGuesses(event.target.value);
   };
 
   // Sets the input value when the submit button is clicked
   const handleButtonClick = () => {
-      if (inputValue.trim() === "" || !(regex.test(inputValue))) {
-          setInputValue("");
+      if (wordGuesses.trim() === "" || !(REGEX.test(wordGuesses))) {
+          setWordGuesses("");
           return;
       }
-      addUserGuess(inputValue.toLowerCase());
-      setInputValue("");
+      addUserGuess(wordGuesses.toLowerCase());
+      setWordGuesses("");
   };
 
   // User can press enter to submit the input
@@ -229,46 +259,44 @@ function App() {
   // Resets game if the user clicks on the home screen
   const stopGame = () => {
     if (gameOver) {sendPacket()}
-    setUserGuesses([]);
+    setLetterGuesses([]);
     setChosenWord(null);
-    setInputValue('');
+    setWordGuesses('');
     setDifficulty(null);
     setGameOver(false)
     navigateTo('home')
   };
 
+  // Adding/deducting points based on if the user gets the word
   useEffect(() => {
-    if (isWinner) {
-      play(won)
-        setResult(true)
-        setGameOver(true)
-        if (difficulty === 'easy') {
-            setUsersPoints(prev => prev + 20);
-            setPointsToShow(20);
-        } else if (difficulty === 'hard') {
-            setUsersPoints(prev => prev + 40);
-            setPointsToShow(40);
-        } else {
-            setUsersPoints(prev => prev + 30);
-            setPointsToShow(30);
-        }
-    } else if (isLoser) {
-      play(lost)
-        setGameOver(true)
-        if (difficulty === 'easy') {
-            setUsersPoints(prev => prev - 10);
-            setPointsToShow(-10);
-        } else if (difficulty === 'hard') {
-            setUsersPoints(prev => prev - 20);
-            setPointsToShow(-20);
-        } else {
-            setUsersPoints(prev => prev - 15);
-            setPointsToShow(-15);
-        }
-
+    const updatePoints = (wordGuessed: number, wordNotGuessed: number) => {
+      if (isWinner) {
+        play(won);
+        setResult(true);
+        setUsersPoints(prev => prev + wordGuessed);
+        setPointsToShow(wordGuessed);
+      } else if (isLoser) {
+        play(lost);
+        setUsersPoints(prev => prev - wordNotGuessed);
+        setPointsToShow(-wordNotGuessed);
+      }
+      setGameOver(true);
+    };
+  
+    switch (difficulty) {
+      case 'easy':
+        updatePoints(EASY_WORD_GUESSED, EASY_WORD_NOT_GUESSED);
+        break;
+      case 'hard':
+        updatePoints(HARD_WORD_GUESSED, HARD_WORD_NOT_GUESSED);
+        break;
+      default:
+        updatePoints(MEDIUM_WORD_GUESSED, MEDIUM_WORD_NOT_GUESSED);
+        break;
     }
-    }, [isWinner, isLoser, difficulty]);
+  }, [isWinner, isLoser, difficulty]);
 
+    // Conditonal rendering of the pages
     const renderPage = () => {
       switch (currentPage) {
         case 'home':
@@ -310,7 +338,7 @@ function App() {
                 mute={mute} 
                 setVolume={setVolume} 
                 setMute={setMute} 
-                navigateToLogin={navigateToLogin}
+                navigateToLogin={() => navigateTo('login')}
               />
               <HomeIcon homeScreen={() => navigateTo('home')} />
             </>
@@ -318,14 +346,14 @@ function App() {
         case 'leaderboard':
           return (
             <>
-              <LeaderboardTable />
+              <LeaderboardTable scores={scores}/>
               <HomeIcon homeScreen={() => navigateTo('home')} />
             </>
           );
         case 'records':
           return (
             <>
-              <Records />
+              <Records records={records}/>
               <HomeIcon homeScreen={() => navigateTo('home')} />
             </>
           );
@@ -339,7 +367,7 @@ function App() {
         case 'login':
           return (
             <>
-              <Login navigateToHome={navigateToHome}/>
+              <Login navigateToHome={() => {navigateTo('home'), window.location.reload();}}/>
               <RegisterIcon RegisterScreen={() => navigateTo('register')}/>
               <HomeIcon homeScreen={() => navigateTo('home')} />
             </>
@@ -347,7 +375,7 @@ function App() {
         case 'register':
           return (
             <>
-              <RegisterPage navigateToLogin={navigateToLogin}/>
+              <RegisterPage navigateToLogin={() => navigateTo('login')}/>
               <LoginIcon LoginScreen={() => navigateTo('login')} />
               <HomeIcon homeScreen={() => navigateTo('home')} />
             </>
@@ -393,7 +421,7 @@ function App() {
             <div className="dashed-words">
               <HangmanWord
                 reveal={isLoser || isWinner ? true : false}
-                userGuesses={userGuesses}
+                letterGuesses={letterGuesses}
                 chosenWord={chosenWord ?? ''}
                 isWinner={!!isWinner}
               />
@@ -406,7 +434,7 @@ function App() {
             <div className="keyboard">
               <Keyboard
                 disabled={isWinner || isLoser}
-                activeLetters={userGuesses.filter((letter) => chosenWord!.includes(letter))}
+                activeLetters={letterGuesses.filter((letter) => chosenWord!.includes(letter))}
                 inactiveLetters={incorrectGuesses}
                 addUserGuess={addUserGuess}
               />
@@ -418,7 +446,7 @@ function App() {
                 <PlayAgain resetGame={resetGame} />
               ) : (
                 <HangmanGuess
-                  inputValue={inputValue}
+                  wordGuesses={wordGuesses}
                   handleInputChange={handleInputChange}
                   handleKeyPress={handleKeyPress}
                   handleButtonClick={handleButtonClick}

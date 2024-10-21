@@ -3,20 +3,20 @@ import muteIcon from '../../images/mute.png';
 import volumeUp from '../../images/volumeUp.png'
 import volumeDown from '../../images/volumeDown.png'
 import { clickSound } from "../sounds/clickSXF";
-import { CustomSlider } from "../functions/customSlider";
-import { getCountryByTimeZone } from "../functions/getLocation";
+import { CustomSlider } from "../../utils/customSlider";
+import { getCountryByTimeZone } from "../../utils/getLocation";
 import { SetStateAction, useEffect, useState } from "react";
 import { updateName } from "../../api/updateName";
 import { updatePassword } from "../../api/updatePassword";
 import nameIcon from "../../images/name.png"
 import passwordIcon from "../../images/password.png"
-import { validatePassword } from "../functions/validatePassword";
-import { validateUsername } from "../functions/validateUsername";
+import { validatePassword } from "../../utils/validatePassword";
+import { validateUsername } from "../../utils/validateUsername";
 import { play } from "../sounds/generalSFX";
 import { getUsernames } from "../../api/getUsernames";
 import error from '../../sounds/error.mp3'
 import { jwtDecode } from "jwt-decode";
-import StyledCard from "../background/StyledCard"
+import StyledCard from "../StyledCard"
 
 const location: string = getCountryByTimeZone();
 const primaryColor = "#F0E5CF"

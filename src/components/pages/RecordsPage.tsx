@@ -1,36 +1,11 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
-import { getRecords } from "../../api/getRecords";
-import { useEffect, useState } from "react";
 import { Record } from "../../models/Record";
+import { formatDate } from "../../utils/formatDate";
 
 const primaryColor = "#F0E5CF"
 const thirdColor =  "#D1BB9E"
 
-function formatDate(isoString: string | number | Date) {
-    const date = new Date(isoString);
-
-    // Extract components
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() returns 0-based month
-    const year = String(date.getFullYear()).slice(-2); // Get last 2 digits of the year
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-
-    // Return formatted date as dd/mm/yy hr:min
-    return `${day}/${month}/${year} ${hours}:${minutes}`;
-}
-
-export function Records() {
-    const [records, setRecords] = useState<Record[]>([]);
-    
-    useEffect(() => {
-        const fetchScores = async () => {
-            const data = await getRecords();
-            setRecords(data);
-        };
-        fetchScores();
-    }, []);
-
+export function Records({ records }: { records: Record[] }) {
     return (
         <div style={{
             display: "flex",

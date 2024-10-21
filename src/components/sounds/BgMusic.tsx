@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import music from '../../bg-music.mp3'
 
 type BgMusicProps = {
     volume: number;
@@ -11,7 +10,7 @@ export function BgMusic({ volume, mute }: BgMusicProps) {
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     useEffect(() => {
-        audioRef.current = new Audio(music);
+        audioRef.current = new Audio('../bg-music.mp3');
 
         // Set initial volume and mute state
         if (audioRef.current) {
@@ -39,14 +38,9 @@ export function BgMusic({ volume, mute }: BgMusicProps) {
     }, [volume]);
 
     useEffect(() => {
-        // Update the mute state and play audio if unmuted
+        // Update the mute state when it changes
         if (audioRef.current) {
             audioRef.current.muted = mute;
-            if (!mute) {
-                audioRef.current.play().catch((error) => {
-                    console.error('Failed to play audio:', error);
-                });
-            }
         }
     }, [mute]);
 

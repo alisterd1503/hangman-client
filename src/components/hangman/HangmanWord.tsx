@@ -1,13 +1,13 @@
 import '../../styles.css';
 
 type HangmanWordProps = {
-    userGuesses: string[]
+    letterGuesses: string[]
     chosenWord: string
     reveal?: boolean
     isWinner?: boolean
 }
 
-export function HangmanWord({userGuesses, chosenWord, reveal=false, isWinner=false}:
+export function HangmanWord({letterGuesses, chosenWord, reveal=false, isWinner=false}:
 HangmanWordProps) {
     return (
         <div 
@@ -36,10 +36,10 @@ HangmanWordProps) {
               >
                     <span
                         style={{
-                            visibility: userGuesses.includes(letter) || reveal
+                            visibility: letterGuesses.includes(letter) || reveal
                             ? "visible" 
                             : "hidden",
-                            color: isWinner ? "black" : (!userGuesses.includes(letter) && reveal ? "red" : "black")
+                            color: isWinner ? "black" : (!letterGuesses.includes(letter) && reveal ? "red" : "black")
                         }}
                 >
                     {letter}</span>

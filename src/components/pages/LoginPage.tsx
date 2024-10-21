@@ -8,7 +8,7 @@ import { play } from "../sounds/generalSFX";
 import error from '../../sounds/error.mp3'
 import openEyeIcon from "../../images/eyeOpen.png"
 import closedEyeIcon from "../../images/eyeClosed.png"
-import StyledCard from "../background/StyledCard"
+import StyledCard from "../StyledCard"
 
 const primaryColor = "#9c8b75"
 

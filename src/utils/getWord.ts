@@ -1,4 +1,4 @@
-import words from "../../wordList.json"
+import words from "../wordList.json"
 const options = ['easy','medium','hard']
 
 // Function that returns a random word from the words list

@@ -8,10 +8,10 @@ import { Register } from "../../models/Register";
 
 const primaryColor = "#9c8b75"
 
-import { getCountryByTimeZone } from '../functions/getLocation';
-import { validatePassword } from "../functions/validatePassword";
-import { validateUsername } from "../functions/validateUsername";
-import StyledCard from "../background/StyledCard"
+import { getCountryByTimeZone } from '../../utils/getLocation';
+import { validatePassword } from "../../utils/validatePassword";
+import { validateUsername } from "../../utils/validateUsername";
+import StyledCard from "../StyledCard"
 
 import { clickSound } from "../sounds/clickSXF";
 import { play } from "../sounds/generalSFX";

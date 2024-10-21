@@ -1,7 +1,7 @@
 import { Typography, Stack } from "@mui/material";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import StyledCard from "../background/StyledCard"
+import StyledCard from "../StyledCard"
 
 const secondaryColor = "#F7F6F2"
 const thirdColor =  "#D1BB9E"

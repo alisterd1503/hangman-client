@@ -1,6 +1,6 @@
 import { Slider, styled } from '@mui/material';
-import slider from '../../images/slider.png'
-import circle from '../../images/circle.png'
+import slider from '../images/slider.png'
+import circle from '../images/circle.png'
 
 export const CustomSlider = styled(Slider)({
     height: 8,

@@ -6,14 +6,14 @@ const primaryColour = "#FF8343";
 const secondaryColour = "#db6e37"
 
 type HangmanGuessProps = {
-    inputValue: string,
+    wordGuesses: string,
     handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     handleKeyPress: (event: React.KeyboardEvent<HTMLInputElement>) => void,
     handleButtonClick: () => void,
 }
 
 export function HangmanGuess({
-    inputValue,
+    wordGuesses,
     handleInputChange,
     handleKeyPress,
     handleButtonClick,
@@ -23,7 +23,7 @@ export function HangmanGuess({
         <input
           type="text"
           id="standard-basic"
-          value={inputValue}
+          value={wordGuesses}
           onChange={handleInputChange}
           onKeyDown={handleKeyPress}
           placeholder="Guess a Word"

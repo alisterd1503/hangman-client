@@ -1,6 +1,4 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
-import { getScores } from "../../api/getScores"
-import { useEffect, useState } from "react";
 
 const primaryColor = "#F0E5CF"
 const thirdColor =  "#D1BB9E"
@@ -11,19 +9,7 @@ type DB_Packet = {
     score: number,
     location: string
 }
-
-export function LeaderboardTable() {
-    const [scores, setScores] = useState<DB_Packet[]>([]);
-
-    useEffect(() => {
-        const fetchScores = async () => {
-            const data = await getScores();
-            setScores(data);
-        };
-
-        fetchScores();
-    }, []);
-
+export function LeaderboardTable({ scores }: { scores: DB_Packet[] }) {
     return (
         <div style={{
             display: "flex",
@@ -65,11 +51,3 @@ export function LeaderboardTable() {
     )
 
 }
-
-/**
-CREATE TABLE users {
-    name varachar(255)
-    score BIGINT
-    location VARCHAR(255)
-}
- */
