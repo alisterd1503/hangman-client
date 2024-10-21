@@ -4,7 +4,7 @@ import { SetStateAction, useEffect, useState } from "react";
 import { getUsernames } from '../../api/getUsernames';
 import { addUser } from '../../api/registerUser'
 
-import { Register } from "../../models/Register";
+import { RegisterModel } from "../../models/RegisterModel";
 
 const primaryColor = "#9c8b75"
 
@@ -41,7 +41,7 @@ export function RegisterPage({navigateToLogin}:RegisterPageProps) {
 
     const handleButtonClick = async () => {
         setMessage('')
-        const body: Register = {
+        const body: RegisterModel = {
             username: username,
             password: password,
             location: location

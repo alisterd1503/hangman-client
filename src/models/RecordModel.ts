@@ -1,4 +1,4 @@
-export type Record = {
+export type RecordModel = {
     id: number,
     score: number,
     difficulty: string,

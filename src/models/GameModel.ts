@@ -1,4 +1,4 @@
-export type Game = {
+export type GameModel = {
     score: number,
     difficulty: string
     word: string,

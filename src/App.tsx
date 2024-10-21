@@ -52,8 +52,9 @@ import { getScores } from "./api/getScores.ts";
 import { getRecords } from "./api/getRecords.ts";
 
 //MODELS//
-import { Game } from "./models/Game.ts";
-import { Record } from "./models/Record.ts";
+import { GameModel } from "./models/GameModel.ts";
+import { RecordModel } from "./models/RecordModel.ts";
+import { LeaderboardModel } from "./models/LeaderboardModel.ts";
 
 //CONSTANTS//
 import {
@@ -69,19 +70,11 @@ import {
   MEDIUM_INCORRECT_LETTER, 
   MEDIUM_WORD_GUESSED, 
   MEDIUM_WORD_NOT_GUESSED, 
-  REGEX 
+  REGEX,
+  MAX_GUESSES
 } from "./utils/constants.ts";
 
 type Page = 'home' | 'settings' | 'leaderboard' | 'login' | 'game' | 'register' | 'records' | 'admin' | 'rules';
-
-type DB_Packet = {
-  id: number
-  username: string | null,
-  score: number,
-  location: string
-}
-
-//TODO: ADD USEEFFECT TO RBING IN LEADERBOARD AND RECORDS DATA
 
 function App() {
   const [difficulty, setDifficulty] = useState<string | null>(null);
@@ -97,22 +90,23 @@ function App() {
   const [pointsToShow, setPointsToShow] = useState<number | null>(null);
   const [currentUser, setCurrentUser] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
-  const [scores, setScores] = useState<DB_Packet[]>([]);
-  const [records, setRecords] = useState<Record[]>([]);
+  const [scores, setScores] = useState<LeaderboardModel[]>([]);
+  const [records, setRecords] = useState<RecordModel[]>([]);
     
-    useEffect(() => {
-        const fetchScores = async () => {
-            const data = await getRecords();
-            setRecords(data);
-        };
-        fetchScores();
-    }, []);
+  // Fetching records from the database
+  useEffect(() => {
+      const fetchScores = async () => {
+          const data = await getRecords();
+          setRecords(data);
+      };
+      fetchScores();
+  }, []);
 
 
   // Function that adds the score to the database
   const sendPacket = async () => {
     if (currentUser && difficulty && chosenWord) {
-      const body: Game = {
+      const body: GameModel = {
         score: usersPoints,
         difficulty: difficulty,
         word: chosenWord,
@@ -123,6 +117,7 @@ function App() {
     }
   }
 
+  // Festhcing leaderboard data from the database
   useEffect(() => {
       const fetchScores = async () => {
           const data = await getScores();
@@ -166,7 +161,7 @@ function App() {
   };
 
   // Variable to track if player lost
-  const isLoser = incorrectGuesses.length >= 10;
+  const isLoser = incorrectGuesses.length >= MAX_GUESSES;
 
   // Variable to track if player won
   const isWinner = chosenWord && (letterGuesses.includes(chosenWord) || chosenWord
@@ -186,43 +181,49 @@ function App() {
 
   // Adding users guesses to an array
   const addUserGuess = useCallback((letter: string) => {
+    // If letter has already been guessed or iswin or islose
     if (letterGuesses.includes(letter) || isLoser || isWinner) {
       return;
     }
-    setLetterGuesses(currentLetters => {
-      const newGuesses = [...currentLetters, letter];
 
-      // Adding points of the guess is correct
-      if ((chosenWord!.includes(letter) && letter.length === 1) 
-        || chosenWord && letterGuesses.includes(chosenWord)) {
-          play(correct)
-        if (difficulty === 'easy') {
-            setUsersPoints(prev => prev + EASY_CORRECT_LETTER);
-            setPointsToShow(EASY_CORRECT_LETTER);
-        } else if (difficulty === 'hard') {
-            setUsersPoints(prev => prev + HARD_CORRECT_LETTER);
-            setPointsToShow(HARD_CORRECT_LETTER)
+    setLetterGuesses(currentLetters => {
+        const newGuesses = [...currentLetters, letter];
+
+        // Check if the guess is correct
+        const isCorrectGuess = chosenWord!.includes(letter) && letter.length === 1;
+        const isWordGuess = chosenWord && letterGuesses.includes(chosenWord);
+        
+        if (isCorrectGuess || isWordGuess) {
+            play(correct);
+            // Update points for a correct guess
+            if (difficulty === 'easy') {
+                setUsersPoints(prev => prev + EASY_CORRECT_LETTER);
+                setPointsToShow(EASY_CORRECT_LETTER);
+            } else if (difficulty === 'hard') {
+                setUsersPoints(prev => prev + HARD_CORRECT_LETTER);
+                setPointsToShow(HARD_CORRECT_LETTER);
+            } else {
+                setUsersPoints(prev => prev + MEDIUM_CORRECT_LETTER);
+                setPointsToShow(MEDIUM_CORRECT_LETTER);
+            }
         } else {
-            setUsersPoints(prev => prev + MEDIUM_CORRECT_LETTER);
-            setPointsToShow(MEDIUM_CORRECT_LETTER)
+            play(wrong);
+            if (difficulty === 'easy') {
+                setUsersPoints(prev => prev - (EASY_CORRECT_LETTER/2));
+                setPointsToShow(-EASY_INCORRECT_LETTER);
+            } else if (difficulty === 'hard') {
+                setUsersPoints(prev => prev - (HARD_INCORRECT_LETTER/2));
+                setPointsToShow(-HARD_INCORRECT_LETTER);
+            } else {
+                setUsersPoints(prev => prev - (MEDIUM_INCORRECT_LETTER/2));
+                setPointsToShow(-MEDIUM_INCORRECT_LETTER);
+            }
         }
-      // Deducting points of the guess is correct
-      } else {
-        play(wrong)
-        if (difficulty === 'easy') {
-          setUsersPoints(prev => prev + EASY_INCORRECT_LETTER);
-          setPointsToShow(EASY_INCORRECT_LETTER);
-        } else if (difficulty === 'hard') {
-            setUsersPoints(prev => prev + HARD_INCORRECT_LETTER);
-            setPointsToShow(HARD_INCORRECT_LETTER)
-        } else {
-            setUsersPoints(prev => prev + MEDIUM_INCORRECT_LETTER);
-            setPointsToShow(MEDIUM_INCORRECT_LETTER)
-        }
-      }
-      return newGuesses;
+
+        return newGuesses;
     });
-  }, [letterGuesses, isLoser, isWinner, chosenWord]);
+}, [chosenWord]);
+
 
   // Resets game when play again button pressed
   const resetGame = () => {
@@ -234,7 +235,6 @@ function App() {
       setUsersPoints(0)
   };
 
-  // TODO: PUT ALL THIS INTO HANGMAN COMPONENT
   const handleInputChange = (event: { target: { value: SetStateAction<string> } }) => {
       setWordGuesses(event.target.value);
   };
@@ -394,13 +394,6 @@ function App() {
             <HomeIcon homeScreen={stopGame} />
             <Points usersPoints={usersPoints} pointsToShow={pointsToShow} />
     
-            {/* Displays confetti */}
-            {isWinner && (
-              <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-                <Confetti width={window.outerWidth} height={window.outerHeight} recycle={false} />
-              </div>
-            )}
-    
             {/* Displays header title */}
             <div className="message"
               style={{
@@ -461,10 +454,18 @@ function App() {
     };
 
     return (
-      <div className="main">
-        <BgMusic volume={volume} mute={mute}/>
-        {renderPage()}
-      </div>
+      <>
+        {/* Displays confetti */}
+        {true && (
+          <>
+            <Confetti width={window.innerWidth} height={window.innerHeight} recycle={false} initialVelocityY={1} />
+          </>
+        )}
+        <div className="main">
+          <BgMusic volume={volume} mute={mute}/>
+          {renderPage()}
+        </div>
+      </>
     );
 }
 

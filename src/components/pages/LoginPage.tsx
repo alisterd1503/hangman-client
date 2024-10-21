@@ -1,24 +1,18 @@
 import { Stack, Typography } from "@mui/material";
 import { SetStateAction, useState } from "react";
-
 import { checkLogin } from "../../api/checkLogin";
-
 import { clickSound } from "../sounds/clickSXF";
 import { play } from "../sounds/generalSFX";
 import error from '../../sounds/error.mp3'
 import openEyeIcon from "../../images/eyeOpen.png"
 import closedEyeIcon from "../../images/eyeClosed.png"
 import StyledCard from "../StyledCard"
+import { LoginModel } from "../../models/LoginModel";
 
 const primaryColor = "#9c8b75"
 
 type LoginProps = {
     navigateToHome: () => void
-}
-
-type Login = {
-    username: string,
-    password: string,
 }
 
 export function Login({navigateToHome}: LoginProps) {
@@ -38,7 +32,7 @@ export function Login({navigateToHome}: LoginProps) {
 
     const validateLogin = async () => {
         clickSound()
-        const body: Login = {
+        const body: LoginModel = {
             username: username,
             password: password
         }

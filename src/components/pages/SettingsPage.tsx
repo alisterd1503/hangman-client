@@ -20,8 +20,6 @@ import StyledCard from "../StyledCard"
 
 const location: string = getCountryByTimeZone();
 const primaryColor = "#F0E5CF"
-//const secondaryColor = "#F7F6F2"
-//const thirdColor =  "#D1BB9E"
 
 type SettingsProps = {
     volume: number;
@@ -45,9 +43,7 @@ export function Settings({
     const [usedNames, setUsedNames] = useState<string[]>([]);
 
     useEffect(() => {
-        // Get the token from local storage
         const token = localStorage.getItem('token');
-    
         if (token) {
             const decodedToken = jwtDecode<{ username: string }>(token);
             setCurrentUser(decodedToken.username);

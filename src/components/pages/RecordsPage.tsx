@@ -1,11 +1,11 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
-import { Record } from "../../models/Record";
+import { RecordModel } from "../../models/RecordModel";
 import { formatDate } from "../../utils/formatDate";
 
 const primaryColor = "#F0E5CF"
 const thirdColor =  "#D1BB9E"
 
-export function Records({ records }: { records: Record[] }) {
+export function Records({ records }: { records: RecordModel[] }) {
     return (
         <div style={{
             display: "flex",

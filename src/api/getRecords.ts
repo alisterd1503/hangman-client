@@ -1,5 +1,5 @@
 const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/getRecords';
-import { Record } from "../models/Record";
+import { Record } from "../models/RecordModel";
 
 export const getRecords = async (): Promise<Record[]> => {
     try {

@@ -1,15 +1,10 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
+import { LeaderboardModel } from "../../models/LeaderboardModel"
 
 const primaryColor = "#F0E5CF"
 const thirdColor =  "#D1BB9E"
 
-type DB_Packet = {
-    id: number
-    username: string | null,
-    score: number,
-    location: string
-}
-export function LeaderboardTable({ scores }: { scores: DB_Packet[] }) {
+export function LeaderboardTable({ scores }: { scores: LeaderboardModel[] }) {
     return (
         <div style={{
             display: "flex",
