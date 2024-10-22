@@ -91,7 +91,7 @@ export function AuthForm({
                         <input
                             onChange={handlePasswordChange}
                             value={password}
-                            type={seePassword ? "text" : "password"}
+                            type={title=='Login' ? (seePassword ? "text" : "password") : "text"}
                             id={title.toLowerCase()}
                             placeholder="Enter Password"
                             autoComplete="off"

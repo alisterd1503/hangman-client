@@ -307,8 +307,8 @@ function App() {
                 onStart={() => { handleStartGame(); navigateTo('game'); }} 
                 onDifficultySelect={setDifficulty}
               />
-              <UseIcon 
-                navigateTo={() => navigateTo('settings')}
+              <UseIcon
+                setCurrentPage={setCurrentPage}
                 title="settings"
                 placement="right"
                 top='20px'
@@ -317,7 +317,7 @@ function App() {
               </UseIcon>
 
               <UseIcon 
-                navigateTo={() => navigateTo('leaderboard')}
+        setCurrentPage={setCurrentPage}
                 title="leaderboard"
                 placement="left"
                 top='0px'
@@ -327,7 +327,7 @@ function App() {
               </UseIcon>
 
               <UseIcon 
-                navigateTo={() => navigateTo('rules')}
+  setCurrentPage={setCurrentPage}
                 title="rules"
                 placement="left"
                 top='130px'
@@ -338,7 +338,7 @@ function App() {
     
               {userRole === 'admin' && 
                 <UseIcon 
-                navigateTo={() => navigateTo('admin')}
+  setCurrentPage={setCurrentPage}
                 title="admin"
                 placement="left"
                 top='260px'
@@ -358,18 +358,22 @@ function App() {
                           fontSize: "2rem",
                       }}>Welcome, {currentUser}! Ready to play?
                     </Typography>
-                    <UseIcon 
-                      navigateTo={clearLocalStorage}
-                      title="logout"
+
+                    <UseIcon
+                      customFunc={clearLocalStorage}
+                      title='home'
+                      setCurrentPage={setCurrentPage}
+                      name="logout"
                       placement="right"
                       bottom='0px'
                       left='20px'
                       size='90px'
                       iconImage={logoutIcon}>
                     </UseIcon>
+
                     <UseIcon 
-                      navigateTo={() => navigateTo('records')}
-                      title="history"
+                      setCurrentPage={setCurrentPage}
+                      title="records"
                       placement="left"
                       bottom='0px'
                       right='20px'
@@ -379,7 +383,7 @@ function App() {
                   </>) 
                   : 
                   (<UseIcon 
-                    navigateTo={() => navigateTo('login')}
+                    setCurrentPage={setCurrentPage}
                     title="login"
                     placement="left"
                     bottom='0px'
@@ -402,7 +406,7 @@ function App() {
                 navigateToLogin={() => navigateTo('login')}
               />
               <UseIcon 
-                navigateTo={() => navigateTo('home')} 
+                setCurrentPage={setCurrentPage}
                 iconImage={homeIcon} 
                 title="home" 
                 placement="right" 
@@ -416,7 +420,7 @@ function App() {
             <>
               <LeaderboardTable scores={scores}/>
               <UseIcon 
-                navigateTo={() => navigateTo('home')} 
+                setCurrentPage={setCurrentPage}
                 iconImage={homeIcon} 
                 title="home" 
                 placement="right" 
@@ -430,7 +434,7 @@ function App() {
             <>
               <RecordsPage records={records}/>
               <UseIcon 
-                navigateTo={() => navigateTo('home')} 
+                setCurrentPage={setCurrentPage}
                 iconImage={homeIcon} 
                 title="home" 
                 placement="right" 
@@ -444,13 +448,13 @@ function App() {
               <>
                 <RulesPage />
                 <UseIcon 
-                navigateTo={() => navigateTo('home')} 
-                iconImage={homeIcon} 
-                title="home" 
-                placement="right" 
-                bottom='40px' 
-                left='20px'>
-              </UseIcon>
+                  setCurrentPage={setCurrentPage}
+                  iconImage={homeIcon} 
+                  title="home" 
+                  placement="right" 
+                  bottom='40px' 
+                  left='20px'>
+                </UseIcon>
               </>
             );
         case 'login':
@@ -459,7 +463,7 @@ function App() {
               <LoginPage navigateToHome={() => {navigateTo('home'), window.location.reload();}}/>
 
               <UseIcon 
-                navigateTo={() => navigateTo('register')} 
+                setCurrentPage={setCurrentPage}
                 iconImage={registerIcon} 
                 title="register" 
                 placement="left" 
@@ -469,7 +473,7 @@ function App() {
               </UseIcon>
 
               <UseIcon 
-                navigateTo={() => navigateTo('home')} 
+                setCurrentPage={setCurrentPage}
                 iconImage={homeIcon} 
                 title="home" 
                 placement="right" 
@@ -483,7 +487,7 @@ function App() {
             <>
               <RegisterPage navigateToLogin={() => navigateTo('login')}/>
               <UseIcon 
-                navigateTo={() => navigateTo('login')}
+                setCurrentPage={setCurrentPage}
                 title="login"
                 placement="left"
                 bottom='0px'
@@ -492,7 +496,7 @@ function App() {
                 iconImage={loginIcon}>
               </UseIcon>
               <UseIcon 
-                navigateTo={() => navigateTo('home')} 
+                setCurrentPage={setCurrentPage}
                 iconImage={homeIcon} 
                 title="home" 
                 placement="right" 
@@ -506,7 +510,7 @@ function App() {
             <>
               <AdminPage/>
               <UseIcon 
-                navigateTo={() => navigateTo('home')} 
+                setCurrentPage={setCurrentPage}
                 iconImage={homeIcon} 
                 title="home" 
                 placement="right" 
@@ -520,7 +524,8 @@ function App() {
             <>
               {/* Home screen button */}
               <UseIcon 
-                navigateTo={stopGame} 
+                customFunc={stopGame}
+                setCurrentPage={setCurrentPage} 
                 iconImage={homeIcon} 
                 title="home" 
                 placement="right" 

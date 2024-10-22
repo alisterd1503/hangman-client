@@ -1,10 +1,12 @@
 import { Tooltip } from '@mui/material'
 import { clickSound } from '../sounds/clickSXF'
+import { SetStateAction } from 'react';
+
+type Page = 'home' | 'settings' | 'leaderboard' | 'login' | 'game' | 'register' | 'records' | 'admin' | 'rules';
 
 type UseIconProps = {
-    navigateTo: () => void,
     iconImage: string,
-    title: string,
+    title: Page,
     placement?: 
         | 'bottom-end' 
         | 'bottom-start' 
@@ -23,10 +25,12 @@ type UseIconProps = {
     bottom?: string
     top?: string
     size?: string
+    name?: string
+    setCurrentPage: React.Dispatch<SetStateAction<Page>>
+    customFunc?: () => void
 }
 
 export function UseIcon({
-    navigateTo,
     iconImage,
     title,
     placement,
@@ -34,12 +38,22 @@ export function UseIcon({
     left,
     bottom,
     top,
-    size
+    size,
+    setCurrentPage,
+    name,
+    customFunc,
 }: UseIconProps) {
+    const handleClick = (page: Page) => {
+        if (customFunc) {
+            customFunc();
+        } else {
+            setCurrentPage(page);
+        }
+    };
     return (
         <div>
             <Tooltip
-                title={title}
+                title={name ? name : title}
                 placement={placement}
                 slotProps={{
                     tooltip: {
@@ -57,7 +71,7 @@ export function UseIcon({
             src={iconImage}
             alt={title}
             draggable={false}
-            onClick={() => {clickSound(),navigateTo()}}
+            onClick={() => {clickSound(),handleClick(title)}}
             style={{
                 position: 'absolute',
                 opacity: '0.4',
