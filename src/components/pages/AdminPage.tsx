@@ -18,7 +18,7 @@ import { NewName } from "../../models/NewNameModel";
 import { NewPassword } from "../../models/NewPasswordModel";
 const primaryColour = "#FF8343";
 
-export function Admin() {
+export function AdminPage() {
     const [users, setUsers] = useState<Users[]>([]);
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
     const [input, setInput] = useState("");

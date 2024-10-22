@@ -18,7 +18,7 @@ const arrowStyles: React.CSSProperties = {
     transform: 'translateY(-50%)',
 };
 
-export function Rules() {
+export function RulesPage() {
     return (
         <div
             style={{

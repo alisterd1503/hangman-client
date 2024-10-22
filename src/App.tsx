@@ -15,14 +15,14 @@ import { Points } from './components/hangman/Points';
 import { PlayAgain } from './components/hangman/PlayAgain';
 
 //Pages//
-import { Settings } from './components/pages/SettingsPage.tsx';
+import { SettingsPage } from './components/pages/SettingsPage.tsx';
 import { LeaderboardTable } from './components/pages/LeaderboardTable';
-import { StartScreen } from "./components/pages/StartPage.tsx"
-import { Login } from "./components/pages/LoginPage.tsx";
+import { StartPage } from "./components/pages/StartPage.tsx"
+import { LoginPage } from "./components/pages/LoginPage.tsx";
 import { RegisterPage } from "./components/pages/RegisterPage.tsx";
-import { Records } from "./components/pages/RecordsPage.tsx";
-import { Admin } from "./components/pages/AdminPage.tsx";
-import { Rules } from "./components/pages/RulesPage.tsx";
+import { RecordsPage } from "./components/pages/RecordsPage.tsx";
+import { AdminPage } from "./components/pages/AdminPage.tsx";
+import { RulesPage } from "./components/pages/RulesPage.tsx";
 
 //Icons//
 import { UseIcon } from "./components/reusable/UseIcon.tsx";
@@ -310,7 +310,7 @@ function App() {
         case 'home':
           return (
             <>
-              <StartScreen
+              <StartPage
                 onStart={() => { handleStartGame(); navigateTo('game'); }} 
                 onDifficultySelect={setDifficulty}
               />
@@ -401,7 +401,7 @@ function App() {
         case 'settings':
           return (
             <>
-              <Settings 
+              <SettingsPage
                 volume={volume} 
                 mute={mute} 
                 setVolume={setVolume} 
@@ -435,7 +435,7 @@ function App() {
         case 'records':
           return (
             <>
-              <Records records={records}/>
+              <RecordsPage records={records}/>
               <UseIcon 
                 navigateTo={() => navigateTo('home')} 
                 iconImage={homeIcon} 
@@ -449,7 +449,7 @@ function App() {
         case 'rules':
             return (
               <>
-                <Rules />
+                <RulesPage />
                 <UseIcon 
                 navigateTo={() => navigateTo('home')} 
                 iconImage={homeIcon} 
@@ -463,7 +463,7 @@ function App() {
         case 'login':
           return (
             <>
-              <Login navigateToHome={() => {navigateTo('home'), window.location.reload();}}/>
+              <LoginPage navigateToHome={() => {navigateTo('home'), window.location.reload();}}/>
 
               <UseIcon 
                 navigateTo={() => navigateTo('register')} 
@@ -511,7 +511,7 @@ function App() {
         case 'admin':
           return (
             <>
-              <Admin/>
+              <AdminPage/>
               <UseIcon 
                 navigateTo={() => navigateTo('home')} 
                 iconImage={homeIcon} 

@@ -29,7 +29,7 @@ type SettingsProps = {
     navigateToLogin: () => void;
 }
 
-export function Settings({
+export function SettingsPage({
     volume,
     mute,
     setVolume,

@@ -13,7 +13,7 @@ type StartScreenProps = {
     onDifficultySelect: (difficulty: string) => void,
 };
 
-export function StartScreen({ 
+export function StartPage({ 
     onStart, 
     onDifficultySelect,
 }: StartScreenProps) {

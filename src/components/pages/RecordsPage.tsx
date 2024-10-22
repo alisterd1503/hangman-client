@@ -5,7 +5,7 @@ import { formatDate } from "../../utils/formatDate";
 const primaryColor = "#F0E5CF"
 const thirdColor =  "#D1BB9E"
 
-export function Records({ records }: { records: RecordModel[] }) {
+export function RecordsPage({ records }: { records: RecordModel[] }) {
     return (
         <div style={{
             display: "flex",

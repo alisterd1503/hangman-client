@@ -15,7 +15,7 @@ type LoginProps = {
     navigateToHome: () => void
 }
 
-export function Login({navigateToHome}: LoginProps) {
+export function LoginPage({navigateToHome}: LoginProps) {
 
     const [message, setMessage] = useState('');
     const [username, setUsername] = useState('');
