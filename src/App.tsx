@@ -95,46 +95,7 @@ function App() {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [scores, setScores] = useState<LeaderboardModel[]>([]);
   const [records, setRecords] = useState<RecordModel[]>([]);
-    
-  // Fetching records from the database
-  useEffect(() => {
-      const fetchScores = async () => {
-          const data = await getRecords();
-          setRecords(data);
-      };
-      fetchScores();
-  }, []);
-
-
-  // Function that adds the score to the database
-  const sendPacket = async () => {
-    if (currentUser && difficulty && chosenWord) {
-      const body: GameModel = {
-        score: usersPoints,
-        difficulty: difficulty,
-        word: chosenWord,
-        result: result,
-        guesses: letterGuesses.length
-      }
-      await addScore(body)
-    }
-  }
-
-  // Festhcing leaderboard data from the database
-  useEffect(() => {
-      const fetchScores = async () => {
-          const data = await getScores();
-          setScores(data);
-      };
-
-      fetchScores();
-  }, []);
-
-  // Function to navigate to relevant pages
-  const navigateTo = (page: Page) => {
-    setCurrentPage(page);
-  };
-
+  
   // Setting the logged in user's name and role
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -145,6 +106,41 @@ function App() {
     }
   }, []);
 
+  // Fetching records from the database
+  useEffect(() => {
+      const fetchScores = async () => {
+          const data = await getRecords();
+          setRecords(data);
+      };
+      fetchScores();
+  }, []);
+
+  // Festhcing leaderboard data from the database
+  useEffect(() => {
+    const fetchScores = async () => {
+        const data = await getScores();
+        setScores(data);
+    };
+
+    fetchScores();
+  }, []);
+
+  const clearLocalStorage = () => {
+    localStorage.removeItem('token');
+    window.location.href = window.location.href;
+  };
+
+  // Function to navigate to relevant pages
+  const navigateTo = (page: Page) => {
+    setCurrentPage(page);
+  };
+
+  // Function to start the game
+  const handleStartGame = () => {
+    setChosenWord(getWord(difficulty!));
+    setUsersPoints(0);
+  };
+
   // Function that tracks the incorrect letter guesses
   const getIncorrectGuesses = () => {
       return letterGuesses.filter(guess => {
@@ -154,19 +150,10 @@ function App() {
           return guess !== chosenWord;
       });
   };
-
   const incorrectGuesses = getIncorrectGuesses();
 
-  // Function to start the game
-  const handleStartGame = () => {
-      setChosenWord(getWord(difficulty!));
-      setUsersPoints(0);
-  };
-
-  // Variable to track if player lost
   const isLoser = incorrectGuesses.length >= MAX_GUESSES;
 
-  // Variable to track if player won
   const isWinner = chosenWord && (letterGuesses.includes(chosenWord) || chosenWord
       .split("")
       .every((letter: string) => letterGuesses.includes(letter)))
@@ -188,7 +175,6 @@ function App() {
     if (letterGuesses.includes(letter) || isLoser || isWinner) {
       return;
     }
-
     setLetterGuesses(currentLetters => {
         const newGuesses = [...currentLetters, letter];
 
@@ -222,21 +208,9 @@ function App() {
                 setPointsToShow(-MEDIUM_INCORRECT_LETTER);
             }
         }
-
         return newGuesses;
     });
 }, [chosenWord]);
-
-
-  // Resets game when play again button pressed
-  const resetGame = () => {
-      if (currentUser) {sendPacket()}
-      setLetterGuesses([]);
-      setChosenWord(getWord(difficulty!));
-      setWordGuesses('');
-      setGameOver(false)
-      setUsersPoints(0)
-  };
 
   const handleInputChange = (event: { target: { value: SetStateAction<string> } }) => {
       setWordGuesses(event.target.value);
@@ -257,6 +231,30 @@ function App() {
       if (event.key === 'Enter') {
           handleButtonClick();
       }
+  };
+
+  // Function that adds the score to the database
+  const sendPacket = async () => {
+    if (currentUser && difficulty && chosenWord) {
+      const body: GameModel = {
+        score: usersPoints,
+        difficulty: difficulty,
+        word: chosenWord,
+        result: result,
+        guesses: letterGuesses.length
+      }
+      await addScore(body)
+    }
+  }
+
+  // Resets game when play again button pressed
+  const resetGame = () => {
+    if (currentUser) {sendPacket()}
+    setLetterGuesses([]);
+    setChosenWord(getWord(difficulty!));
+    setWordGuesses('');
+    setGameOver(false)
+    setUsersPoints(0)
   };
 
   // Resets game if the user clicks on the home screen
@@ -298,11 +296,6 @@ function App() {
         break;
     }
   }, [isWinner, isLoser, difficulty]);
-
-  const clearLocalStorage = () => {
-    localStorage.removeItem('token');
-    window.location.href = window.location.href;
-  };
 
     // Conditonal rendering of the pages
     const renderPage = () => {
