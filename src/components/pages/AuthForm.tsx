@@ -3,6 +3,7 @@ import StyledCard from "../reusable/StyledCard";
 import openEyeIcon from "../../images/eyeOpen.png"
 import closedEyeIcon from "../../images/eyeClosed.png"
 import { SetStateAction, useState } from "react";
+import { clickSound } from "../sounds/clickSXF";
 
 const primaryColor = "#9c8b75"
 
@@ -166,7 +167,7 @@ export function AuthForm({
                     </Stack>
                 </Stack>
                 <span
-                    onClick={autherisation}
+                    onClick={() => {clickSound(), autherisation()}}
                     style={{
                         color: primaryColor,
                         display: "inline-block",

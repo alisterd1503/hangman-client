@@ -1,6 +1,5 @@
 import { SetStateAction, useState } from "react";
 import { checkLogin } from "../../api/checkLogin";
-import { clickSound } from "../sounds/clickSXF";
 import { play } from "../sounds/generalSFX";
 import error from '../../sounds/error.mp3'
 import { LoginModel } from "../../models/LoginModel";
@@ -25,7 +24,6 @@ export function LoginPage({navigateToHome}: LoginProps) {
     };
 
     const validateLogin = async () => {
-        clickSound()
         const body: LoginModel = {
             username: username,
             password: password

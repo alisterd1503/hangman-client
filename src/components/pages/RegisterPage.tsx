@@ -5,14 +5,13 @@ import { addUser } from '../../api/registerUser'
 
 import { RegisterModel } from "../../models/RegisterModel";
 
-
 import { getCountryByTimeZone } from '../../utils/getLocation';
 import { validatePassword } from "../../utils/validatePassword";
 import { validateUsername } from "../../utils/validateUsername";
 
-import { clickSound } from "../sounds/clickSXF";
 import { play } from "../sounds/generalSFX";
 import error from '../../sounds/error.mp3'
+
 import { AuthForm } from "./AuthForm";
 
 const location: string = getCountryByTimeZone();
@@ -41,7 +40,6 @@ export function RegisterPage({navigateToLogin}:RegisterPageProps) {
         const passwordCheck = validatePassword(password)
         const usernameCheck = validateUsername(username, usedNames)
         if (passwordCheck.valid && usernameCheck.valid) {
-            clickSound()
             valideRegisteration()
         } else {
             play(error)
