@@ -1,8 +1,8 @@
-import { Game } from "../models/GameModel";
+import { GameModel } from "../models/GameModel";
 
 const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/addScore';
 
-export const addScore = async (score: Game): Promise<void> => {
+export const addScore = async (score: GameModel): Promise<void> => {
     try {
         const token = localStorage.getItem('token');
         

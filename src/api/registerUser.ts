@@ -1,7 +1,7 @@
 const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/register';
-import { Register } from "../models/RegisterModel";
+import { RegisterModel } from "../models/RegisterModel";
 
-export const addUser = async (packet: Register): Promise<void> => {
+export const addUser = async (packet: RegisterModel): Promise<void> => {
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
@@ -15,6 +15,6 @@ export const addUser = async (packet: Register): Promise<void> => {
             throw new Error(`Error: ${response.statusText}`);
         }
     } catch (error) {
-        console.error('Error adding score:', error);
+        console.error('Error registering user:', error);
     }
 };

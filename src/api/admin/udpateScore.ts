@@ -1,9 +1,6 @@
-const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/admin/updateScore';
+import { NewScore } from "../../models/NewScoreModel";
 
-type NewScore = {
-    id: number,
-    newScore: number,
-}
+const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/admin/updateScore';
 
 export const updateScore = async (newScore: NewScore): Promise<void> => {
     try {
@@ -21,6 +18,6 @@ export const updateScore = async (newScore: NewScore): Promise<void> => {
             throw new Error(`Error: ${response.statusText}`);
         }
     } catch (error) {
-        console.error('Error adding score:', error);
+        console.error('Error updating users score:', error);
     }
 };

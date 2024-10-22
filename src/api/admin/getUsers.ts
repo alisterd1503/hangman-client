@@ -1,12 +1,5 @@
+import { Users } from "../../models/UsersModel";
 const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/admin/getUsers';
-
-type Users = {
-    id: number,
-    username: string,
-    score: number,
-    location: string,
-    role: string
-}
 
 export const getUsers = async (): Promise<Users[]> => {
     try {
@@ -26,7 +19,7 @@ export const getUsers = async (): Promise<Users[]> => {
         const data: Users[] = await response.json();
         return data;
     } catch (error) {
-        console.error('Error fetching scores:', error);
+        console.error('Error fetching users data:', error);
         return [];
     }
 };

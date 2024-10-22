@@ -1,9 +1,6 @@
-const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/updatePassword';
+import { NewPassword } from "../../models/NewPasswordModel";
 
-type NewPassword = {
-    id: number,
-    newPassword: string,
-}
+const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/updatePassword';
 
 export const updatePassword = async (newPassword: NewPassword): Promise<void> => {
     try {
@@ -21,6 +18,6 @@ export const updatePassword = async (newPassword: NewPassword): Promise<void> =>
             throw new Error(`Error: ${response.statusText}`);
         }
     } catch (error) {
-        console.error('Error adding password:', error);
+        console.error('Error updating users password:', error);
     }
 };

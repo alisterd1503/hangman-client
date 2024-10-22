@@ -12,30 +12,11 @@ import { updateScore } from "../../api/admin/udpateScore";
 import { updatePassword } from "../../api/admin/updatePassword";
 import checkedIcon from '../../images/checked.png'
 import uncheckedIcon from '../../images/unchecked.png'
+import { Users } from "../../models/UsersModel";
+import { NewScore } from "../../models/NewScoreModel";
+import { NewName } from "../../models/NewNameModel";
+import { NewPassword } from "../../models/NewPasswordModel";
 const primaryColour = "#FF8343";
-
-type Users = {
-    id: number,
-    username: string,
-    score: number,
-    location: string,
-    role: string
-}
-
-type NewName = {
-    id: number,
-    newName: string,
-}
-
-type NewScore = {
-    id: number,
-    newScore: number,
-}
-
-type NewPassword = {
-    id: number,
-    newPassword: string,
-}
 
 export function Admin() {
     const [users, setUsers] = useState<Users[]>([]);

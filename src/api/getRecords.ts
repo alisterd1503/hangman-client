@@ -1,7 +1,7 @@
 const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/getRecords';
-import { Record } from "../models/RecordModel";
+import { RecordModel } from "../models/RecordModel";
 
-export const getRecords = async (): Promise<Record[]> => {
+export const getRecords = async (): Promise<RecordModel[]> => {
     try {
 
         const token = localStorage.getItem('token');
@@ -18,7 +18,7 @@ export const getRecords = async (): Promise<Record[]> => {
             throw new Error(`Error: ${response.statusText}`);
         }
 
-        const data: Record[] = await response.json();
+        const data: RecordModel[] = await response.json();
         return data;
     } catch (error) {
         console.error('Error fetching records:', error);

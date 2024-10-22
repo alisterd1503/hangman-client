@@ -24,14 +24,14 @@ HangmanWordProps) {
                 <span
                 key={index}
                 style={{
-                  display: 'inline-block', // Ensure each letter behaves like a block for consistent sizing
-                  borderBottom: '0.1em solid black', // Set the bottom border width
-                  width: '2.5ch', // Set a fixed width for the letter space
-                  textAlign: 'center', // Center align the letter within the span
-                  fontFamily: "'Indie Flower', cursive", // Use the custom font
-                  fontSize: '3rem', // Set the font size for visibility
-                  lineHeight: '1', // Control line height for alignment
-                  marginRight: '0.1em', // Add space between letters
+                  display: 'inline-block',
+                  borderBottom: '0.1em solid black',
+                  width: '2.5ch',
+                  textAlign: 'center',
+                  fontFamily: "'Indie Flower', cursive",
+                  fontSize: '3rem',
+                  lineHeight: '1',
+                  marginRight: '0.1em',
                 }}
               >
                     <span

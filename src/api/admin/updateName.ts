@@ -1,9 +1,6 @@
-const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/admin/updateName';
+import { NewName } from "../../models/NewNameModel";
 
-type NewName = {
-    id: number,
-    newName: string,
-}
+const API_URL = 'https://alisters-hangman-d5d887d87847.herokuapp.com/api/admin/updateName';
 
 export const updateName = async (newName: NewName): Promise<void> => {
     try {
@@ -21,6 +18,6 @@ export const updateName = async (newName: NewName): Promise<void> => {
             throw new Error(`Error: ${response.statusText}`);
         }
     } catch (error) {
-        console.error('Error adding score:', error);
+        console.error('Error updating users name:', error);
     }
 };
