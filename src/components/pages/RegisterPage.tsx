@@ -11,7 +11,7 @@ const primaryColor = "#9c8b75"
 import { getCountryByTimeZone } from '../../utils/getLocation';
 import { validatePassword } from "../../utils/validatePassword";
 import { validateUsername } from "../../utils/validateUsername";
-import StyledCard from "../StyledCard"
+import StyledCard from "../reusable/StyledCard"
 
 import { clickSound } from "../sounds/clickSXF";
 import { play } from "../sounds/generalSFX";

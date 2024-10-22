@@ -1,19 +1,46 @@
 import { Tooltip } from '@mui/material'
-import loginIcon from '../../images/login.png'
 import { clickSound } from '../sounds/clickSXF'
 
-type LoginIconProps = {
-    LoginScreen: () => void,
+type UseIconProps = {
+    navigateTo: () => void,
+    iconImage: string,
+    title: string,
+    placement?: 
+        | 'bottom-end' 
+        | 'bottom-start' 
+        | 'bottom' 
+        | 'left-end' 
+        | 'left-start' 
+        | 'left' 
+        | 'right-end' 
+        | 'right-start' 
+        | 'right' 
+        | 'top-end' 
+        | 'top-start' 
+        | 'top';
+    left?: string
+    right?: string
+    bottom?: string
+    top?: string
+    size?: string
 }
 
-export function LoginIcon({
-    LoginScreen
-}: LoginIconProps) {
+export function UseIcon({
+    navigateTo,
+    iconImage,
+    title,
+    placement,
+    right,
+    left,
+    bottom,
+    top,
+    size
+}: UseIconProps) {
     return (
         <div>
             <Tooltip
-                title="login"
-                placement="left"
+                title={title}
+                placement={placement}
                 slotProps={{
                     tooltip: {
                         sx: {
@@ -27,16 +54,19 @@ export function LoginIcon({
                 }}
             >
             <img
-            src={loginIcon}
-            alt="Home"
-            onClick={() => {clickSound(),LoginScreen()}}
+            src={iconImage}
+            alt={title}
+            draggable={false}
+            onClick={() => {clickSound(),navigateTo()}}
             style={{
                 position: 'absolute',
                 opacity: '0.4',
-                bottom: '0px',
-                right: '20px',
-                width: '120px',
-                height: '120px',
+                bottom: bottom,
+                left: left,
+                right: right,
+                top: top,
+                width: size ? size :  "80px",
+                height: size ? size :  "80px",
                 cursor: 'pointer',
                 transition: 'transform 0.3s, opacity 0.3s',
             }}

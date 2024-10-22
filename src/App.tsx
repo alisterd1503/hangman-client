@@ -25,15 +25,7 @@ import { Admin } from "./components/pages/AdminPage.tsx";
 import { Rules } from "./components/pages/RulesPage.tsx";
 
 //Icons//
-import { HomeIcon } from './components/icons/HomeIcon';
-import { SettingsIcon } from './components/icons/SettingsIcon';
-import { LeaderboardIcon } from './components/icons/LeaderboardIcon';
-import { LoginIcon } from "./components/icons/LoginIcon.tsx";
-import { RegisterIcon } from "./components/icons/RegisterIcon.tsx";
-import { LogoutIcon } from "./components/icons/LogoutIcon.tsx";
-import { RecordsIcon } from "./components/icons/RecordsIcon.tsx";
-import { AdminIcon } from "./components/icons/AdminIcon.tsx";
-import { RulesIcon } from "./components/icons/RulesIcon.tsx";
+import { UseIcon } from "./components/reusable/UseIcon.tsx";
 
 //SOUNDS//
 import { play } from './components/sounds/generalSFX.ts'
@@ -73,6 +65,17 @@ import {
   REGEX,
   MAX_GUESSES
 } from "./utils/constants.ts";
+
+//ICON IMAGES//
+import homeIcon from './images/home.png'
+import settingsIcon from './images/settings.png'
+import leaderboardIcon from './images/leaderboard.png'
+import rulesIcon from './images/rules.png'
+import adminIcon from './images/admin.png'
+import logoutIcon from './images/logout.png'
+import recordsIcon from './images/records.png'
+import loginIcon from './images/login.png'
+import registerIcon from './images/register.png'
 
 type Page = 'home' | 'settings' | 'leaderboard' | 'login' | 'game' | 'register' | 'records' | 'admin' | 'rules';
 
@@ -296,6 +299,11 @@ function App() {
     }
   }, [isWinner, isLoser, difficulty]);
 
+  const clearLocalStorage = () => {
+    localStorage.removeItem('token');
+    window.location.href = window.location.href;
+  };
+
     // Conditonal rendering of the pages
     const renderPage = () => {
       switch (currentPage) {
@@ -306,27 +314,87 @@ function App() {
                 onStart={() => { handleStartGame(); navigateTo('game'); }} 
                 onDifficultySelect={setDifficulty}
               />
-              <SettingsIcon settingsScreen={() => navigateTo('settings')} />
-              <LeaderboardIcon LeaderboardScreen={() => navigateTo('leaderboard')} />
-              <RulesIcon rulesScreen={() => navigateTo('rules')} />
+              <UseIcon 
+                navigateTo={() => navigateTo('settings')}
+                title="settings"
+                placement="right"
+                top='20px'
+                left='20px'
+                iconImage={settingsIcon}>
+              </UseIcon>
+
+              <UseIcon 
+                navigateTo={() => navigateTo('leaderboard')}
+                title="leaderboard"
+                placement="left"
+                top='0px'
+                right='20px'
+                size='110px'
+                iconImage={leaderboardIcon}>
+              </UseIcon>
+
+              <UseIcon 
+                navigateTo={() => navigateTo('rules')}
+                title="rules"
+                placement="left"
+                top='130px'
+                left='20px'
+                size='120px'
+                iconImage={rulesIcon}>
+              </UseIcon>
     
-              {userRole === 'admin' && <AdminIcon AdminScreen={() => navigateTo('admin')} />}
+              {userRole === 'admin' && 
+                <UseIcon 
+                navigateTo={() => navigateTo('admin')}
+                title="admin"
+                placement="left"
+                top='260px'
+                left='0px'
+                size='120px'
+                iconImage={adminIcon}>
+                </UseIcon>
+              }
 
               <div style={{height: '50px'}}>
                 {currentUser ? 
-                (<> 
-                  <Typography
-                    style={{ 
-                        fontFamily: "'Indie Flower',cursive",
-                        fontWeight: "bold",
-                        fontSize: "2rem",
-                    }}>Welcome, {currentUser}! Ready to play?
-                  </Typography>
-                  <LogoutIcon/>
-                  <RecordsIcon RecordsScreen={() => navigateTo('records')} />
-                </>) 
-                : 
-                (<LoginIcon LoginScreen={() => navigateTo('login')} />)}
+                  (<> 
+                    <Typography
+                      style={{ 
+                          fontFamily: "'Indie Flower',cursive",
+                          fontWeight: "bold",
+                          fontSize: "2rem",
+                      }}>Welcome, {currentUser}! Ready to play?
+                    </Typography>
+                    <UseIcon 
+                      navigateTo={clearLocalStorage}
+                      title="logout"
+                      placement="right"
+                      bottom='0px'
+                      left='20px'
+                      size='90px'
+                      iconImage={logoutIcon}>
+                    </UseIcon>
+                    <UseIcon 
+                      navigateTo={() => navigateTo('records')}
+                      title="history"
+                      placement="left"
+                      bottom='0px'
+                      right='20px'
+                      size='100px'
+                      iconImage={recordsIcon}>
+                    </UseIcon>
+                  </>) 
+                  : 
+                  (<UseIcon 
+                    navigateTo={() => navigateTo('login')}
+                    title="login"
+                    placement="left"
+                    bottom='0px'
+                    right='20px'
+                    size='120px'
+                    iconImage={loginIcon}>
+                  </UseIcon>)
+                }
               </div>
             </>
           );
@@ -340,112 +408,186 @@ function App() {
                 setMute={setMute} 
                 navigateToLogin={() => navigateTo('login')}
               />
-              <HomeIcon homeScreen={() => navigateTo('home')} />
+              <UseIcon 
+                navigateTo={() => navigateTo('home')} 
+                iconImage={homeIcon} 
+                title="home" 
+                placement="right" 
+                bottom='40px' 
+                left='20px'>
+              </UseIcon>
             </>
           );
         case 'leaderboard':
           return (
             <>
               <LeaderboardTable scores={scores}/>
-              <HomeIcon homeScreen={() => navigateTo('home')} />
+              <UseIcon 
+                navigateTo={() => navigateTo('home')} 
+                iconImage={homeIcon} 
+                title="home" 
+                placement="right" 
+                bottom='40px' 
+                left='20px'>
+              </UseIcon>
             </>
           );
         case 'records':
           return (
             <>
               <Records records={records}/>
-              <HomeIcon homeScreen={() => navigateTo('home')} />
+              <UseIcon 
+                navigateTo={() => navigateTo('home')} 
+                iconImage={homeIcon} 
+                title="home" 
+                placement="right" 
+                bottom='40px' 
+                left='20px'>
+              </UseIcon>
             </>
           );
         case 'rules':
             return (
               <>
                 <Rules />
-                <HomeIcon homeScreen={() => navigateTo('home')} />
+                <UseIcon 
+                navigateTo={() => navigateTo('home')} 
+                iconImage={homeIcon} 
+                title="home" 
+                placement="right" 
+                bottom='40px' 
+                left='20px'>
+              </UseIcon>
               </>
             );
         case 'login':
           return (
             <>
               <Login navigateToHome={() => {navigateTo('home'), window.location.reload();}}/>
-              <RegisterIcon RegisterScreen={() => navigateTo('register')}/>
-              <HomeIcon homeScreen={() => navigateTo('home')} />
+
+              <UseIcon 
+                navigateTo={() => navigateTo('register')} 
+                iconImage={registerIcon} 
+                title="register" 
+                placement="left" 
+                bottom='0px' 
+                right='20px'
+                size="120px">
+              </UseIcon>
+
+              <UseIcon 
+                navigateTo={() => navigateTo('home')} 
+                iconImage={homeIcon} 
+                title="home" 
+                placement="right" 
+                bottom='40px' 
+                left='20px'>
+              </UseIcon>
             </>
           );
         case 'register':
           return (
             <>
               <RegisterPage navigateToLogin={() => navigateTo('login')}/>
-              <LoginIcon LoginScreen={() => navigateTo('login')} />
-              <HomeIcon homeScreen={() => navigateTo('home')} />
+              <UseIcon 
+                navigateTo={() => navigateTo('login')}
+                title="login"
+                placement="left"
+                bottom='0px'
+                right='20px'
+                size='120px'
+                iconImage={loginIcon}>
+              </UseIcon>
+              <UseIcon 
+                navigateTo={() => navigateTo('home')} 
+                iconImage={homeIcon} 
+                title="home" 
+                placement="right" 
+                bottom='40px' 
+                left='20px'>
+              </UseIcon>
             </>
           );
         case 'admin':
           return (
             <>
               <Admin/>
-              <HomeIcon homeScreen={() => navigateTo('home')} />
+              <UseIcon 
+                navigateTo={() => navigateTo('home')} 
+                iconImage={homeIcon} 
+                title="home" 
+                placement="right" 
+                bottom='40px' 
+                left='20px'>
+              </UseIcon>
             </>
           );
         case 'game':
           return (
             <>
-            {/* Home screen button */}
-            <HomeIcon homeScreen={stopGame} />
-            <Points usersPoints={usersPoints} pointsToShow={pointsToShow} />
+              {/* Home screen button */}
+              <UseIcon 
+                navigateTo={stopGame} 
+                iconImage={homeIcon} 
+                title="home" 
+                placement="right" 
+                bottom='40px' 
+                left='20px'>
+              </UseIcon>
+              <Points usersPoints={usersPoints} pointsToShow={pointsToShow} />
     
-            {/* Displays header title */}
-            <div className="message"
-              style={{
-                color: isWinner !== isLoser ? (isWinner ? 'green' : 'red') : 'black',
-              }}
-            >
-              {isWinner === isLoser && 'GUESS THE WORD!'}
-              {isWinner && 'WINNER!'}
-              {isLoser && 'LOSER!'}
-            </div>
-    
-            {/* Displays the hangman image */}
-            <div className="drawing">
-              <HangmanDrawing numOfGuesses={incorrectGuesses.length} isWinner={!!isWinner}/>
-            </div>
-    
-            {/* Displays the correct guessed letters and dashes */}
-            <div className="dashed-words">
-              <HangmanWord
-                reveal={isLoser || isWinner ? true : false}
-                letterGuesses={letterGuesses}
-                chosenWord={chosenWord ?? ''}
-                isWinner={!!isWinner}
-              />
-            </div>
-    
-            {/* Displays the incorrect guessed letters */}
-            <WrongGuesses incorrectGuesses={incorrectGuesses} />
-    
-            {/* Displays the keyboard */}
-            <div className="keyboard">
-              <Keyboard
-                disabled={isWinner || isLoser}
-                activeLetters={letterGuesses.filter((letter) => chosenWord!.includes(letter))}
-                inactiveLetters={incorrectGuesses}
-                addUserGuess={addUserGuess}
-              />
-            </div>
-    
-            {/* Displays the guess input field */}
-            <div className="guess-words">
-              {isLoser || isWinner ? (
-                <PlayAgain resetGame={resetGame} />
-              ) : (
-                <HangmanGuess
-                  wordGuesses={wordGuesses}
-                  handleInputChange={handleInputChange}
-                  handleKeyPress={handleKeyPress}
-                  handleButtonClick={handleButtonClick}
+              {/* Displays header title */}
+              <div className="message"
+                style={{
+                  color: isWinner !== isLoser ? (isWinner ? 'green' : 'red') : 'black',
+                }}
+              >
+                {isWinner === isLoser && 'GUESS THE WORD!'}
+                {isWinner && 'WINNER!'}
+                {isLoser && 'LOSER!'}
+              </div>
+      
+              {/* Displays the hangman image */}
+              <div className="drawing">
+                <HangmanDrawing numOfGuesses={incorrectGuesses.length} isWinner={!!isWinner}/>
+              </div>
+      
+              {/* Displays the correct guessed letters and dashes */}
+              <div className="dashed-words">
+                <HangmanWord
+                  reveal={isLoser || isWinner ? true : false}
+                  letterGuesses={letterGuesses}
+                  chosenWord={chosenWord ?? ''}
+                  isWinner={!!isWinner}
                 />
-              )}
-            </div>
+              </div>
+      
+              {/* Displays the incorrect guessed letters */}
+              <WrongGuesses incorrectGuesses={incorrectGuesses} />
+      
+              {/* Displays the keyboard */}
+              <div className="keyboard">
+                <Keyboard
+                  disabled={isWinner || isLoser}
+                  activeLetters={letterGuesses.filter((letter) => chosenWord!.includes(letter))}
+                  inactiveLetters={incorrectGuesses}
+                  addUserGuess={addUserGuess}
+                />
+              </div>
+      
+              {/* Displays the guess input field */}
+              <div className="guess-words">
+                {isLoser || isWinner ? (
+                  <PlayAgain resetGame={resetGame} />
+                ) : (
+                  <HangmanGuess
+                    wordGuesses={wordGuesses}
+                    handleInputChange={handleInputChange}
+                    handleKeyPress={handleKeyPress}
+                    handleButtonClick={handleButtonClick}
+                  />
+                )}
+              </div>
           </>
           );
         default:
@@ -456,7 +598,7 @@ function App() {
     return (
       <>
         {/* Displays confetti */}
-        {true && (
+        {isWinner && (
           <>
             <Confetti width={window.innerWidth} height={window.innerHeight} recycle={false} initialVelocityY={1} />
           </>

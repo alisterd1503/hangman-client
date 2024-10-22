@@ -6,7 +6,7 @@ import { play } from "../sounds/generalSFX";
 import error from '../../sounds/error.mp3'
 import openEyeIcon from "../../images/eyeOpen.png"
 import closedEyeIcon from "../../images/eyeClosed.png"
-import StyledCard from "../StyledCard"
+import StyledCard from "../reusable/StyledCard"
 import { LoginModel } from "../../models/LoginModel";
 
 const primaryColor = "#9c8b75"

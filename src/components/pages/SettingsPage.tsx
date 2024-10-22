@@ -16,7 +16,7 @@ import { play } from "../sounds/generalSFX";
 import { getUsernames } from "../../api/getUsernames";
 import error from '../../sounds/error.mp3'
 import { jwtDecode } from "jwt-decode";
-import StyledCard from "../StyledCard"
+import StyledCard from "../reusable/StyledCard"
 
 const location: string = getCountryByTimeZone();
 const primaryColor = "#F0E5CF"
